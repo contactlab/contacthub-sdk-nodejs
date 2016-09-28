@@ -1,0 +1,38 @@
+{
+  "name": "contacthub-sdk-node",
+  "version": "0.0.1",
+  "description": "ContactHub SDK for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "test-watch": "mocha --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/contactlab/contacthub-sdk-node.git"
+  },
+  "keywords": [
+    "contacthub",
+    "contactlab",
+    "sdk",
+    "node",
+    "nodejs"
+  ],
+  "author": "Francesco Negri <francesco.negri@buildo.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/contactlab/contacthub-sdk-node/issues"
+  },
+  "homepage": "https://github.com/contactlab/contacthub-sdk-node#readme",
+  "devDependencies": {
+    "babel-eslint": "^7.0.0",
+    "chai": "^3.5.0",
+    "eslint": "^3.6.1",
+    "eslint-config-buildo": "^0.1.0",
+    "eslint-plugin-flowtype": "^2.19.0",
+    "mocha": "^3.1.0"
+  },
+  "dependencies": {
+    "axios": "^0.14.0"
+  }
+}
