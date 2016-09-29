@@ -1,7 +1,5 @@
-const expect = require('chai').expect;
-const nock = require('nock');
-
 const ch = require('../index.js');
+const nock = require('nock');
 
 const auth = {
   token: 'token',
@@ -11,23 +9,23 @@ const auth = {
 
 const apiUrl = 'https://api.contactlab.it/hub/v1';
 
-/* global describe, it, beforeEach */
-
 describe('ContactHub', () => {
   beforeEach(() => {
   });
 
+  afterAll(() => nock.restore());
+
   it('throws if required params are missing', () => {
     const wrongCall = () => { ch(); };
-    expect(wrongCall).to.throw();
+    expect(wrongCall).toThrow();
   });
 
   it('returns an object', () => {
-    expect(ch(auth)).to.be.a('object');
+    expect(typeof ch(auth)).toBe('object');
   });
 
   describe('getCustomer', () => {
-    it('finds an existing Customer', () => {
+    it('finds an existing Customer', async () => {
       const customer = {
         id: 'foo'
       };
@@ -37,14 +35,13 @@ describe('ContactHub', () => {
         .query({ nodeId: auth.nodeId })
         .reply(200, customer);
 
-      return ch(auth).getCustomer(customer.id).then(res => {
-        expect(res).to.eql(customer);
-      });
+      const res = await ch(auth).getCustomer(customer.id);
+      expect(res).toEqual(customer);
     });
   });
 
   describe('getCustomers', () => {
-    it('returns a list of customers', () => {
+    it('returns a list of customers', async () => {
       const customers = {
         _embedded: {
           customers: [{
@@ -60,9 +57,8 @@ describe('ContactHub', () => {
         .query({ nodeId: auth.nodeId })
         .reply(200, customers);
 
-      return ch(auth).getCustomers().then(res => {
-        expect(res).to.eql(customers._embedded.customers);
-      });
+      const res = await ch(auth).getCustomers();
+      expect(res).toEqual(customers._embedded.customers);
     });
   });
 
@@ -77,13 +73,13 @@ describe('ContactHub', () => {
         .reply(200, { id: 'new-cid' });
 
       return ch(auth).addCustomer(customer).then(res => {
-        expect(res.id).to.equal('new-cid');
+        expect(res.id).toBe('new-cid');
       });
     });
   });
 
   describe('updateCustomer', () => {
-    it('updates an existing Customer', () => {
+    it('updates an existing Customer', async () => {
       const customer = {
         id: 'existing-cid',
         foo: 'bar'
@@ -93,14 +89,13 @@ describe('ContactHub', () => {
         .put(`/workspaces/${auth.workspaceId}/customers/${customer.id}`)
         .reply(200, customer);
 
-      return ch(auth).updateCustomer(customer).then(res => {
-        expect(res.id).to.equal('existing-cid');
-      });
+      const res = await ch(auth).updateCustomer(customer);
+      expect(res.id).toBe('existing-cid');
     });
   });
 
   describe('deleteCustomer', () => {
-    it('deletes an existing Customer', () => {
+    it('deletes an existing Customer', async () => {
       const customerId = 'existing-cid';
 
       nock(apiUrl)
@@ -108,9 +103,8 @@ describe('ContactHub', () => {
         .query({ nodeId: auth.nodeId })
         .reply(200);
 
-      return ch(auth).deleteCustomer('existing-cid').then(res => {
-        expect(res).to.eql({ deleted: true });
-      });
+      const res = await ch(auth).deleteCustomer('existing-cid');
+      expect(res).toEqual({ deleted: true });
     });
   });
 });
