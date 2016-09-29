@@ -32,6 +32,6 @@ Available methods:
 
 ### Running tests
 
-Run unit tests with `npm test` or (`npm test-watch` to enable watch mode).
+Run unit tests with `npm test` or (`npm run test-watch` to enable watch mode).
 
-Run e2e tests with `npm e2e`.
+Run e2e tests with `npm run e2e`.
