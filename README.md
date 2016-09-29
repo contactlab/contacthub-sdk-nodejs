@@ -11,7 +11,8 @@ const ch = contacthub({
   nodeId: 'YOUR_NODE_ID'
 });
 
-ch.getCustomer('CUSTOMER_ID').then(res => console.log
+ch.getCustomer('CUSTOMER_ID').then(res => console.log(res));
+```
 
 
 ## Customer API
