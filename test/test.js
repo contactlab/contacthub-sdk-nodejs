@@ -1,12 +1,15 @@
 const expect = require('chai').expect;
+const nock = require('nock');
 
 const ch = require('../index.js');
 
 const auth = {
-  token: '97841617075b4b5f8ea88c30a8d2aec7647b7181df2c483fa78138c8d58aed4d',
-  workspaceId: '40b6195f-e4f7-4f95-b10e-75268d850988',
-  nodeId: '854f0791-c120-4e4a-9264-6dd197cb922c'
+  token: 'token',
+  workspaceId: 'wid',
+  nodeId: 'nid'
 };
+
+const apiUrl = 'https://api.contactlab.it/hub/v1';
 
 /* global describe, it, beforeEach */
 
@@ -23,13 +26,90 @@ describe('ContactHub', () => {
     expect(ch(auth)).to.be.a('object');
   });
 
-
   describe('getCustomer', () => {
-    it('finds an existing Customer', (done) => {
-      const cid = 'e65a8339-1bb4-45dd-9b3d-2cd666945b0b';
-      ch(auth).getCustomer(cid).then((res) => {
-        expect(res.data.id).to.eql(cid);
-        done();
+    it('finds an existing Customer', () => {
+      const customer = {
+        id: 'foo'
+      };
+
+      nock(apiUrl)
+        .get(`/workspaces/${auth.workspaceId}/customers/${customer.id}`)
+        .query({ nodeId: auth.nodeId })
+        .reply(200, customer);
+
+      return ch(auth).getCustomer(customer.id).then(res => {
+        expect(res).to.eql(customer);
+      });
+    });
+  });
+
+  describe('getCustomers', () => {
+    it('returns a list of customers', () => {
+      const customers = {
+        _embedded: {
+          customers: [{
+            id: 'c1'
+          }, {
+            id: 'c2'
+          }]
+        }
+      };
+
+      nock(apiUrl)
+        .get(`/workspaces/${auth.workspaceId}/customers`)
+        .query({ nodeId: auth.nodeId })
+        .reply(200, customers);
+
+      return ch(auth).getCustomers().then(res => {
+        expect(res).to.eql(customers._embedded.customers);
+      });
+    });
+  });
+
+  describe('addCustomer', () => {
+    it('creates a new Customer', () => {
+      const customer = {
+        foo: 'bar'
+      };
+
+      nock(apiUrl)
+        .post(`/workspaces/${auth.workspaceId}/customers`)
+        .reply(200, { id: 'new-cid' });
+
+      return ch(auth).addCustomer(customer).then(res => {
+        expect(res.id).to.equal('new-cid');
+      });
+    });
+  });
+
+  describe('updateCustomer', () => {
+    it('updates an existing Customer', () => {
+      const customer = {
+        id: 'existing-cid',
+        foo: 'bar'
+      };
+
+      nock(apiUrl)
+        .put(`/workspaces/${auth.workspaceId}/customers/${customer.id}`)
+        .reply(200, customer);
+
+      return ch(auth).updateCustomer(customer).then(res => {
+        expect(res.id).to.equal('existing-cid');
+      });
+    });
+  });
+
+  describe('deleteCustomer', () => {
+    it('deletes an existing Customer', () => {
+      const customerId = 'existing-cid';
+
+      nock(apiUrl)
+        .delete(`/workspaces/${auth.workspaceId}/customers/${customerId}`)
+        .query({ nodeId: auth.nodeId })
+        .reply(200);
+
+      return ch(auth).deleteCustomer('existing-cid').then(res => {
+        expect(res).to.eql({ deleted: true });
       });
     });
   });
