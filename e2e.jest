@@ -1,0 +1,4 @@
+{
+  "testRegex": ".*\\.e2e\\.js",
+  "testEnvironment": "node"
+}
