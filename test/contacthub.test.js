@@ -1,3 +1,5 @@
+// @flow
+
 const ch = require('../index.js');
 const nock = require('nock');
 
@@ -16,6 +18,7 @@ describe('ContactHub', () => {
   afterAll(() => nock.restore());
 
   it('throws if required params are missing', () => {
+    // $ExpectError
     const wrongCall = () => { ch(); };
     expect(wrongCall).toThrow();
   });

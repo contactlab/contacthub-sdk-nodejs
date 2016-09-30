@@ -1,14 +1,34 @@
+// @flow
+
+/* Dependencies */
+
 const axios = require('axios');
+
+/* Constants */
 
 const baseUrl = 'https://api.contactlab.it/hub/v1';
 
+/* Flow types */
+
+type Auth = {
+  token: string,
+  workspaceId: string,
+  nodeId: string
+};
+
+type Customer = {
+  id?: string,
+  base: Object,
+  extra?: Object
+};
+
 /* Internal abstractions */
 
-const headers = (token) => ({
+const headers = (token: string) => ({
   Authorization: `Bearer ${token}`
 });
 
-const get = (auth, opts) => axios({
+const get = (auth: Auth, opts: Object) => axios({
   method: 'get',
   url: `${baseUrl}/workspaces/${auth.workspaceId}/${opts.endpoint}`,
   headers: headers(auth.token),
@@ -17,21 +37,21 @@ const get = (auth, opts) => axios({
   }
 });
 
-const post = (auth, opts) => axios({
+const post = (auth: Auth, opts: Object) => axios({
   method: 'post',
   url: `${baseUrl}/workspaces/${auth.workspaceId}/${opts.endpoint}`,
   headers: headers(auth.token),
   data: opts.data
 });
 
-const put = (auth, opts) => axios({
+const put = (auth: Auth, opts: Object) => axios({
   method: 'put',
   url: `${baseUrl}/workspaces/${auth.workspaceId}/${opts.endpoint}`,
   headers: headers(auth.token),
   data: opts.data
 });
 
-const del = (auth, opts) => axios({
+const del = (auth: Auth, opts: Object) => axios({
   method: 'delete',
   url: `${baseUrl}/workspaces/${auth.workspaceId}/${opts.endpoint}`,
   headers: headers(auth.token),
@@ -40,17 +60,18 @@ const del = (auth, opts) => axios({
   }
 });
 
+
 /* Public API methods */
 
-const getCustomer = (auth) => (customerId) => get(auth, {
+const getCustomer = (auth: Auth) => (customerId: string) => get(auth, {
   endpoint: `customers/${customerId}`
 }).then(res => Promise.resolve(res.data));
 
-const getCustomers = (auth) => () => get(auth, {
+const getCustomers = (auth: Auth) => () => get(auth, {
   endpoint: 'customers'
 }).then(res => Promise.resolve(res.data._embedded.customers));
 
-const addCustomer = (auth) => (customer) => post(auth, {
+const addCustomer = (auth: Auth) => (customer: Customer) => post(auth, {
   endpoint: 'customers',
   data: {
     nodeId: auth.nodeId,
@@ -58,18 +79,25 @@ const addCustomer = (auth) => (customer) => post(auth, {
   }
 }).then(res => Promise.resolve(res.data));
 
-const updateCustomer = (auth) => (customer) => put(auth, {
-  endpoint: `customers/${customer.id}`,
-  data: customer
-}).then(res => Promise.resolve(res.data));
+const updateCustomer = (auth: Auth) => (customer: Customer) => {
+  if (!customer.id) {
+    throw new Error('Missing "id" property, cannot update customer');
+  }
 
-const deleteCustomer = (auth) => (customerId) => del(auth, {
+  return put(auth, {
+    endpoint: `customers/${customer.id}`,
+    data: customer
+  }).then(res => Promise.resolve(res.data));
+};
+
+const deleteCustomer = (auth: Auth) => (customerId: string) => del(auth, {
   endpoint: `customers/${customerId}`
 }).then(() => Promise.resolve({ deleted: true }));
 
+
 /* Single exported function */
 
-const ContactHub = (params) => {
+const ContactHub = (params: Auth) => {
   if (typeof params !== 'object'
       || !(params.token && params.workspaceId && params.nodeId)) {
     throw new Error('Missing required ContactHub configuration.');
