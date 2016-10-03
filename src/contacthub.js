@@ -22,6 +22,10 @@ type Customer = {
   extra?: Object
 };
 
+type Job = {
+  id: string
+};
+
 /* Internal abstractions */
 
 const headers = (token: string) => ({
@@ -94,6 +98,15 @@ const deleteCustomer = (auth: Auth) => (customerId: string) => del(auth, {
   endpoint: `customers/${customerId}`
 }).then(() => Promise.resolve({ deleted: true }));
 
+const addJob = (auth: Auth) => (customerId: string, job: Job) => post(auth, {
+  endpoint: `customers/${customerId}/jobs`,
+  data: job
+}).then(res => Promise.resolve(res.data));
+
+const updateJob = (auth: Auth) => (customerId: string, job: Job) => put(auth, {
+  endpoint: `customers/${customerId}/jobs/${job.id}`,
+  data: job
+}).then(res => Promise.resolve(res.data));
 
 /* Single exported function */
 
@@ -114,7 +127,9 @@ const ContactHub = (params: Auth) => {
     getCustomers: getCustomers(auth),
     addCustomer: addCustomer(auth),
     updateCustomer: updateCustomer(auth),
-    deleteCustomer: deleteCustomer(auth)
+    deleteCustomer: deleteCustomer(auth),
+    addJob: addJob(auth),
+    updateJob: updateJob(auth)
   };
 };
 
