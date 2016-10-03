@@ -13,7 +13,9 @@
     "test": "jest",
     "test-watch": "jest --watch",
     "e2e": "jest --config e2e.jest",
-    "build": "rm -rf lib/* && babel src -d lib && flow-copy-source -v src lib"
+    "clean": "rm -rf lib/*",
+    "build": "npm run clean && babel src -d lib && flow stop && npm run gen-flow-files",
+    "gen-flow-files": "flow gen-flow-files src --out-dir lib"
   },
   "repository": {
     "type": "git",
