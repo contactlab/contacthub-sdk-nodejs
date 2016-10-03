@@ -1,12 +1,21 @@
 {
-  "name": "contacthub-sdk-node",
-  "version": "0.0.1",
+  "name": "contacthub-sdk-nodejs",
+  "version": "0.0.2",
   "description": "ContactHub SDK for Node.js",
   "main": "index.js",
+  "files": [
+    "src",
+    "lib"
+  ],
   "scripts": {
+    "lint": "eslint src && eslint test",
+    "flow": "flow",
     "test": "jest",
     "test-watch": "jest --watch",
-    "e2e": "jest --config e2e.jest"
+    "e2e": "jest --config e2e.jest",
+    "clean": "rm -rf lib/*",
+    "build": "npm run clean && babel src -d lib && flow stop && npm run gen-flow-files",
+    "gen-flow-files": "flow gen-flow-files src --out-dir lib"
   },
   "repository": {
     "type": "git",
@@ -26,13 +35,17 @@
   },
   "homepage": "https://github.com/contactlab/contacthub-sdk-node#readme",
   "devDependencies": {
+    "babel-cli": "^6.16.0",
     "babel-eslint": "^7.0.0",
     "babel-jest": "^15.0.0",
     "babel-plugin-transform-async-to-generator": "^6.16.0",
+    "babel-plugin-transform-flow-strip-types": "^6.14.0",
     "babel-polyfill": "^6.16.0",
     "eslint": "^3.6.1",
     "eslint-config-buildo": "^0.1.0",
     "eslint-plugin-flowtype": "^2.19.0",
+    "flow-bin": "^0.33.0",
+    "flow-copy-source": "^1.1.0",
     "jest": "^15.1.1",
     "nock": "^8.0.0"
   },

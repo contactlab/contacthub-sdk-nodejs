@@ -1,4 +1,6 @@
-const ch = require('../index.js');
+// @flow
+
+const ch = require('../src/contacthub');
 const nock = require('nock');
 
 const auth = {
@@ -16,7 +18,10 @@ describe('ContactHub', () => {
   afterAll(() => nock.restore());
 
   it('throws if required params are missing', () => {
-    const wrongCall = () => { ch(); };
+    const wrongCall = () => {
+      // $ExpectError
+      ch();
+    };
     expect(wrongCall).toThrow();
   });
 
@@ -65,7 +70,9 @@ describe('ContactHub', () => {
   describe('addCustomer', () => {
     it('creates a new Customer', () => {
       const customer = {
-        foo: 'bar'
+        base: {
+          firstName: 'Mario'
+        }
       };
 
       nock(apiUrl)
@@ -82,7 +89,9 @@ describe('ContactHub', () => {
     it('updates an existing Customer', async () => {
       const customer = {
         id: 'existing-cid',
-        foo: 'bar'
+        base: {
+          lastName: 'Rossi'
+        }
       };
 
       nock(apiUrl)

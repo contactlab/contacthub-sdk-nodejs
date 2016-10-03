@@ -1,0 +1,4 @@
+// @flow
+
+
+declare module.exports: (params: {nodeId: string, token: string, workspaceId: string}) => {addCustomer: (customer: {base: Object, extra?: Object, id?: string}) => any, deleteCustomer: (customerId: string) => any, getCustomer: (customerId: string) => any, getCustomers: () => any, updateCustomer: (customer: {base: Object, extra?: Object, id?: string}) => any};

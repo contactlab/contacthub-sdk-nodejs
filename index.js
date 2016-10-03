@@ -1,1 +1,3 @@
-module.exports = require('./src/contacthub');
+// @flow
+
+module.exports = require('./lib/contacthub');
