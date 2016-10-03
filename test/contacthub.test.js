@@ -1,6 +1,6 @@
 // @flow
 
-const ch = require('../index.js');
+const ch = require('../src/contacthub');
 const nock = require('nock');
 
 const auth = {
