@@ -1,3 +1,5 @@
+// @flow
+
 const contacthub = require('../../index');
 
 const ch = contacthub({
