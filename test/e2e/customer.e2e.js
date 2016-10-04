@@ -14,6 +14,11 @@ const customer = {
   }
 };
 
+const job = {
+  // random id as it must be unique
+  id: Math.random().toString(36).substr(2, 8)
+};
+
 describe('ContactHub', () => {
   it('creates, updates and deletes a customer', async () => {
     const addResult = await ch.addCustomer(customer);
@@ -30,5 +35,19 @@ describe('ContactHub', () => {
     const res = await ch.deleteCustomer(updateResult.id);
 
     expect(res).toEqual({ deleted: true });
+  });
+
+  it('adds and updates a job', async () => {
+    const customerObj = await ch.addCustomer(customer);
+
+    const jobObj = await ch.addJob(customerObj.id, job);
+
+    const updatedJobObj = Object.assign({}, jobObj, {
+      companyName: 'SPAM'
+    });
+
+    const updatedJob = await ch.updateJob(customerObj.id, updatedJobObj);
+
+    expect(updatedJob.companyName).toEqual('SPAM');
   });
 });
