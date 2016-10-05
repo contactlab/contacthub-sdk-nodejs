@@ -8,46 +8,46 @@ const ch = contacthub({
   nodeId: '854f0791-c120-4e4a-9264-6dd197cb922c'
 });
 
-const customer = {
+const customer1 = {
   base: {
     firstName: 'Mario'
   }
 };
 
-const job = {
+const customer2 = {
+  base: {
+    firstName: 'Mario',
+    lastName: 'Rossi'
+  }
+};
+
+const job1 = {
   // random id as it must be unique
   id: Math.random().toString(36).substr(2, 8)
 };
 
+const job2 = Object.assign({}, job1, {
+  companyName: 'SPAM'
+});
+
 describe('ContactHub', () => {
   it('creates, updates and deletes a customer', async () => {
-    const addResult = await ch.addCustomer(customer);
+    const c1 = await ch.addCustomer(customer1);
 
-    const updatedCustomer = Object.assign({}, customer, {
-      id: addResult.id,
-      base: {
-        lastName: 'Rossi'
-      }
-    });
+    const c2 = await c1.updateCustomer(customer2);
 
-    const updateResult = await ch.updateCustomer(updatedCustomer);
+    const del = await ch.deleteCustomer(c2.id);
 
-    const res = await ch.deleteCustomer(updateResult.id);
-
-    expect(res).toEqual({ deleted: true });
+    expect(del).toEqual({ deleted: true });
   });
 
   it('adds and updates a job', async () => {
-    const customerObj = await ch.addCustomer(customer);
+    const c1 = await ch.addCustomer(customer1);
 
-    const jobObj = await ch.addJob(customerObj.id, job);
+    await c1.addJob(job1);
 
-    const updatedJobObj = Object.assign({}, jobObj, {
-      companyName: 'SPAM'
-    });
+    const j2 = await c1.updateJob(job2);
 
-    const updatedJob = await ch.updateJob(customerObj.id, updatedJobObj);
-
-    expect(updatedJob.companyName).toEqual('SPAM');
+    expect(j2.companyName).toEqual('SPAM');
   });
 });
