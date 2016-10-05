@@ -36,7 +36,7 @@ describe('ContactHub', () => {
 
     const c2 = await c1.updateCustomer(customer2);
 
-    const del = await ch.deleteCustomer(c2.id);
+    const del = await c2.deleteCustomer();
 
     expect(del).toEqual({ deleted: true });
   });

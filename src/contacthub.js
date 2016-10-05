@@ -130,7 +130,7 @@ const CustomerFactory = (auth: Auth, data: APICustomer): SDKCustomer => ({
   enabled: data.enabled,
   // SDK methods
   updateCustomer: curry(updateCustomer)(auth, data.id),
-  deleteCustomer: () => curry(updateCustomer)(auth, data.id),
+  deleteCustomer: () => curry(deleteCustomer)(auth, data.id),
   addJob: curry(addJob)(auth, data.id),
   updateJob: curry(updateJob)(auth, data.id)
 });
