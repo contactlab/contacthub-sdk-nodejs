@@ -1,30 +1,21 @@
 // @flow
 
+import type {
+  Auth,
+  APICustomer,
+  SDKCustomer,
+  CustomerData,
+  CustomerJob
+} from './types';
+
 /* Dependencies */
 
+const curry = require('lodash.curry');
 const axios = require('axios');
 
 /* Constants */
 
 const baseUrl = 'https://api.contactlab.it/hub/v1';
-
-/* Flow types */
-
-type Auth = {
-  token: string,
-  workspaceId: string,
-  nodeId: string
-};
-
-type Customer = {
-  id?: string,
-  base: Object,
-  extra?: Object
-};
-
-type Job = {
-  id: string
-};
 
 /* Internal abstractions */
 
@@ -64,53 +55,89 @@ const del = (auth: Auth, opts: Object) => axios({
   }
 });
 
+/* Public SDK methods */
 
-/* Public API methods */
-
-const getCustomer = (auth: Auth) => (customerId: string) => get(auth, {
+const getCustomer = (auth: Auth, customerId: string): Promise<SDKCustomer> =>
+get(auth, {
   endpoint: `customers/${customerId}`
-}).then(res => Promise.resolve(res.data));
+}).then(res => Promise.resolve(CustomerFactory(auth, res.data)));
 
-const getCustomers = (auth: Auth) => () => get(auth, {
+const getCustomers = (auth: Auth): Promise<Array<SDKCustomer>> =>
+get(auth, {
   endpoint: 'customers'
-}).then(res => Promise.resolve(res.data._embedded.customers));
+}).then(res => Promise.resolve(res.data._embedded.customers.map(
+  curry(CustomerFactory)(auth)
+)));
 
-const addCustomer = (auth: Auth) => (customer: Customer) => post(auth, {
+const addCustomer = (
+  auth: Auth, customer: CustomerData
+): Promise<SDKCustomer> => post(auth, {
   endpoint: 'customers',
   data: {
     nodeId: auth.nodeId,
     base: customer.base
   }
-}).then(res => Promise.resolve(res.data));
+}).then(res => Promise.resolve(CustomerFactory(auth, res.data)));
 
-const updateCustomer = (auth: Auth) => (customer: Customer) => {
-  if (!customer.id) {
+const updateCustomer = (
+  auth: Auth, customerId: string, customer: CustomerData
+): Promise<SDKCustomer> => {
+  if (!customerId) {
     throw new Error('Missing "id" property, cannot update customer');
   }
 
   return put(auth, {
-    endpoint: `customers/${customer.id}`,
-    data: customer
-  }).then(res => Promise.resolve(res.data));
+    endpoint: `customers/${customerId}`,
+    data: {
+      nodeId: auth.nodeId,
+      base: customer.base,
+      extended: customer.extended || {},
+      extra: customer.extra || ''
+    }
+  }).then(res => Promise.resolve(CustomerFactory(auth, res.data)));
 };
 
-const deleteCustomer = (auth: Auth) => (customerId: string) => del(auth, {
+const deleteCustomer = (
+  auth: Auth, customerId: string
+) => del(auth, {
   endpoint: `customers/${customerId}`
 }).then(() => Promise.resolve({ deleted: true }));
 
-const addJob = (auth: Auth) => (customerId: string, job: Job) => post(auth, {
+const addJob = (
+  auth: Auth, customerId: string, job: CustomerJob
+) => post(auth, {
   endpoint: `customers/${customerId}/jobs`,
   data: job
 }).then(res => Promise.resolve(res.data));
 
-const updateJob = (auth: Auth) => (customerId: string, job: Job) => put(auth, {
+const updateJob = (
+  auth: Auth, customerId: string, job: CustomerJob
+) => put(auth, {
   endpoint: `customers/${customerId}/jobs/${job.id}`,
   data: job
 }).then(res => Promise.resolve(res.data));
 
-/* Single exported function */
+/* CustomeryFactory: APICustomer -> SDKCustomer */
 
-const ContactHub = (params: Auth) => {
+const CustomerFactory = (auth: Auth, data: APICustomer): SDKCustomer => ({
+  // Public properties
+  id: data.id,
+  externalId: data.externalId,
+  base: data.base,
+  extended: data.extended,
+  extra: data.extra,
+  tags: data.tags,
+  enabled: data.enabled,
+  // SDK methods
+  updateCustomer: curry(updateCustomer)(auth, data.id),
+  deleteCustomer: () => curry(deleteCustomer)(auth, data.id),
+  addJob: curry(addJob)(auth, data.id),
+  updateJob: curry(updateJob)(auth, data.id)
+});
+
+/* === Single exported function === */
+
+const ContactHub = (params: Auth): Object => {
   if (typeof params !== 'object'
       || !(params.token && params.workspaceId && params.nodeId)) {
     throw new Error('Missing required ContactHub configuration.');
@@ -123,13 +150,13 @@ const ContactHub = (params: Auth) => {
   };
 
   return {
-    getCustomer: getCustomer(auth),
-    getCustomers: getCustomers(auth),
-    addCustomer: addCustomer(auth),
-    updateCustomer: updateCustomer(auth),
-    deleteCustomer: deleteCustomer(auth),
-    addJob: addJob(auth),
-    updateJob: updateJob(auth)
+    getCustomer: curry(getCustomer)(auth),
+    getCustomers: () => curry(getCustomers)(auth),
+    addCustomer: curry(addCustomer)(auth),
+    updateCustomer: curry(updateCustomer)(auth),
+    deleteCustomer: curry(deleteCustomer)(auth),
+    addJob: curry(addJob)(auth),
+    updateJob: curry(updateJob)(auth)
   };
 };
 

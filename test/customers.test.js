@@ -30,23 +30,30 @@ describe('ContactHub', () => {
   });
 
   describe('getCustomer', () => {
-    it('finds an existing Customer', async () => {
-      const customer = {
-        id: 'foo'
-      };
+    const customer = {
+      id: 'foo'
+    };
 
+    beforeEach(() => {
       nock(apiUrl)
         .get(`/workspaces/${auth.workspaceId}/customers/${customer.id}`)
         .query({ nodeId: auth.nodeId })
         .reply(200, customer);
+    });
 
+    it('finds an existing Customer', async () => {
       const res = await ch(auth).getCustomer(customer.id);
-      expect(res).toEqual(customer);
+      expect(res.id).toEqual('foo');
+    });
+
+    it('returns an instance of the Customer object', async () => {
+      const res = await ch(auth).getCustomer(customer.id);
+      expect(res.addJob).not.toBe(undefined);
     });
   });
 
   describe('getCustomers', () => {
-    it('returns a list of customers', async () => {
+    beforeEach(() => {
       const customers = {
         _embedded: {
           customers: [{
@@ -61,9 +68,18 @@ describe('ContactHub', () => {
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId })
         .reply(200, customers);
+    });
 
+    it('returns a list of customers', async () => {
       const res = await ch(auth).getCustomers();
-      expect(res).toEqual(customers._embedded.customers);
+      expect(res.length).toBe(2);
+      expect(res[0].id).toBe('c1');
+      expect(res[1].id).toBe('c2');
+    });
+
+    it('returns instances of the Customer object', async () => {
+      const res = await ch(auth).getCustomers();
+      expect(res[0].addJob).not.toBe(undefined);
     });
   });
 
@@ -87,19 +103,19 @@ describe('ContactHub', () => {
 
   describe('updateCustomer', () => {
     it('updates an existing Customer', async () => {
+      const customerId = 'existing-id';
       const customer = {
-        id: 'existing-cid',
         base: {
           lastName: 'Rossi'
         }
       };
 
       nock(apiUrl)
-        .put(`/workspaces/${auth.workspaceId}/customers/${customer.id}`)
+        .put(`/workspaces/${auth.workspaceId}/customers/${customerId}`)
         .reply(200, customer);
 
-      const res = await ch(auth).updateCustomer(customer);
-      expect(res.id).toBe('existing-cid');
+      const res = await ch(auth).updateCustomer(customerId, customer);
+      expect(res.base.lastName).toBe('Rossi');
     });
   });
 
