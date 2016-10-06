@@ -10,7 +10,7 @@ import type {
 
 /* Dependencies */
 
-const curry = require('lodash/fp/curry');
+const curry = require('lodash.curry');
 const axios = require('axios');
 
 /* Constants */
