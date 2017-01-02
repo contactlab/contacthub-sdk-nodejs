@@ -8,18 +8,14 @@ const ch = contacthub({
   nodeId: '854f0791-c120-4e4a-9264-6dd197cb922c'
 });
 
-const customer1 = {
+const randomBase = () => ({
   base: {
-    firstName: 'Mario'
+    firstName: Math.random().toString(36).substr(2, 8),
+    contacts: {
+      email: `${Math.random().toString(36).substr(2, 8)}@example.com`
+    }
   }
-};
-
-const customer2 = {
-  base: {
-    firstName: 'Mario',
-    lastName: 'Rossi'
-  }
-};
+});
 
 const job1 = {
   // random id as it must be unique
@@ -32,9 +28,9 @@ const job2 = Object.assign({}, job1, {
 
 describe('ContactHub', () => {
   it('creates, updates and deletes a customer', async () => {
-    const c1 = await ch.addCustomer(customer1);
+    const c1 = await ch.addCustomer(randomBase());
 
-    const c2 = await c1.updateCustomer(customer2);
+    const c2 = await c1.updateCustomer(randomBase());
 
     const del = await c2.deleteCustomer();
 
@@ -42,7 +38,7 @@ describe('ContactHub', () => {
   });
 
   it('adds and updates a job', async () => {
-    const c1 = await ch.addCustomer(customer1);
+    const c1 = await ch.addCustomer(randomBase());
 
     await c1.addJob(job1);
 

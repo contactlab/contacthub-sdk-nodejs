@@ -89,6 +89,7 @@ const updateCustomer = (
   return put(auth, {
     endpoint: `customers/${customerId}`,
     data: {
+      id: customerId,
       nodeId: auth.nodeId,
       base: customer.base,
       extended: customer.extended || {},
