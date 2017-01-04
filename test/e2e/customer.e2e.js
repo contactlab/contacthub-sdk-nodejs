@@ -1,6 +1,6 @@
 // @flow
 
-const ContactHub = require('../../src/contacthub');
+import ContactHub from '../../src/contacthub';
 
 const ch = new ContactHub({
   token: '97841617075b4b5f8ea88c30a8d2aec7647b7181df2c483fa78138c8d58aed4d',

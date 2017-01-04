@@ -3,10 +3,10 @@
 import type { Auth } from './types';
 
 /* Dependencies */
-const APIEntity = require('./APIEntity');
-const Customer = require('./Customer');
+import APIEntity from './APIEntity';
+import Customer from './Customer';
 
-module.exports = class ContactHub extends APIEntity {
+export default class ContactHub extends APIEntity {
   auth: Auth
   api: Object
 
@@ -58,4 +58,4 @@ module.exports = class ContactHub extends APIEntity {
     return data;
   }
 
-};
+}

@@ -1,6 +1,6 @@
 // @flow
 
-const ContactHub = require('../src/contacthub');
+import ContactHub from '../src/contacthub';
 const nock = require('nock');
 
 

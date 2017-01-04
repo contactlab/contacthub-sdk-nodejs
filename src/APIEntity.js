@@ -1,9 +1,9 @@
 // @flow
 
 import type { Auth } from './types';
-const API = require('./API');
+import API from './API';
 
-module.exports = class APIEntity {
+export default class APIEntity {
 
   api: Object
   auth: Auth
@@ -20,4 +20,4 @@ module.exports = class APIEntity {
     this.api = new API(this.auth);
   }
 
-};
+}

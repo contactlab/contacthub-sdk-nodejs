@@ -1,13 +1,12 @@
 // @flow
 import type { Auth } from './types';
-const axios = require('axios');
-
+import axios from 'axios';
 
 const baseURL = 'https://api.contactlab.it/hub/v1';
 
 /* Internal abstractions */
 
-module.exports = class API {
+export default class API {
 
   workspaceId: string
   nodeId: string

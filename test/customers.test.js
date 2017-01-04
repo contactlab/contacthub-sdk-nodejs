@@ -1,7 +1,7 @@
 // @flow
 
-const ContactHub = require('../src/ContactHub');
-const nock = require('nock');
+import ContactHub from '../src/ContactHub';
+import nock from 'nock';
 
 const auth = {
   token: 'token',

@@ -3,9 +3,9 @@
 import type { Auth, Tags } from './types';
 
 /* Dependencies */
-const APIEntity = require('./APIEntity');
+import APIEntity from './APIEntity';
 
-module.exports = class Customer extends APIEntity {
+export default class Customer extends APIEntity {
 
   id: string
   externalId: ?string
@@ -15,7 +15,7 @@ module.exports = class Customer extends APIEntity {
   tags: Tags
   enabled: boolean
 
-  constructor(auth: Auth, data: Object) {
+  constructor(auth: Object, data: Object): void {
     super(auth);
     this.id = data.id;
     this.externalId = data.externalId;
@@ -37,5 +37,4 @@ module.exports = class Customer extends APIEntity {
   updateJob = (job: Object): Promise<Object> => {
     return this.api.put({ endpoint: `customers/${this.id}/jobs/${job.id}`, data: job });
   }
-
-};
+}
