@@ -19,10 +19,7 @@ export default class API {
       baseURL,
       headers: {
         Authorization: `Bearer ${auth.token}`
-      },
-      transformResponse: [(data: string) => {
-        return data && JSON.parse(data);
-      }]
+      }
     });
   }
 
