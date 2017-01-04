@@ -15,7 +15,7 @@ export default class Customer extends APIEntity {
   tags: Tags
   enabled: boolean
 
-  constructor(auth: Object, data: Object): void {
+  constructor(auth: Auth, data: Object): void {
     super(auth);
     this.id = data.id;
     this.externalId = data.externalId;
@@ -26,15 +26,20 @@ export default class Customer extends APIEntity {
     this.enabled = data.enabled;
   }
 
-  updateCustomer = (customer: Object): Promise<Object> => {
-    return this.api.put({ endpoint: `customers/${this.id}`, data: customer });
+  updateCustomer(customer: Object): Promise<Customer> {
+    return this.api.put({ endpoint: `customers/${this.id}`, data: { ...customer, id: this.id, nodeId: this.auth.nodeId } })
+      .then((customer) => new Customer(this.auth, customer));
   }
 
-  addJob = (job: Object): Promise<Object> => {
+  deleteCustomer(): Promise<Object> {
+    return this.api.del({ endpoint: `customers/${this.id}` }).then(() => ({ deleted: true }));
+  }
+
+  addJob(job: Object): Promise<Object> {
     return this.api.post({ endpoint: `customers/${this.id}/jobs`, data: job });
   }
 
-  updateJob = (job: Object): Promise<Object> => {
+  updateJob(job: Object): Promise<Object> {
     return this.api.put({ endpoint: `customers/${this.id}/jobs/${job.id}`, data: job });
   }
 }

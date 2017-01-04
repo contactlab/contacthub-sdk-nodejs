@@ -26,23 +26,23 @@ export default class API {
     });
   }
 
-  get = (opts: Object): Promise<Object> => {
+  get(opts: Object): Promise<Object> {
     return this.axios.get(`/workspaces/${this.workspaceId}/${opts.endpoint}`, { params: { nodeId: this.nodeId } })
       .then(res => res.data);
   }
 
-  post = (opts: Object): Promise<Object> => {
-    return this.axios.post(`/workspaces/${this.workspaceId}/${opts.endpoint}`, { data: opts.data })
+  post(opts: Object): Promise<Object> {
+    return this.axios.post(`/workspaces/${this.workspaceId}/${opts.endpoint}`, opts.data)
       .then(res => res.data);
   }
 
-  put = (opts: Object): Promise<Object> => {
-    return this.axios.put(`/workspaces/${this.workspaceId}/${opts.endpoint}`, { data: opts.data })
+  put(opts: Object): Promise<Object> {
+    return this.axios.put(`/workspaces/${this.workspaceId}/${opts.endpoint}`, opts.data)
       .then(res => res.data);
   }
 
-  del = (opts: Object) => {
+  del(opts: Object) {
     return this.axios.delete(`/workspaces/${this.workspaceId}/${opts.endpoint}`, { params: { nodeId: this.nodeId } })
       .then(res => res.data);
   }
-};
+}
