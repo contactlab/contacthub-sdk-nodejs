@@ -1,7 +1,8 @@
 // @flow
 
-const ch = require('../src/contacthub');
+const ContactHub = require('../src/contacthub');
 const nock = require('nock');
+
 
 const auth = {
   token: 'token',
@@ -9,11 +10,12 @@ const auth = {
   nodeId: 'nid'
 };
 
+const ch = new ContactHub(auth);
+
 const apiUrl = 'https://api.contactlab.it/hub/v1';
 
 describe('ContactHub', () => {
-  beforeEach(() => {
-  });
+  beforeEach(() => { });
 
   afterAll(() => nock.restore());
 
@@ -29,7 +31,7 @@ describe('ContactHub', () => {
         .post(`/workspaces/${auth.workspaceId}/customers/${cid}/jobs`)
         .reply(200, job);
 
-      const res = await ch(auth).addJob(cid, job);
+      const res = await ch.addJob(cid, job);
       expect(res).toEqual(job);
     });
   });
@@ -47,7 +49,7 @@ describe('ContactHub', () => {
         .put(`/workspaces/${auth.workspaceId}/customers/${cid}/jobs/${jid}`)
         .reply(200, job);
 
-      const res = await ch(auth).updateJob(cid, job);
+      const res = await ch.updateJob(cid, job);
       expect(res).toEqual(job);
     });
   });
