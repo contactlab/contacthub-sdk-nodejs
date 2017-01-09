@@ -1,7 +1,7 @@
 // @flow
 
-const ch = require('../src/contacthub');
-const nock = require('nock');
+import ContactHub from '../src/ContactHub';
+import nock from 'nock';
 
 const auth = {
   token: 'token',
@@ -9,11 +9,12 @@ const auth = {
   nodeId: 'nid'
 };
 
+const ch = new ContactHub(auth);
+
 const apiUrl = 'https://api.contactlab.it/hub/v1';
 
 describe('ContactHub', () => {
-  beforeEach(() => {
-  });
+  beforeEach(() => { });
 
   afterAll(() => nock.restore());
 
@@ -26,7 +27,7 @@ describe('ContactHub', () => {
   });
 
   it('returns an object', () => {
-    expect(typeof ch(auth)).toBe('object');
+    expect(typeof ch).toBe('object');
   });
 
   describe('getCustomer', () => {
@@ -42,12 +43,12 @@ describe('ContactHub', () => {
     });
 
     it('finds an existing Customer', async () => {
-      const res = await ch(auth).getCustomer(customer.id);
+      const res = await ch.getCustomer(customer.id);
       expect(res.id).toEqual('foo');
     });
 
     it('returns an instance of the Customer object', async () => {
-      const res = await ch(auth).getCustomer(customer.id);
+      const res = await ch.getCustomer(customer.id);
       expect(res.addJob).not.toBe(undefined);
     });
   });
@@ -71,14 +72,14 @@ describe('ContactHub', () => {
     });
 
     it('returns a list of customers', async () => {
-      const res = await ch(auth).getCustomers();
+      const res = await ch.getCustomers();
       expect(res.length).toBe(2);
       expect(res[0].id).toBe('c1');
       expect(res[1].id).toBe('c2');
     });
 
     it('returns instances of the Customer object', async () => {
-      const res = await ch(auth).getCustomers();
+      const res = await ch.getCustomers();
       expect(res[0].addJob).not.toBe(undefined);
     });
   });
@@ -95,7 +96,7 @@ describe('ContactHub', () => {
         .post(`/workspaces/${auth.workspaceId}/customers`)
         .reply(200, { id: 'new-cid' });
 
-      return ch(auth).addCustomer(customer).then(res => {
+      return ch.addCustomer(customer).then(res => {
         expect(res.id).toBe('new-cid');
       });
     });
@@ -114,7 +115,7 @@ describe('ContactHub', () => {
         .put(`/workspaces/${auth.workspaceId}/customers/${customerId}`)
         .reply(200, customer);
 
-      const res = await ch(auth).updateCustomer(customerId, customer);
+      const res = await ch.updateCustomer(customerId, customer);
       expect(res.base.lastName).toBe('Rossi');
     });
   });
@@ -128,7 +129,7 @@ describe('ContactHub', () => {
         .query({ nodeId: auth.nodeId })
         .reply(200);
 
-      const res = await ch(auth).deleteCustomer('existing-cid');
+      const res = await ch.deleteCustomer('existing-cid');
       expect(res).toEqual({ deleted: true });
     });
   });

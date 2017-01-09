@@ -14,8 +14,7 @@
     "test-watch": "jest --watch",
     "e2e": "jest --config e2e.jest",
     "clean": "rm -rf lib/*",
-    "build": "npm run clean && babel src -d lib && flow stop && npm run gen-flow-files",
-    "gen-flow-files": "flow gen-flow-files src --out-dir lib"
+    "build": "npm run clean && babel src -d lib"
   },
   "repository": {
     "type": "git",
@@ -39,7 +38,9 @@
     "babel-eslint": "^7.0.0",
     "babel-jest": "^15.0.0",
     "babel-plugin-transform-async-to-generator": "^6.16.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.18.0",
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
+    "babel-plugin-transform-object-rest-spread": "^6.20.2",
     "babel-polyfill": "^6.16.0",
     "eslint": "^3.6.1",
     "eslint-config-buildo": "^0.1.0",
