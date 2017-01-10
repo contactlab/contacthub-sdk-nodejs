@@ -102,9 +102,19 @@ describe('ContactHub', () => {
 
       nock(apiUrl)
         .put(`/workspaces/${auth.workspaceId}/customers/${customerId}`)
+
+  describe('patchCustomer', () => {
+    it('updates an existing Customer', async () => {
+      const customerId = 'existing-id';
+      const customer = {
+        base: { lastName: 'Rossi' }
+      };
+
+      nock(apiUrl)
+        .patch(`/workspaces/${auth.workspaceId}/customers/${customerId}`)
         .reply(200, customer);
 
-      const res = await ch.updateCustomer(customerId, customer);
+      const res = await ch.patchCustomer(customerId, customer);
       expect(res.base.lastName).toBe('Rossi');
     });
   });

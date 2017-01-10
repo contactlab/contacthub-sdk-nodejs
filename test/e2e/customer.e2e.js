@@ -170,6 +170,16 @@ describe('ContactHub', () => {
     expect(remote.base).toEqual(local.base);
   });
 
+  it('creates, patches and deletes a customer', async () => {
+    const customerData = simpleCustomer();
+    const customer = await ch.addCustomer(customerData);
+
+    const updatedCustomerData = simpleCustomer();
+    const updatedCustomer = await ch.patchCustomer(customer.id, updatedCustomerData);
+    expect(sanitize(updatedCustomer.base)).toEqual(updatedCustomerData.base);
+  });
+
+
   it('adds and updates a job', async () => {
     const c1 = await ch.addCustomer(simpleCustomer());
 
