@@ -28,7 +28,7 @@ export default class ContactHub extends APIEntity {
 
   getCustomers(): Promise<Array<Object>> {
     return this.api.get({ endpoint: 'customers' })
-      .then(data => data._embedded.customers)
+      .then(({ elements }) => elements)
       .then(this.toCustomer.bind(this));
   }
 

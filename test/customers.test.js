@@ -56,13 +56,11 @@ describe('ContactHub', () => {
   describe('getCustomers', () => {
     beforeEach(() => {
       const customers = {
-        _embedded: {
-          customers: [{
-            id: 'c1'
-          }, {
-            id: 'c2'
-          }]
-        }
+        elements: [{
+          id: 'c1'
+        }, {
+          id: 'c2'
+        }]
       };
 
       nock(apiUrl)

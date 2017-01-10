@@ -1,6 +1,6 @@
 // @flow
 
-import ContactHub from '../../src/contacthub';
+import ContactHub from '../../src/ContactHub';
 
 const ch = new ContactHub({
   token: '97841617075b4b5f8ea88c30a8d2aec7647b7181df2c483fa78138c8d58aed4d',
@@ -27,6 +27,14 @@ const job2 = Object.assign({}, job1, {
 });
 
 describe('ContactHub', () => {
+
+  it('gets a list of customers', async () => {
+    const customers = await ch.getCustomers();
+
+    expect(customers.length).toEqual(10);
+    customers.forEach(c => expect(c.id).toBeDefined());
+  });
+
   it('creates, updates and deletes a customer', async () => {
     const c1 = await ch.addCustomer(randomBase());
 
