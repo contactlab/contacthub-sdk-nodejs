@@ -13,6 +13,7 @@
     "test": "jest",
     "test-watch": "jest --watch",
     "e2e": "jest --config e2e.jest",
+    "e2e-watch": "jest --watch --config e2e.jest",
     "clean": "rm -rf lib/*",
     "build": "npm run clean && babel src -d lib"
   },
