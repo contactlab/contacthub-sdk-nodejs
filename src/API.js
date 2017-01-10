@@ -39,6 +39,11 @@ export default class API {
       .then(res => res.data);
   }
 
+  patch(opts: Object): Promise<Object> {
+    return this.axios.patch(`/workspaces/${this.workspaceId}/${opts.endpoint}`, opts.data)
+      .then(res => res.data);
+  }
+
   del(opts: Object) {
     return this.axios.delete(`/workspaces/${this.workspaceId}/${opts.endpoint}`,
                              { params: { nodeId: this.nodeId } })
