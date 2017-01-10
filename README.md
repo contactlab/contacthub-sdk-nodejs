@@ -3,9 +3,9 @@
 ## Basic usage
 
 ```js
-const contacthub = require('contacthub-sdk-nodejs');
+const ContactHub = require('contacthub-sdk-nodejs');
 
-const ch = contacthub({
+const ch = new ContactHub({
   token: 'YOUR_TOKEN',
   workspaceId: 'YOUR_WORKSPACE_ID',
   nodeId: 'YOUR_NODE_ID'
@@ -35,3 +35,12 @@ Available methods:
 Run unit tests with `npm test` or (`npm run test-watch` to enable watch mode).
 
 Run e2e tests with `npm run e2e`.
+
+This *sdk* is tested against *node v4* and to help testing for this specific node version there is a `Dockerfile`.
+
+Here are the commands to run tests with docker.
+
+```sh
+$ docker build -t ch-node4 .
+$ docker run --rm ch-node4
+```

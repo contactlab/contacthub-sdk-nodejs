@@ -1,8 +1,12 @@
 {
   "plugins": [
-    "transform-async-to-generator",
     "transform-flow-strip-types",
-    "transform-object-rest-spread",
-    "transform-es2015-modules-commonjs"
+    ["transform-object-rest-spread", { "useBuiltIns": true }]
+  ],
+  "presets": [
+    ["env", {
+      "debug": true,
+      "targets": { "node": 4 }
+    }]
   ]
 }
