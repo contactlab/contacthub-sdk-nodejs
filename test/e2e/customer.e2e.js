@@ -3,14 +3,15 @@
 import ContactHub from '../../src/ContactHub';
 
 // For comparing Base Properties, we remove null values and empty arrays.
-const removeNulls = (obj) => {
+// This should probably be handled by the Customer class, see #21
+const sanitize = (obj) => {
   Object.keys(obj).forEach(key => {
     if (obj[key] === null) {
       delete obj[key];
     } else if (Array.isArray(obj[key]) && obj[key].length === 0) {
       delete obj[key];
     } else if (typeof obj[key] === 'object') {
-      removeNulls(obj[key]);
+      sanitize(obj[key]);
     }
   });
   return obj;
@@ -160,7 +161,7 @@ describe('ContactHub', () => {
     const cid = (await ch.addCustomer(local)).id;
     const remote = await ch.getCustomer(cid);
 
-    expect(removeNulls(remote.base)).toEqual(local.base);
+    expect(sanitize(remote.base)).toEqual(local.base);
   });
 
   it('can write and read back all base properties', async () => {
@@ -168,7 +169,7 @@ describe('ContactHub', () => {
     const cid = (await ch.addCustomer(local)).id;
     const remote = await ch.getCustomer(cid);
 
-    expect(removeNulls(remote.base)).toEqual(local.base);
+    expect(sanitize(remote.base)).toEqual(local.base);
   });
 
   it('adds and updates a job', async () => {
