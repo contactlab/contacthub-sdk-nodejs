@@ -1,45 +1,36 @@
 // @flow
 
-import type { Auth, Tags } from './types';
+import type { BaseProperties, Tags } from './types';
 
-/* Dependencies */
-import APIEntity from './APIEntity';
+const sanitize = (obj) => {
+  Object.keys(obj).forEach(key => {
+    if (obj[key] === null) {
+      delete obj[key];
+    } else if (Array.isArray(obj[key]) && obj[key].length === 0) {
+      delete obj[key];
+    } else if (typeof obj[key] === 'object') {
+      sanitize(obj[key]);
+    }
+  });
+  return obj;
+};
 
-export default class Customer extends APIEntity {
+export default class Customer {
 
   id: string
   externalId: ?string
-  base: Object
-  extended: Object
-  extra: Object
-  tags: Tags
-  enabled: boolean
+  base: BaseProperties
+  extended: ?Object
+  extra: ?string
+  tags: ?Tags
 
-  constructor(auth: Auth, data: Object): void {
-    super(auth);
-    this.id = data.id;
-    this.externalId = data.externalId;
-    this.base = data.base;
-    this.extended = data.extended;
-    this.extra = data.extra;
-    this.tags = data.tags;
-    this.enabled = data.enabled;
+  constructor(data: Object): void {
+    ['id', 'externalId', 'extended', 'extra', 'tags'].forEach(key => {
+      if (data[key]) (this: any)[key] = data[key];
+    });
+
+    /* Strip nulls and empty arrays recursively from `base` */
+    if (data.base) this.base = sanitize(data.base);
   }
 
-  updateCustomer(customer: Object): Promise<Customer> {
-    return this.api.put({ endpoint: `customers/${this.id}`, data: { ...customer, id: this.id, nodeId: this.auth.nodeId } })
-      .then((customer) => new Customer(this.auth, customer));
-  }
-
-  deleteCustomer(): Promise<Object> {
-    return this.api.del({ endpoint: `customers/${this.id}` }).then(() => ({ deleted: true }));
-  }
-
-  addJob(job: Object): Promise<Object> {
-    return this.api.post({ endpoint: `customers/${this.id}/jobs`, data: job });
-  }
-
-  updateJob(job: Object): Promise<Object> {
-    return this.api.put({ endpoint: `customers/${this.id}/jobs/${job.id}`, data: job });
-  }
 }

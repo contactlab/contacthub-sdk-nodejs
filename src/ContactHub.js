@@ -10,7 +10,7 @@ export default class ContactHub extends APIEntity {
   auth: Auth
   api: Object
 
-  addCustomer(customer: Object): Promise<Customer> {
+  addCustomer(customer: Customer): Promise<Customer> {
     return this.api.post({
       endpoint: 'customers',
       data: {
@@ -21,19 +21,21 @@ export default class ContactHub extends APIEntity {
     .then(this.toCustomer.bind(this));
   }
 
-  getCustomer(customerId: string): Promise<Object> {
+  getCustomer(customerId: string): Promise<Customer> {
     return this.api.get({ endpoint: `customers/${customerId}` })
       .then((data) => this.toCustomer(data));
   }
 
-  getCustomers(): Promise<Array<Object>> {
+  getCustomers(): Promise<Array<Customer>> {
     return this.api.get({ endpoint: 'customers' })
       .then(({ elements }) => elements)
       .then(this.toCustomer.bind(this));
   }
 
-  updateCustomer(customerId: string, customer: Object): Promise<Customer> {
-    return this.api.put({ endpoint: `customers/${customerId}`, data: customer })
+  updateCustomer(customerId: string, customer: Customer): Promise<Customer> {
+    const data = { ...customer, nodeId: this.auth.nodeId };
+
+    return this.api.put({ endpoint: `customers/${customerId}`, data })
       .then(this.toCustomer.bind(this));
   }
 
@@ -49,11 +51,11 @@ export default class ContactHub extends APIEntity {
     return this.api.put({ endpoint: `customers/${customerId}/jobs/${job.id}`, data: job });
   }
 
-  toCustomer(data: Object) {
+  toCustomer(data: Object): Customer {
     if (Array.isArray(data)) {
-      return data.map(d => new Customer(this.auth, d));
+      return data.map(d => new Customer(d));
     } else if (typeof data === 'object') {
-      return new Customer(this.auth, data);
+      return new Customer(data);
     }
     return data;
   }
