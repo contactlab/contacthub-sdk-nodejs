@@ -78,16 +78,15 @@ const complexCustomer = () => ({
       username: 'user',
       password: 'pass'
     },
-    // educations are commented because of an API bug
-    // educations: [{
-    //   id: 'edu',
-    //   schoolType: 'OTHER',
-    //   schoolName: 'Politecnico di Milano',
-    //   schoolConcentration: 'Software Engineering',
-    //   startYear: 2000,
-    //   endYear: 2005,
-    //   isCurrent: false
-    // }],
+    educations: [{
+      id: 'edu',
+      schoolType: 'OTHER',
+      schoolName: 'Politecnico di Milano',
+      schoolConcentration: 'Software Engineering',
+      startYear: 2000,
+      endYear: 2005,
+      isCurrent: false
+    }],
     likes: [{
       id: 'like1',
       category: 'cat1',
