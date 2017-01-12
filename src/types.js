@@ -110,7 +110,7 @@ export type BaseProperties = {
   credential?: CustomerCredential,
   educations?: string,
   likes?: Array<CustomerLike>,
-  socialProfile: CustomerSocial,
+  socialProfile?: CustomerSocial,
   jobs?: Array<CustomerJob>,
   subscriptions?: string
 };
