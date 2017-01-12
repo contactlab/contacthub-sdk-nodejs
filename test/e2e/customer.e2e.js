@@ -23,6 +23,25 @@ const simpleCustomer = () => new Customer({
   }
 });
 
+// Source: http://justsomething.co/hilarious-job-titles/
+const realJobs = [
+  'Chocolate Beer Specialist', 'Shredded Cheese Authority',
+  'Pornography Historian', 'Smarties Expert', 'Mall Santa',
+  'Rasputin Impersonator', 'Cat Behavior Consultant', 'MILF Commander',
+  'Head of Potatoes', 'Ex-moonshiner', 'Pork Rind Expert', 'Bread Scientist',
+  'Bear biologist and Paper folder', '6-layer dip maker',
+  'Chief of Unicorn Division', 'Bride Kidnapping Expert'
+];
+
+const randomJobTitle = () => {
+  return realJobs[Math.floor(Math.random() * realJobs.length)];
+};
+
+const randomJob = () => ({
+  id: randomString(),
+  jobTitle: randomJobTitle()
+});
+
 const complexCustomer = () => new Customer({
   externalId: randomString(),
   extra: randomString(),
@@ -117,11 +136,6 @@ const complexCustomer = () => new Customer({
   }
 });
 
-const randomJob = () => ({
-  // random id as it must be unique
-  id: Math.random().toString(36).substr(2, 8)
-});
-
 describe('ContactHub', () => {
 
   it('gets a list of customers', async () => {
@@ -161,16 +175,15 @@ describe('ContactHub', () => {
 
   it('adds and updates a job', async () => {
     const c1 = await ch.addCustomer(simpleCustomer());
-    const job1 = randomJob();
 
-    await ch.addJob(c1.id, job1);
+    const job = await ch.addJob(c1.id, randomJob());
 
-    const job2 = Object.assign({}, job1, {
-      companyName: 'SPAM'
+    const updatedJob = Object.assign({}, job, {
+      jobTitle: randomJobTitle()
     });
 
-    const j2 = await ch.updateJob(c1.id, job2);
+    const j2 = await ch.updateJob(c1.id, updatedJob);
 
-    expect(j2.companyName).toEqual('SPAM');
+    expect(j2.jobTitle).toEqual(updatedJob.jobTitle);
   });
 });
