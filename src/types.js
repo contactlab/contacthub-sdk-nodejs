@@ -28,14 +28,6 @@ export type CustomerOps = {
   updateJob: Function
 };
 
-export type CustomerData = {
-  externalId?: string,
-  base: BaseProperties,
-  extended?: Object,
-  extra?: string,
-  tags: CustomerTags
-};
-
 export type CustomerTags = {
   auto?: Array<string>,
   manual?: Array<string>
@@ -113,4 +105,12 @@ export type BaseProperties = {
   socialProfile?: CustomerSocial,
   jobs?: Array<CustomerJob>,
   subscriptions?: string
+};
+
+export type CustomerData = {
+  externalId?: string,
+  base: BaseProperties,
+  extended?: Object,
+  extra?: string,
+  tags: CustomerTags
 };

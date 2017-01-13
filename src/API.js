@@ -24,7 +24,8 @@ export default class API {
   }
 
   get(opts: Object): Promise<Object> {
-    return this.axios.get(`/workspaces/${this.workspaceId}/${opts.endpoint}`, { params: { nodeId: this.nodeId } })
+    return this.axios.get(`/workspaces/${this.workspaceId}/${opts.endpoint}`,
+                          { params: { nodeId: this.nodeId } })
       .then(res => res.data);
   }
 
@@ -39,7 +40,8 @@ export default class API {
   }
 
   del(opts: Object) {
-    return this.axios.delete(`/workspaces/${this.workspaceId}/${opts.endpoint}`, { params: { nodeId: this.nodeId } })
+    return this.axios.delete(`/workspaces/${this.workspaceId}/${opts.endpoint}`,
+                             { params: { nodeId: this.nodeId } })
       .then(res => res.data);
   }
 }

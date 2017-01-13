@@ -19,9 +19,9 @@ const crazy = {
   bar: null,
   baz: [
     simple,
-    [ null ],
+    [null],
     undefined,
-    [ simple, undefined, { a: null }, { key: 'val' } ],
+    [simple, undefined, { a: null }, { key: 'val' }],
     null,
     123
   ]
@@ -31,7 +31,7 @@ const crazyExpected = {
   foo: 'a',
   baz: [
     simpleExpected,
-    [ simpleExpected, { key: 'val' } ],
+    [simpleExpected, { key: 'val' }],
     123
   ]
 };
@@ -75,7 +75,7 @@ describe('utils', () => {
     });
 
     it('creates a copy of arrays', () => {
-      const a = [ 'a', 'b' ];
+      const a = ['a', 'b'];
       expect(compact(a)).not.toBe(a);
     });
 
@@ -85,7 +85,7 @@ describe('utils', () => {
     });
 
     it('removes undefined elements from arrays', () => {
-      expect(compact([ 'a', undefined, 'b' ])).toEqual([ 'a', 'b' ]);
+      expect(compact(['a', undefined, 'b'])).toEqual(['a', 'b']);
     });
 
     it('recursively compacts nested objects', () => {
@@ -93,7 +93,7 @@ describe('utils', () => {
     });
 
     it('recursively compacts nested arrays', () => {
-      expect(compact([ 'a', [ 'b', [ null ] ] ])).toEqual([ 'a', [ 'b' ] ]);
+      expect(compact(['a', ['b', [null]]])).toEqual(['a', ['b']]);
     });
 
     /*

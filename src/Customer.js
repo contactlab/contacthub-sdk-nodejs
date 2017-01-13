@@ -14,11 +14,15 @@ export default class Customer {
 
   constructor(data: Object): void {
     ['id', 'externalId', 'extended', 'extra', 'tags'].forEach(key => {
-      if (data[key]) (this: any)[key] = data[key];
+      if (data[key]) {
+        (this: any)[key] = data[key];
+      }
     });
 
     /* Strip nulls and empty arrays recursively from `base` */
-    if (data.base) this.base = compact(data.base);
+    if (data.base) {
+      this.base = compact(data.base);
+    }
   }
 
 }
