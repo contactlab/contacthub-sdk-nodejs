@@ -1,26 +1,7 @@
 // @flow
 
 import type { BaseProperties, Tags } from './types';
-
-// Remove "null" values and empty arrays
-const sanitize = (obj) =>  Object.keys(obj).reduce((acc, key) => {
-  const value = obj[key];
-  if (value === null || Array.isArray(value) && value.length === 0) {
-    return acc;
-  }
-
-  if (Array.isArray(value)) {
-    return {
-      ...acc,
-      [key]: value.map(sanitize)
-    };
-  }
-
-  return {
-    ...acc,
-    [key]: typeof value === 'object' ? sanitize(value) : value
-  };
-}, {});
+import { compact } from './utils';
 
 export default class Customer {
 
@@ -37,7 +18,7 @@ export default class Customer {
     });
 
     /* Strip nulls and empty arrays recursively from `base` */
-    if (data.base) this.base = sanitize(data.base);
+    if (data.base) this.base = compact(data.base);
   }
 
 }
