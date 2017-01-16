@@ -1,40 +1,41 @@
 // @flow
 
 import type { Auth } from './types';
+import type API from './API';
 
-/* Dependencies */
 import APIEntity from './APIEntity';
 import Customer from './Customer';
 
 export default class ContactHub extends APIEntity {
   auth: Auth
-  api: Object
+  api: API
 
-  addCustomer(customer: Object): Promise<Customer> {
+  addCustomer(customer: Customer): Promise<Customer> {
     return this.api.post({
       endpoint: 'customers',
       data: {
         nodeId: this.auth.nodeId,
         base: customer.base
       }
-    })
-    .then(this.toCustomer.bind(this));
+    }).then(data => new Customer(data));
   }
 
-  getCustomer(customerId: string): Promise<Object> {
+  getCustomer(customerId: string): Promise<Customer> {
     return this.api.get({ endpoint: `customers/${customerId}` })
-      .then((data) => this.toCustomer(data));
+      .then(data => new Customer(data));
   }
 
-  getCustomers(): Promise<Array<Object>> {
+  getCustomers(): Promise<Array<Customer>> {
     return this.api.get({ endpoint: 'customers' })
       .then(({ elements }) => elements)
-      .then(this.toCustomer.bind(this));
+      .then(data => data.map(d => new Customer(d)));
   }
 
-  updateCustomer(customerId: string, customer: Object): Promise<Customer> {
-    return this.api.put({ endpoint: `customers/${customerId}`, data: customer })
-      .then(this.toCustomer.bind(this));
+  updateCustomer(customerId: string, customer: Customer): Promise<Customer> {
+    const data = { ...customer, nodeId: this.auth.nodeId };
+
+    return this.api.put({ endpoint: `customers/${customerId}`, data })
+      .then(data => new Customer(data));
   }
 
   deleteCustomer(customerId: string) {
@@ -47,15 +48,6 @@ export default class ContactHub extends APIEntity {
 
   updateJob(customerId: string, job: Object): Promise<Object> {
     return this.api.put({ endpoint: `customers/${customerId}/jobs/${job.id}`, data: job });
-  }
-
-  toCustomer(data: Object) {
-    if (Array.isArray(data)) {
-      return data.map(d => new Customer(this.auth, d));
-    } else if (typeof data === 'object') {
-      return new Customer(this.auth, data);
-    }
-    return data;
   }
 
 }

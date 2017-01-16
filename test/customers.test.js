@@ -1,6 +1,7 @@
 // @flow
 
 import ContactHub from '../src/ContactHub';
+import Customer from '../src/Customer';
 import nock from 'nock';
 
 const auth = {
@@ -46,11 +47,6 @@ describe('ContactHub', () => {
       const res = await ch.getCustomer(customer.id);
       expect(res.id).toEqual('foo');
     });
-
-    it('returns an instance of the Customer object', async () => {
-      const res = await ch.getCustomer(customer.id);
-      expect(res.addJob).not.toBe(undefined);
-    });
   });
 
   describe('getCustomers', () => {
@@ -75,20 +71,15 @@ describe('ContactHub', () => {
       expect(res[0].id).toBe('c1');
       expect(res[1].id).toBe('c2');
     });
-
-    it('returns instances of the Customer object', async () => {
-      const res = await ch.getCustomers();
-      expect(res[0].addJob).not.toBe(undefined);
-    });
   });
 
   describe('addCustomer', () => {
     it('creates a new Customer', () => {
-      const customer = {
+      const customer = new Customer({
         base: {
           firstName: 'Mario'
         }
-      };
+      });
 
       nock(apiUrl)
         .post(`/workspaces/${auth.workspaceId}/customers`)
@@ -103,11 +94,11 @@ describe('ContactHub', () => {
   describe('updateCustomer', () => {
     it('updates an existing Customer', async () => {
       const customerId = 'existing-id';
-      const customer = {
+      const customer = new Customer({
         base: {
           lastName: 'Rossi'
         }
-      };
+      });
 
       nock(apiUrl)
         .put(`/workspaces/${auth.workspaceId}/customers/${customerId}`)

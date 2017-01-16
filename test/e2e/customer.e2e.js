@@ -1,21 +1,7 @@
 // @flow
 
 import ContactHub from '../../src/ContactHub';
-
-// For comparing Base Properties, we remove null values and empty arrays.
-// This should probably be handled by the Customer class, see #21
-const sanitize = (obj) => {
-  Object.keys(obj).forEach(key => {
-    if (obj[key] === null) {
-      delete obj[key];
-    } else if (Array.isArray(obj[key]) && obj[key].length === 0) {
-      delete obj[key];
-    } else if (typeof obj[key] === 'object') {
-      sanitize(obj[key]);
-    }
-  });
-  return obj;
-};
+import Customer from '../../src/Customer';
 
 const ch = new ContactHub({
   token: '97841617075b4b5f8ea88c30a8d2aec7647b7181df2c483fa78138c8d58aed4d',
@@ -25,7 +11,7 @@ const ch = new ContactHub({
 
 const randomString = () => Math.random().toString(36).substr(2, 8);
 
-const simpleCustomer = () => ({
+const simpleCustomer = () => new Customer({
   base: {
     firstName: randomString(),
     contacts: {
@@ -34,7 +20,26 @@ const simpleCustomer = () => ({
   }
 });
 
-const complexCustomer = () => ({
+// Source: http://justsomething.co/hilarious-job-titles/
+const realJobs = [
+  'Chocolate Beer Specialist', 'Shredded Cheese Authority',
+  'Pornography Historian', 'Smarties Expert', 'Mall Santa',
+  'Rasputin Impersonator', 'Cat Behavior Consultant', 'MILF Commander',
+  'Head of Potatoes', 'Ex-moonshiner', 'Pork Rind Expert', 'Bread Scientist',
+  'Bear biologist and Paper folder', '6-layer dip maker',
+  'Chief of Unicorn Division', 'Bride Kidnapping Expert'
+];
+
+const randomJobTitle = () => {
+  return realJobs[Math.floor(Math.random() * realJobs.length)];
+};
+
+const randomJob = () => ({
+  id: randomString(),
+  jobTitle: randomJobTitle()
+});
+
+const complexCustomer = () => new Customer({
   externalId: randomString(),
   extra: randomString(),
   base: {
@@ -128,15 +133,6 @@ const complexCustomer = () => ({
   }
 });
 
-const job1 = {
-  // random id as it must be unique
-  id: Math.random().toString(36).substr(2, 8)
-};
-
-const job2 = Object.assign({}, job1, {
-  companyName: 'SPAM'
-});
-
 describe('ContactHub', () => {
 
   it('gets a list of customers', async () => {
@@ -149,9 +145,11 @@ describe('ContactHub', () => {
   it('creates, updates and deletes a customer', async () => {
     const c1 = await ch.addCustomer(simpleCustomer());
 
-    const c2 = await c1.updateCustomer(simpleCustomer());
+    c1.base.firstName = randomString();
 
-    const del = await c2.deleteCustomer();
+    const c2 = await ch.updateCustomer(c1.id, c1);
+
+    const del = await ch.deleteCustomer(c2.id);
 
     expect(del).toEqual({ deleted: true });
   });
@@ -161,7 +159,7 @@ describe('ContactHub', () => {
     const cid = (await ch.addCustomer(local)).id;
     const remote = await ch.getCustomer(cid);
 
-    expect(sanitize(remote.base)).toEqual(local.base);
+    expect(remote.base).toEqual(local.base);
   });
 
   it('can write and read back all base properties', async () => {
@@ -169,16 +167,20 @@ describe('ContactHub', () => {
     const cid = (await ch.addCustomer(local)).id;
     const remote = await ch.getCustomer(cid);
 
-    expect(sanitize(remote.base)).toEqual(local.base);
+    expect(remote.base).toEqual(local.base);
   });
 
   it('adds and updates a job', async () => {
     const c1 = await ch.addCustomer(simpleCustomer());
 
-    await c1.addJob(job1);
+    const job = await ch.addJob(c1.id, randomJob());
 
-    const j2 = await c1.updateJob(job2);
+    const updatedJob = Object.assign({}, job, {
+      jobTitle: randomJobTitle()
+    });
 
-    expect(j2.companyName).toEqual('SPAM');
+    const j2 = await ch.updateJob(c1.id, updatedJob);
+
+    expect(j2.jobTitle).toEqual(updatedJob.jobTitle);
   });
 });

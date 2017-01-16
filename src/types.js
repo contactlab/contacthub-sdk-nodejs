@@ -28,21 +28,6 @@ export type CustomerOps = {
   updateJob: Function
 };
 
-export type APICustomer = {
-  id: string,
-  enabled: boolean
-} & CustomerData;
-
-export type SDKCustomer = CustomerData & CustomerOps;
-
-export type CustomerData = {
-  externalId?: string,
-  base: CustomerBase,
-  extended?: Object,
-  extra?: string,
-  tags: CustomerTags
-};
-
 export type CustomerTags = {
   auto?: Array<string>,
   manual?: Array<string>
@@ -101,7 +86,7 @@ export type CustomerJob = {
   isCurrent: bool
 };
 
-export type CustomerBase = {
+export type BaseProperties = {
   pictureUrl?: string,
   title?: string,
   prefix?: string,
@@ -114,10 +99,18 @@ export type CustomerBase = {
   timezone?: string,
   contacts?: CustomerContacts,
   address?: CustomerAddress,
-  credential: CustomerCredential,
+  credential?: CustomerCredential,
   educations?: string,
   likes?: Array<CustomerLike>,
-  socialProfile: CustomerSocial,
+  socialProfile?: CustomerSocial,
   jobs?: Array<CustomerJob>,
   subscriptions?: string
+};
+
+export type CustomerData = {
+  externalId?: string,
+  base: BaseProperties,
+  extended?: Object,
+  extra?: string,
+  tags: CustomerTags
 };
