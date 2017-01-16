@@ -1,6 +1,7 @@
 // @flow
 
 import type { Auth } from './types';
+import type API from './API';
 
 /* Dependencies */
 import APIEntity from './APIEntity';
@@ -8,7 +9,7 @@ import Customer from './Customer';
 
 export default class ContactHub extends APIEntity {
   auth: Auth
-  api: Object
+  api: API
 
   addCustomer(customer: Customer): Promise<Customer> {
     return this.api.post({
@@ -17,26 +18,25 @@ export default class ContactHub extends APIEntity {
         nodeId: this.auth.nodeId,
         base: customer.base
       }
-    })
-    .then(this.toCustomer.bind(this));
+    }).then(data => new Customer(data));
   }
 
   getCustomer(customerId: string): Promise<Customer> {
     return this.api.get({ endpoint: `customers/${customerId}` })
-      .then((data) => this.toCustomer(data));
+      .then(data => new Customer(data));
   }
 
   getCustomers(): Promise<Array<Customer>> {
     return this.api.get({ endpoint: 'customers' })
       .then(({ elements }) => elements)
-      .then(this.toCustomer.bind(this));
+      .then(data => data.map((d) => { return new Customer(d); }));
   }
 
   updateCustomer(customerId: string, customer: Customer): Promise<Customer> {
     const data = { ...customer, nodeId: this.auth.nodeId };
 
     return this.api.put({ endpoint: `customers/${customerId}`, data })
-      .then(this.toCustomer.bind(this));
+      .then(data => new Customer(data));
   }
 
   deleteCustomer(customerId: string) {
@@ -49,15 +49,6 @@ export default class ContactHub extends APIEntity {
 
   updateJob(customerId: string, job: Object): Promise<Object> {
     return this.api.put({ endpoint: `customers/${customerId}/jobs/${job.id}`, data: job });
-  }
-
-  toCustomer(data: Object): Customer {
-    if (Array.isArray(data)) {
-      return data.map(d => new Customer(d));
-    } else if (typeof data === 'object') {
-      return new Customer(data);
-    }
-    return data;
   }
 
 }
