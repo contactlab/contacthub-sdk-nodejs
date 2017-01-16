@@ -3,9 +3,6 @@
 import ContactHub from '../../src/ContactHub';
 import Customer from '../../src/Customer';
 
-// For comparing Base Properties, we remove null values and empty arrays.
-// This should probably be handled by the Customer class, see #21
-
 const ch = new ContactHub({
   token: '97841617075b4b5f8ea88c30a8d2aec7647b7181df2c483fa78138c8d58aed4d',
   workspaceId: '40b6195f-e4f7-4f95-b10e-75268d850988',
