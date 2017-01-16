@@ -3,7 +3,6 @@
 import type { Auth } from './types';
 import type API from './API';
 
-/* Dependencies */
 import APIEntity from './APIEntity';
 import Customer from './Customer';
 
