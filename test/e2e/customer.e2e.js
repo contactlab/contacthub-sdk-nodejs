@@ -170,13 +170,23 @@ describe('ContactHub', () => {
     expect(remote.base).toEqual(local.base);
   });
 
-  it('creates, patches and deletes a customer', async () => {
+  it('can patch a single customer property', async () => {
     const customerData = simpleCustomer();
     const customer = await ch.addCustomer(customerData);
 
-    const updatedCustomerData = simpleCustomer();
-    const updatedCustomer = await ch.patchCustomer(customer.id, updatedCustomerData);
-    expect(sanitize(updatedCustomer.base)).toEqual(updatedCustomerData.base);
+    const updatedCustomerData = {
+      base: { contacts: { email: `${randomString()}@example.com` } }
+    };
+    const updatedCustomer = await ch.patchCustomer(
+      customer.id, updatedCustomerData
+    );
+
+    // email property was modified
+    expect(updatedCustomer.base.contacts.email)
+    .toEqual(updatedCustomerData.base.contacts.email);
+
+    // firstName property was not modified
+    expect(updatedCustomer.base.firstName).toEqual(customerData.base.firstName);
   });
 
 
