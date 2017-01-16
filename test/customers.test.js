@@ -93,12 +93,12 @@ describe('ContactHub', () => {
 
   describe('updateCustomer', () => {
     it('updates an existing Customer', async () => {
-      const customer = {
+      const customer = new Customer({
         id: 'existing-id',
         base: {
           lastName: 'Rossi'
         }
-      };
+      });
 
       nock(apiUrl)
         .put(`/workspaces/${auth.workspaceId}/customers/${customer.id}`)
@@ -112,9 +112,9 @@ describe('ContactHub', () => {
   describe('patchCustomer', () => {
     it('updates an existing Customer', async () => {
       const customerId = 'existing-id';
-      const customer = {
+      const customer = new Customer({
         base: { lastName: 'Rossi' }
-      };
+      });
 
       nock(apiUrl)
         .patch(`/workspaces/${auth.workspaceId}/customers/${customerId}`)

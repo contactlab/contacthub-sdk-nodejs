@@ -171,22 +171,24 @@ describe('ContactHub', () => {
   });
 
   it('can patch a single customer property', async () => {
-    const customerData = simpleCustomer();
-    const customer = await ch.addCustomer(customerData);
+    const customer = simpleCustomer();
+    const c1 = await ch.addCustomer(customer);
 
-    const updatedCustomerData = {
-      base: { contacts: { email: `${randomString()}@example.com` } }
-    };
-    const updatedCustomer = await ch.patchCustomer(
-      customer.id, updatedCustomerData
+    const updatedEmail = `${randomString()}@example.com`;
+    const patch = new Customer({
+      base: { contacts: { email: updatedEmail } }
+    });
+    const c2 = await ch.patchCustomer(
+      c1.id, patch
     );
 
+    const email = c2.base.contacts && c2.base.contacts.email;
+
     // email property was modified
-    expect(updatedCustomer.base.contacts.email)
-    .toEqual(updatedCustomerData.base.contacts.email);
+    expect(email).toEqual(updatedEmail);
 
     // firstName property was not modified
-    expect(updatedCustomer.base.firstName).toEqual(customerData.base.firstName);
+    expect(c2.base.firstName).toEqual(customer.base.firstName);
   });
 
 
