@@ -7,10 +7,6 @@ export const compact = (obj: any): any => {
   }
 
   if (Array.isArray(obj)) {
-    if (obj.length === 0) {
-      return undefined;
-    }
-
     const compacted = obj.map(v => compact(v)).filter(
       v => typeof v !== 'undefined'
     );
@@ -19,10 +15,6 @@ export const compact = (obj: any): any => {
   }
 
   if (typeof obj === 'object') {
-    if (Object.keys(obj).length === 0) {
-      return undefined;
-    }
-
     const compacted = Object.keys(obj).reduce((acc, key) => {
       const nested = compact(obj[key]);
 
