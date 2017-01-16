@@ -147,7 +147,7 @@ describe('ContactHub', () => {
 
     c1.base.firstName = randomString();
 
-    const c2 = await ch.updateCustomer(c1.id, c1);
+    const c2 = await ch.updateCustomer(c1);
 
     const del = await ch.deleteCustomer(c2.id);
 

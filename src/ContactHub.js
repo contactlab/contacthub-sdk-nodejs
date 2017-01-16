@@ -31,12 +31,13 @@ export default class ContactHub extends APIEntity {
       .then(data => data.map(d => new Customer(d)));
   }
 
-  updateCustomer(customer: Object): Promise<Customer> {
-    return this.api.put({ endpoint: `customers/${customer.id}`, data: customer })
+  updateCustomer(customer: Customer): Promise<Customer> {
+    const data = { ...customer, nodeId: this.auth.nodeId };
+    return this.api.put({ endpoint: `customers/${customer.id}`, data })
       .then(data => new Customer(data));
   }
 
-  patchCustomer(customerId: string, customer: Object): Promise<Customer> {
+  patchCustomer(customerId: string, customer: Customer): Promise<Customer> {
     return this.api.patch({ endpoint: `customers/${customerId}`, data: customer })
       .then(data => new Customer(data));
   }
