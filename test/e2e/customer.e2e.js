@@ -147,7 +147,7 @@ describe('ContactHub', () => {
 
     c1.base.firstName = randomString();
 
-    const c2 = await ch.updateCustomer(c1.id, c1);
+    const c2 = await ch.updateCustomer(c1);
 
     const del = await ch.deleteCustomer(c2.id);
 
@@ -169,6 +169,28 @@ describe('ContactHub', () => {
 
     expect(remote.base).toEqual(local.base);
   });
+
+  it('can patch a single customer property', async () => {
+    const customer = simpleCustomer();
+    const c1 = await ch.addCustomer(customer);
+
+    const updatedEmail = `${randomString()}@example.com`;
+    const patch = new Customer({
+      base: { contacts: { email: updatedEmail } }
+    });
+    const c2 = await ch.patchCustomer(
+      c1.id, patch
+    );
+
+    const email = c2.base.contacts && c2.base.contacts.email;
+
+    // email property was modified
+    expect(email).toEqual(updatedEmail);
+
+    // firstName property was not modified
+    expect(c2.base.firstName).toEqual(customer.base.firstName);
+  });
+
 
   it('adds and updates a job', async () => {
     const c1 = await ch.addCustomer(simpleCustomer());
