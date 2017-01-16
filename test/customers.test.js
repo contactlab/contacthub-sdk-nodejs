@@ -47,11 +47,6 @@ describe('ContactHub', () => {
       const res = await ch.getCustomer(customer.id);
       expect(res.id).toEqual('foo');
     });
-
-    it('returns an instance of the Customer object', async () => {
-      const res = await ch.getCustomer(customer.id);
-      expect(res instanceof Customer).toBe(true);
-    });
   });
 
   describe('getCustomers', () => {
@@ -75,11 +70,6 @@ describe('ContactHub', () => {
       expect(res.length).toBe(2);
       expect(res[0].id).toBe('c1');
       expect(res[1].id).toBe('c2');
-    });
-
-    it('returns instances of the Customer object', async () => {
-      const res = await ch.getCustomers();
-      expect(res[0] instanceof Customer).toBe(true);
     });
   });
 
