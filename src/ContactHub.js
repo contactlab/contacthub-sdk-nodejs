@@ -38,7 +38,8 @@ export default class ContactHub extends APIEntity {
   }
 
   patchCustomer(customerId: string, customer: Customer): Promise<Customer> {
-    return this.api.patch({ endpoint: `customers/${customerId}`, data: customer })
+    const data = { ...customer, id: customerId };
+    return this.api.patch({ endpoint: `customers/${customerId}`, data })
       .then(data => new Customer(data));
   }
 
