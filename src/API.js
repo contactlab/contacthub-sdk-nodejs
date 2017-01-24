@@ -24,9 +24,11 @@ export default class API {
   }
 
   get(opts: Object): Promise<Object> {
-    return this.axios.get(`/workspaces/${this.workspaceId}/${opts.endpoint}`,
-                          { params: { nodeId: this.nodeId } })
-      .then(res => res.data);
+    return this.axios.request({
+      method: 'get',
+      url: `/workspaces/${this.workspaceId}/${opts.endpoint}`,
+      params: opts.params
+    }).then(res => res.data);
   }
 
   post(opts: Object): Promise<Object> {

@@ -15,20 +15,14 @@ const ch = new ContactHub(auth);
 const apiUrl = 'https://api.contactlab.it/hub/v1';
 
 describe('ContactHub', () => {
-  beforeEach(() => { });
-
-  afterAll(() => nock.restore());
-
-  it('throws if required params are missing', () => {
-    const wrongCall = () => {
-      // $ExpectError
-      ch();
-    };
-    expect(wrongCall).toThrow();
-  });
-
-  it('returns an object', () => {
-    expect(typeof ch).toBe('object');
+  describe('constructor', () => {
+    it('throws if required params are missing', () => {
+      const wrongCall = () => {
+        // $ExpectError
+        new ContactHub(); // eslint-disable-line no-new
+      };
+      expect(wrongCall).toThrow();
+    });
   });
 
   describe('getCustomer', () => {
@@ -36,40 +30,133 @@ describe('ContactHub', () => {
       id: 'foo'
     };
 
-    beforeEach(() => {
+    it('finds an existing Customer', async () => {
       nock(apiUrl)
         .get(`/workspaces/${auth.workspaceId}/customers/${customer.id}`)
         .query({ nodeId: auth.nodeId })
         .reply(200, customer);
-    });
 
-    it('finds an existing Customer', async () => {
       const res = await ch.getCustomer(customer.id);
       expect(res.id).toEqual('foo');
     });
   });
 
   describe('getCustomers', () => {
-    beforeEach(() => {
-      const customers = {
-        elements: [{
-          id: 'c1'
-        }, {
-          id: 'c2'
-        }]
-      };
+    const exampleQuery = {
+      name: '',
+      query: {
+        name: 'mario',
+        type: 'simple',
+        are: {
+          condition: {
+            type: 'atomic',
+            attribute: 'base.firstName',
+            operator: 'EQUALS',
+            value: 'Mario'
+          }
+        }
+      }
+    };
 
+    it('works with no parameters', async () => {
       nock(apiUrl)
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId })
-        .reply(200, customers);
+        .reply(200, {
+          elements: [{ id: 'no-filters' }]
+        });
+
+      const res = await ch.getCustomers();
+      expect(res[0].id).toBe('no-filters');
     });
 
-    it('returns a list of customers', async () => {
-      const res = await ch.getCustomers();
-      expect(res.length).toBe(2);
-      expect(res[0].id).toBe('c1');
-      expect(res[1].id).toBe('c2');
+    it('takes an externalId as a filter', async () => {
+      nock(apiUrl)
+        .get(`/workspaces/${auth.workspaceId}/customers`)
+        .query({ nodeId: auth.nodeId, externalId: 'ext123' })
+        .reply(200, {
+          elements: [{ id: 'by-extid' }]
+        });
+
+      const res = await ch.getCustomers({ externalId: 'ext123' });
+      expect(res[0].id).toBe('by-extid');
+    });
+
+    it('takes a list of fields to retrieve', async () => {
+      nock(apiUrl)
+        .get(`/workspaces/${auth.workspaceId}/customers`)
+        .query({ nodeId: auth.nodeId, fields: 'base.firstName,base.lastName' })
+        .reply(200, {
+          elements: [{ id: 'with-fields' }]
+        });
+
+      const res = await ch.getCustomers({
+        fields: ['base.firstName', 'base.lastName']
+      });
+      expect(res[0].id).toBe('with-fields');
+    });
+
+    it('takes a query object as a filter', async () => {
+      nock(apiUrl)
+        .get(`/workspaces/${auth.workspaceId}/customers`)
+        .query({ nodeId: auth.nodeId, query: JSON.stringify(exampleQuery) })
+        .reply(200, {
+          elements: [{ id: 'by-query' }]
+        });
+
+      const res = await ch.getCustomers({ query: exampleQuery });
+      expect(res[0].id).toBe('by-query');
+    });
+
+    it('takes a field to sort by', async () => {
+      nock(apiUrl)
+        .get(`/workspaces/${auth.workspaceId}/customers`)
+        .query({ nodeId: auth.nodeId, sort: 'base.firstName' })
+        .reply(200, {
+          elements: [{ id: 'sorted' }]
+        });
+
+      const res = await ch.getCustomers({ sort: 'base.firstName' });
+      expect(res[0].id).toBe('sorted');
+    });
+
+    it('takes a sort field and a sort direction', async () => {
+      nock(apiUrl)
+        .get(`/workspaces/${auth.workspaceId}/customers`)
+        .query({ nodeId: auth.nodeId, sort: 'base.firstName,desc' })
+        .reply(200, {
+          elements: [{ id: 'sorted-desc' }]
+        });
+
+      const res = await ch.getCustomers({
+        sort: 'base.firstName',
+        direction: 'desc'
+      });
+      expect(res[0].id).toBe('sorted-desc');
+    });
+
+    it('takes all params together', async () => {
+      nock(apiUrl)
+        .get(`/workspaces/${auth.workspaceId}/customers`)
+        .query({
+          nodeId: auth.nodeId,
+          externalId: 'ext123',
+          fields: 'base.firstName',
+          query: JSON.stringify(exampleQuery),
+          sort: 'base.firstName,asc'
+        })
+        .reply(200, {
+          elements: [{ id: 'all-params' }]
+        });
+
+      const res = await ch.getCustomers({
+        externalId: 'ext123',
+        fields: ['base.firstName'],
+        query: exampleQuery,
+        sort: 'base.firstName',
+        direction: 'asc'
+      });
+      expect(res[0].id).toBe('all-params');
     });
   });
 

@@ -135,11 +135,58 @@ const complexCustomer = () => new Customer({
 
 describe('ContactHub', () => {
 
-  it('gets a list of customers', async () => {
-    const customers = await ch.getCustomers();
+  describe('getCustomers', async () => {
+    it('gets a list of customers', async () => {
+      const customers = await ch.getCustomers();
 
-    expect(customers.length).toEqual(10);
-    customers.forEach(c => expect(c.id).toBeDefined());
+      expect(customers.length).toEqual(10);
+      customers.forEach(c => expect(c.id).toBeDefined());
+    });
+
+    it('filters by externalId', async () => {
+      const customers = await ch.getCustomers({ externalId: 'ext123' });
+
+      expect(customers.length).toBe(1);
+      expect(customers[0].externalId).toBe('ext123');
+    });
+
+    it('takes a whitelist of fields', async () => {
+      const customers = await ch.getCustomers({ fields: ['base.firstName'] });
+
+      expect(customers.length).toBe(10);
+      expect(Object.keys(customers[0].base)).toEqual(['firstName']);
+    });
+
+    it('takes a custom query', async () => {
+      const query = {
+        name: '',
+        query: {
+          name: 'mario',
+          type: 'simple',
+          are: {
+            condition: {
+              type: 'atomic',
+              attribute: 'base.firstName',
+              operator: 'EQUALS',
+              value: 'Mario'
+            }
+          }
+        }
+      };
+      const customers = await ch.getCustomers({ query });
+
+      expect(customers[0].base.firstName).toBe('mario');
+    });
+
+    it('takes a sort field and direction', async () => {
+      const customers = await ch.getCustomers({
+        sort: 'base.contacts.email',
+        direction: 'desc'
+      });
+
+      expect(customers[0].base.contacts
+             && customers[0].base.contacts.email).toMatch(/^zz/);
+    });
   });
 
   it('creates, updates and deletes a customer', async () => {
@@ -154,7 +201,7 @@ describe('ContactHub', () => {
     expect(del).toEqual({ deleted: true });
   });
 
-  it('can write and read back a simple customer', async () => {
+  it('writes and reads back a simple customer', async () => {
     const local = simpleCustomer();
     const cid = (await ch.addCustomer(local)).id;
     const remote = await ch.getCustomer(cid);
@@ -162,7 +209,7 @@ describe('ContactHub', () => {
     expect(remote.base).toEqual(local.base);
   });
 
-  it('can write and read back all base properties', async () => {
+  it('writes and reads back all base properties', async () => {
     const local = complexCustomer();
     const cid = (await ch.addCustomer(local)).id;
     const remote = await ch.getCustomer(cid);
@@ -170,7 +217,7 @@ describe('ContactHub', () => {
     expect(remote.base).toEqual(local.base);
   });
 
-  it('can patch a single customer property', async () => {
+  it('patches a single customer property', async () => {
     const customer = simpleCustomer();
     const c1 = await ch.addCustomer(customer);
 

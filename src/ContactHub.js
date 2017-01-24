@@ -1,14 +1,25 @@
 // @flow
 
-import type { Auth } from './types';
-import type API from './API';
+import type { Auth, GetCustomersOptions } from './types';
+import API from './API';
 
-import APIEntity from './APIEntity';
 import Customer from './Customer';
 
-export default class ContactHub extends APIEntity {
+export default class ContactHub {
   auth: Auth
   api: API
+
+  constructor(params: Object) {
+    if (!(params && params.token && params.workspaceId && params.nodeId)) {
+      throw new Error('Missing required ContactHub configuration.');
+    }
+    this.auth = {
+      token: params.token,
+      workspaceId: params.workspaceId,
+      nodeId: params.nodeId
+    };
+    this.api = new API(this.auth);
+  }
 
   addCustomer(customer: Customer): Promise<Customer> {
     return this.api.post({
@@ -25,8 +36,18 @@ export default class ContactHub extends APIEntity {
       .then(data => new Customer(data));
   }
 
-  getCustomers(): Promise<Array<Customer>> {
-    return this.api.get({ endpoint: 'customers' })
+  getCustomers(options: ?GetCustomersOptions): Promise<Array<Customer>> {
+    const endpoint = 'customers';
+    const params = {
+      nodeId: this.auth.nodeId,
+      externalId: options && options.externalId,
+      fields: options && options.fields && options.fields.join(','),
+      query: options && options.query,
+      sort: options && options.sort
+            && options.sort + (options.direction ? `,${options.direction}` : '')
+    };
+
+    return this.api.get({ endpoint, params })
       .then(({ elements }) => elements)
       .then(data => data.map(d => new Customer(d)));
   }
@@ -38,7 +59,8 @@ export default class ContactHub extends APIEntity {
   }
 
   patchCustomer(customerId: string, customer: Customer): Promise<Customer> {
-    return this.api.patch({ endpoint: `customers/${customerId}`, data: customer })
+    const data = { ...customer, id: customerId };
+    return this.api.patch({ endpoint: `customers/${customerId}`, data })
       .then(data => new Customer(data));
   }
 

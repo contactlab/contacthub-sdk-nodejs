@@ -6,6 +6,19 @@ export type Auth = {
   nodeId: string
 };
 
+export type Query = {
+  name: string,
+  query: Object
+};
+
+export type GetCustomersOptions = {|
+  externalId?: string,
+  query?: Query,
+  fields?: Array<string>,
+  sort?: string,
+  direction?: 'asc' | 'desc'
+|};
+
 export type Tags = {
   auto: Array<string>,
   manual: Array<string>
