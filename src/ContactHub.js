@@ -36,8 +36,18 @@ export default class ContactHub {
       .then(data => new Customer(data));
   }
 
-  getCustomers(): Promise<Array<Customer>> {
-    return this.api.get({ endpoint: 'customers' })
+  getCustomers(options: ?GetCustomersOptions): Promise<Array<Customer>> {
+    const endpoint = 'customers';
+    const params = {
+      nodeId: this.auth.nodeId,
+      externalId: options && options.externalId,
+      fields: options && options.fields && options.fields.join(','),
+      query: options && options.query,
+      sort: options && options.sort
+            && options.sort + (options.direction ? `,${options.direction}` : '')
+    };
+
+    return this.api.get({ endpoint, params })
       .then(({ elements }) => elements)
       .then(data => data.map(d => new Customer(d)));
   }
