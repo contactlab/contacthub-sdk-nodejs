@@ -46,7 +46,7 @@
     "eslint-config-buildo": "github:buildo/eslint-config",
     "eslint-plugin-flowtype": "^2.19.0",
     "flow-bin": "^0.37.0",
-    "jest": "^15.1.1",
+    "jest": "^18.1.0",
     "nock": "^8.0.0"
   },
   "dependencies": {
