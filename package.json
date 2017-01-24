@@ -1,6 +1,6 @@
 {
   "name": "contacthub-sdk-nodejs",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "ContactHub SDK for Node.js",
   "main": "index.js",
   "files": [
