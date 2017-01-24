@@ -19,7 +19,7 @@ describe('ContactHub', () => {
     it('throws if required params are missing', () => {
       const wrongCall = () => {
         // $ExpectError
-        new ContactHub(); // eslint-disable-line
+        new ContactHub(); // eslint-disable-line no-new
       };
       expect(wrongCall).toThrow();
     });
