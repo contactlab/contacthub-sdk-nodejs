@@ -1,14 +1,25 @@
 // @flow
 
-import type { Auth } from './types';
-import type API from './API';
+import type { Auth, GetCustomersOptions } from './types';
+import API from './API';
 
-import APIEntity from './APIEntity';
 import Customer from './Customer';
 
-export default class ContactHub extends APIEntity {
+export default class ContactHub {
   auth: Auth
   api: API
+
+  constructor(params: Object) {
+    if (!(params && params.token && params.workspaceId && params.nodeId)) {
+      throw new Error('Missing required ContactHub configuration.');
+    }
+    this.auth = {
+      token: params.token,
+      workspaceId: params.workspaceId,
+      nodeId: params.nodeId
+    };
+    this.api = new API(this.auth);
+  }
 
   addCustomer(customer: Customer): Promise<Customer> {
     return this.api.post({
