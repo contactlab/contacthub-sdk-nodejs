@@ -24,63 +24,73 @@ export type Tags = {
   manual: Array<string>
 };
 
-export type Job = {
-  id: string,
-  companyIndustry?: string,
-  companyName?: string,
-  jobTitle?: string,
-  startDate: string,
-  endDate: string,
-  isCurrent: boolean
+export type OtherContact = {
+  name?: string,
+  type?: 'MOBILE' | 'PHONE' | 'EMAIL' | 'FAX' | 'OTHER',
+  value?: string
 };
 
-export type CustomerOps = {
-  updateCustomer: Function,
-  deleteCustomer: Function,
-  addJob: Function,
-  updateJob: Function
+export type MobileDevice = {
+  identifier?: string,
+  name?: string,
+  type?: 'IOS' | 'GCM' | 'WP'
 };
 
-export type CustomerTags = {
-  auto?: Array<string>,
-  manual?: Array<string>
-};
-
-export type CustomerContacts = {
+export type Contacts = {
   email?: string,
   fax?: string,
   mobilePhone?: string,
   phone?: string,
-  otherContacts?: string,
-  mobileDevices?: string
+  otherContacts?: Array<OtherContact>,
+  mobileDevices?: Array<MobileDevice>
 };
 
-export type CustomerGeo = {
-  lat: string,
-  lon: string
+export type Geo = {
+  lat: number,
+  lon: number
 };
 
-export type CustomerAddress = {
+export type Address = {
   street?: string,
   city?: string,
   country?: string,
   province?: string,
   zip?: string,
-  geo?: CustomerGeo
+  geo?: Geo
 };
 
-export type CustomerCredential = {
+export type Credential = {
   username?: string,
   password?: string
 };
 
-export type CustomerLike = {
-  likeId: string,
-  likeCategory: string,
-  likeName: string
+export type Education = {
+  id: string,
+  schoolType?: 'PRIMARY_SCHOOL' | 'SECONDARY_SCHOOL' | 'HIGH_SCHOOL' | 'COLLEGE' | 'OTHER',
+  schoolName?: string,
+  schoolConcentration?: string,
+  startYear?: number,
+  endYear?: number,
+  isCurrent?: boolean
 };
 
-export type CustomerSocial = {
+export type Job = {
+  id: string,
+  companyIndustry?: string,
+  companyName?: string,
+  jobTitle?: string,
+  startDate?: string,
+  endDate?: string,
+  isCurrent?: boolean
+};
+
+export type Like = {
+  id: string,
+  category?: string,
+  name?: string
+};
+
+export type Social = {
   facebook?: string,
   google?: string,
   instagram?: string,
@@ -89,14 +99,23 @@ export type CustomerSocial = {
   twitter?: string
 };
 
-export type CustomerJob = {
+export type Preference = {
+  key: string,
+  value: string
+};
+
+export type Subscription = {
   id: string,
-  companyIndustry?: string,
-  companyName?: string,
-  jobTitle?: string,
-  startDate: string,
-  endDate: string,
-  isCurrent: bool
+  name?: string,
+  type?: string,
+  kind?: 'DIGITAL_MESSAGE' | 'SERVICE' | 'OTHER',
+  subscribed?: boolean,
+  startDate?: string,
+  endDate?: string,
+  subscriberId?: string,
+  registeredAt?: string,
+  updatedAt?: string,
+  preferences?: Array<Preference>
 };
 
 export type BaseProperties = {
@@ -110,20 +129,39 @@ export type BaseProperties = {
   dob?: string,
   locale?: string,
   timezone?: string,
-  contacts?: CustomerContacts,
-  address?: CustomerAddress,
-  credential?: CustomerCredential,
-  educations?: string,
-  likes?: Array<CustomerLike>,
-  socialProfile?: CustomerSocial,
-  jobs?: Array<CustomerJob>,
-  subscriptions?: string
+  contacts?: Contacts,
+  address?: Address,
+  credential?: Credential,
+  educations?: Array<Education>,
+  likes?: Array<Like>,
+  socialProfile?: Social,
+  jobs?: Array<Job>,
+  subscriptions?: Array<Subscription>
 };
 
 export type CustomerData = {
   externalId?: string,
-  base: BaseProperties,
+  base?: BaseProperties,
   extended?: Object,
   extra?: string,
-  tags: CustomerTags
+  tags?: Tags
+};
+
+export type Customer = CustomerData & {
+  id: string,
+  registeredAt: Date,
+  updatedAt: Date
+};
+
+export type APICustomer = {
+  id: string,
+  nodeId: string,
+  externalId: string | null,
+  extra: string | null,
+  registeredAt: string,
+  updatedAt: string,
+  enabled: boolean,
+  base: BaseProperties | null,
+  extended: Object | null,
+  tags: Tags | null
 };

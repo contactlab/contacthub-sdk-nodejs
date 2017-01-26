@@ -32,23 +32,34 @@ export default class API {
   }
 
   post(opts: Object): Promise<Object> {
-    return this.axios.post(`/workspaces/${this.workspaceId}/${opts.endpoint}`, opts.data)
-      .then(res => res.data);
+    return this.axios.request({
+      method: 'post',
+      url: `/workspaces/${this.workspaceId}/${opts.endpoint}`,
+      data: opts.data
+    }).then(res => res.data);
   }
 
   put(opts: Object): Promise<Object> {
-    return this.axios.put(`/workspaces/${this.workspaceId}/${opts.endpoint}`, opts.data)
-      .then(res => res.data);
+    return this.axios.request({
+      method: 'put',
+      url: `/workspaces/${this.workspaceId}/${opts.endpoint}`,
+      data: opts.data
+    }).then(res => res.data);
   }
 
   patch(opts: Object): Promise<Object> {
-    return this.axios.patch(`/workspaces/${this.workspaceId}/${opts.endpoint}`, opts.data)
-      .then(res => res.data);
+    return this.axios.request({
+      method: 'patch',
+      url: `/workspaces/${this.workspaceId}/${opts.endpoint}`,
+      data: opts.data
+    }).then(res => res.data);
   }
 
-  del(opts: Object) {
-    return this.axios.delete(`/workspaces/${this.workspaceId}/${opts.endpoint}`,
-                             { params: { nodeId: this.nodeId } })
-      .then(res => res.data);
+  delete(opts: Object): Promise<Object> {
+    return this.axios.request({
+      method: 'delete',
+      url: `/workspaces/${this.workspaceId}/${opts.endpoint}`,
+      params: opts.params
+    }).then(res => res.data);
   }
 }

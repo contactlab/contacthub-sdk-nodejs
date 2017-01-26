@@ -1,7 +1,6 @@
 // @flow
 
 import ContactHub from '../src/ContactHub';
-import Customer from '../src/Customer';
 import nock from 'nock';
 
 const auth = {
@@ -162,11 +161,11 @@ describe('ContactHub', () => {
 
   describe('addCustomer', () => {
     it('creates a new Customer', () => {
-      const customer = new Customer({
+      const customer = {
         base: {
           firstName: 'Mario'
         }
-      });
+      };
 
       nock(apiUrl)
         .post(`/workspaces/${auth.workspaceId}/customers`)
@@ -180,35 +179,35 @@ describe('ContactHub', () => {
 
   describe('updateCustomer', () => {
     it('updates an existing Customer', async () => {
-      const customer = new Customer({
+      const customer = {
         id: 'existing-id',
         base: {
           lastName: 'Rossi'
         }
-      });
+      };
 
       nock(apiUrl)
         .put(`/workspaces/${auth.workspaceId}/customers/${customer.id}`)
         .reply(200, customer);
 
-      const res = await ch.updateCustomer(customer);
-      expect(res.base.lastName).toBe('Rossi');
+      const res = await ch.updateCustomer('existing-id', customer);
+      expect(res.base && res.base.lastName).toBe('Rossi');
     });
   });
 
   describe('patchCustomer', () => {
     it('updates an existing Customer', async () => {
       const customerId = 'existing-id';
-      const customer = new Customer({
+      const customer = {
         base: { lastName: 'Rossi' }
-      });
+      };
 
       nock(apiUrl)
         .patch(`/workspaces/${auth.workspaceId}/customers/${customerId}`)
         .reply(200, customer);
 
       const res = await ch.patchCustomer(customerId, customer);
-      expect(res.base.lastName).toBe('Rossi');
+      expect(res.base && res.base.lastName).toBe('Rossi');
     });
   });
 
@@ -222,7 +221,7 @@ describe('ContactHub', () => {
         .reply(200);
 
       const res = await ch.deleteCustomer('existing-cid');
-      expect(res).toEqual({ deleted: true });
+      expect(res).toEqual(true);
     });
   });
 });
