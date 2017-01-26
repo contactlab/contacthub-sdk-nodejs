@@ -1,1 +1,3 @@
-module.exports = require('./lib/ContactHub');
+// @flow
+
+module.exports = require('./lib/ContactHub').default;

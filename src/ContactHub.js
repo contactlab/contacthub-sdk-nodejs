@@ -21,7 +21,7 @@ export default class ContactHub {
     this.api = new API(this.auth);
   }
 
-  addCustomer(customer: Customer): Promise<Customer> {
+  addCustomer(customer: Object): Promise<Customer> {
     return this.api.post({
       endpoint: 'customers',
       data: {
