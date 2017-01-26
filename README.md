@@ -248,7 +248,8 @@ ch.addTag(customerId, tag)
 **Warning: this method can suffer from race conditions if there are other
 clients updating the same workspace.** It makes two API calls in short
 succession, retrieving the existing customer, than _patching_ it to replace the
-existing array of manual tags.
+existing array of manual tags. This is an ugly workaround until the API supports
+atomic updates of the tags.
 
 ### removeTag
 
@@ -265,7 +266,9 @@ ch.removeTag(customerId, tag)
 **Warning: this method can suffer from race conditions if there are other
 clients updating the same workspace.** It makes two API calls in short
 succession, retrieving the existing customer, than _patching_ it to replace the
-existing array of manual tags.
+existing array of manual tags. This is an ugly workaround until the API supports
+atomic updates of the tags.
+
 
 
 ## Education API
