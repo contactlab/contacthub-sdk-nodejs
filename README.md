@@ -7,11 +7,10 @@ Node.js SDK for the ContactHub API.
 
 This library requires Node.js v4 or later.
 
-All async operations return a `Promise`. Callback-style is not supported.
+All async operations return a `Promise`.
 
-[Flow](http://flowtype.org) type annotations are present throughout the library and
-should be automatically detected if you add `// @flow` to the files where you
-import this library.
+[Flow](http://flowtype.org) type annotations are used throughout the library and
+can be leveraged if you use Flow in a project which depends on this library.
 
 
 ## Quick start
@@ -40,7 +39,7 @@ All the functionalities provided by the SDK are exposed as methods of the
 
 To create a new instance you need three authentication parameters: `token`,
 `workspaceId` and `nodeId`. You can find them in your [ContactHub
-dashboard](hub.contactlab.it).
+dashboard](https://hub.contactlab.it/#/settings/sources).
 
 ```js
 const ch = new ContactHub({
@@ -54,7 +53,7 @@ The `ch` object will use the provided authentication parameters for all its
 methods listed below.
 
 If you need to work with more than one workspace or node, or if you want to use
-different tokens, you can instantiate multiple objects.
+different tokens, you can instantiate multiple ContactHub objects.
 
 
 ## Session API
@@ -69,7 +68,7 @@ const sessionId = ch.createSessionId();
 
 ### addCustomerSession
 
-Reconciles a sessionId with an existing Customer. Use this if you want to
+Reconciles a sessionId with an existing `Customer`. Use this if you want to
 associate anonymous events (containing a sessionId) with an existing customerId.
 
 Returns a `Promise` that resolves to `true` if the sessionId has been
@@ -96,19 +95,19 @@ addEvent(event)
 
 The `event` parameter is an object that can contain the following properties:
 
-* `customerId`: the id of the Customer associated to this event
-* `externalId`: the externalId of the Customer associated to this event
+* `customerId`: the id of the `Customer` associated to this event
+* `externalId`: the externalId of the `Customer` associated to this event
 * `sessionId`: the id of the session associated to this event
-* `context`: one of `WEB,MOBILE,ECOMMERCE,RETAIL,SOCIAL,DIGITAL_CAMPAIGN,CONTACT_CENTER,IOT,OTHER`
+* `context`: one of `WEB`,`MOBILE`,`ECOMMERCE`,`RETAIL`,`SOCIAL`,`DIGITAL_CAMPAIGN`,`CONTACT_CENTER`,`IOT`,`OTHER`
 * `type`: a valid event type (listed in the [ContactHub settings](https://hub.contactlab.it/#/settings/events))
 * `properties`: an object conforming to the JSON schema required by the event type
 
 `context`, `type` and `properties` are always required.
 
 You must specify one between `customerId`, `externalId` and `sessionId`. If you
-don't have any Customer information (e.g. the user is not logged in) you should
+don't have any `Customer` information (e.g. the user is not logged in) you should
 use a sessionId so that you can later reconcile all the events in the same
-session with a Customer when he/she logins.
+session with a `Customer` when he/she logins.
 
 Example of a valid `event` object:
 
@@ -148,7 +147,7 @@ ch.getEvents(customerId);
 
 ### addCustomer
 
-Creates a new customer.
+Creates a new `Customer`.
 
 Returns a `Promise` that resolves to a `Customer` object including the `id` it
 was assigned by the API.
@@ -204,7 +203,7 @@ Updates a customer, removing all its existing properties and replacing them with
 the ones passed to this method.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
-version of the Customer.
+version of the `Customer`.
 
 ```js
 ch.updateCustomer(customerId, customerData)
@@ -216,7 +215,7 @@ Patches a customer, keeping all its existing properties and replacing only the
 ones specified in `customerData`.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
-version of the Customer.
+version of the `Customer`.
 
 ```js
 ch.patchCustomer(customerId, customerData)
@@ -236,11 +235,11 @@ ch.deleteCustomer(customerId)
 
 ### addTag
 
-Adds a tag to an existing Customer. The new tag will be appended to the
+Adds a tag to an existing `Customer`. The new tag will be appended to the
 `tags.manual` array of tags, if not already present.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
-version of the Customer.
+version of the `Customer`.
 
 ```js
 ch.addTag(customerId, tag)
@@ -253,11 +252,11 @@ existing array of manual tags.
 
 ### removeTag
 
-Removes a tag to an existing Customer. The new tag will be removed from the
+Removes a tag to an existing `Customer`. The new tag will be removed from the
 `tags.manual` Array of tags, if present.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
-version of the Customer.
+version of the `Customer`.
 
 ```js
 ch.removeTag(customerId, tag)
@@ -273,10 +272,10 @@ existing array of manual tags.
 
 ### addEducation
 
-Adds a new `Education` object to an existing Customer.
+Adds a new `Education` object to an existing `Customer`.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
-version of the Customer.
+version of the `Customer`.
 
 ```js
 ch.addEducation(customerId, education)
@@ -297,7 +296,7 @@ ch.addEducation(customerId, education)
 Updates an existing `Education` object for an existing `Customer`.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
-version of the Customer.
+version of the `Customer`.
 
 ```js
 ch.updateEducation(customerId, education)
@@ -312,7 +311,7 @@ the new ones provided to this method.
 Removes an existing `Education` object from an existing `Customer`.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
-version of the Customer.
+version of the `Customer`.
 
 ```js
 ch.removeEducation(customerId, educationId)
@@ -323,10 +322,10 @@ ch.removeEducation(customerId, educationId)
 
 ### addJob
 
-Adds a new `Job` object to an existing Customer.
+Adds a new `Job` object to an existing `Customer`.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
-version of the Customer.
+version of the `Customer`.
 
 ```js
 ch.addJob(customerId, job)
@@ -347,7 +346,7 @@ ch.addJob(customerId, job)
 Updates an existing `Job` object for an existing `Customer`.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
-version of the Customer.
+version of the `Customer`.
 
 ```js
 ch.updateJob(customerId, job)
@@ -362,7 +361,7 @@ the new ones provided to this method.
 Removes an existing `Job` object from an existing `Customer`.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
-version of the Customer.
+version of the `Customer`.
 
 ```js
 ch.removeJob(customerId, jobId)
@@ -373,10 +372,10 @@ ch.removeJob(customerId, jobId)
 
 ### addLike
 
-Adds a new `Like` object to an existing Customer.
+Adds a new `Like` object to an existing `Customer`.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
-version of the Customer.
+version of the `Customer`.
 
 ```js
 ch.addLike(customerId, like)
@@ -395,7 +394,7 @@ ch.addLike(customerId, like)
 Updates an existing `Like` object for an existing `Customer`.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
-version of the Customer.
+version of the `Customer`.
 
 ```js
 ch.updateLike(customerId, like)
@@ -410,7 +409,7 @@ the new ones provided to this method.
 Removes an existing `Like` object from an existing `Customer`.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
-version of the Customer.
+version of the `Customer`.
 
 ```js
 ch.removeLike(customerId, likeId)
@@ -420,7 +419,7 @@ ch.removeLike(customerId, likeId)
 ## Custom queries
 
 ContactHub supports a complex query language for advanced searches in the
-Customer list. This is an example of a valid query
+`Customer` list. This is an example of a valid query
 
 ```js
 ch.getCustomers({
@@ -461,13 +460,12 @@ Run e2e tests with `npm run e2e`, or `npm run e2e-watch` to enable watch mode.
 ### Flow types
 
 This library uses [Flow](flowtype.org) as a static type checker. Run `npm run
-flow` to check the entire project for errors. Most text editors also have a Flow
-plugin to see Flow hints and warnings as you type.
+flow` to check the entire project for errors.
 
 ### Minimum Node version
 
-This SDK is tested against **Node.js v4** and to help testing for this specific
-node version there is a `Dockerfile`.
+This SDK is developed and tested against Node.js v4. To help developing against
+this specific version we provide a Dockerfile for testing purposes.
 
 Here are the commands to run tests with docker.
 
