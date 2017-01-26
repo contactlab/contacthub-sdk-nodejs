@@ -61,7 +61,7 @@ different tokens, you can instantiate multiple objects.
 
 ### createSessionId
 
-Generate a new random sessionId to use in ContactHub events.
+Generates a new random sessionId to use in ContactHub events.
 
 ```js
 const sessionId = ch.createSessionId();
@@ -69,7 +69,7 @@ const sessionId = ch.createSessionId();
 
 ### addCustomerSession
 
-Reconcile a sessionId with an existing Customer. Use this if you want to
+Reconciles a sessionId with an existing Customer. Use this if you want to
 associate anonymous events (containing a sessionId) with an existing customerId.
 
 Returns a `Promise` that resolves to `true` if the sessionId has been
@@ -84,7 +84,7 @@ ch.addCustomerSession(customerId, sessionId)
 
 ### addEvent
 
-Add a new Event.
+Adds a new Event.
 
 Returns a `Promise` that resolves to `true` if the API has successfully queued
 the event for insertion. The API will then process the queue asynchronously, it
@@ -273,7 +273,7 @@ existing array of manual tags.
 
 ### addEducation
 
-Add a new `Education` object to an existing Customer.
+Adds a new `Education` object to an existing Customer.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
 version of the Customer.
@@ -323,7 +323,7 @@ ch.removeEducation(customerId, educationId)
 
 ### addJob
 
-Add a new `Job` object to an existing Customer.
+Adds a new `Job` object to an existing Customer.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
 version of the Customer.
@@ -373,7 +373,7 @@ ch.removeJob(customerId, jobId)
 
 ### addLike
 
-Add a new `Like` object to an existing Customer.
+Adds a new `Like` object to an existing Customer.
 
 Returns a `Promise` that resolves to a `Customer` object containing the updated
 version of the Customer.
