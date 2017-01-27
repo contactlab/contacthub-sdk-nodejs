@@ -53,12 +53,12 @@ export default class ContactHub {
     return this.api.post({
       endpoint: 'customers',
       data
-    }).then(data => cleanCustomer(data));
+    }).then(cleanCustomer);
   }
 
   getCustomer(customerId: string): Promise<Customer> {
     return this.api.get({ endpoint: `customers/${customerId}` })
-      .then(data => cleanCustomer(data));
+      .then(cleanCustomer);
   }
 
   getCustomers(options: ?GetCustomersOptions): Promise<Array<Customer>> {
@@ -73,7 +73,7 @@ export default class ContactHub {
     };
 
     return this.api.get({ endpoint, params })
-      .then(data => data.elements.map(d => cleanCustomer(d)));
+      .then(data => data.elements.map(cleanCustomer));
   }
 
   updateCustomer(customerId: string, customer: CustomerData): Promise<Customer> {
@@ -88,7 +88,7 @@ export default class ContactHub {
     };
 
     return this.api.put({ endpoint: `customers/${customerId}`, data })
-      .then(data => cleanCustomer(data));
+      .then(cleanCustomer);
   }
 
   patchCustomer(customerId: string, customer: CustomerData): Promise<Customer> {
@@ -102,7 +102,7 @@ export default class ContactHub {
     };
 
     return this.api.patch({ endpoint: `customers/${customerId}`, data })
-      .then(data => cleanCustomer(data));
+      .then(cleanCustomer);
   }
 
   deleteCustomer(customerId: string): Promise<boolean> {
