@@ -1,7 +1,6 @@
 // @flow
 
 import ContactHub from '../../src/ContactHub';
-import Customer from '../../src/Customer';
 
 const ch = new ContactHub({
   token: '97841617075b4b5f8ea88c30a8d2aec7647b7181df2c483fa78138c8d58aed4d',
@@ -9,9 +8,9 @@ const ch = new ContactHub({
   nodeId: '854f0791-c120-4e4a-9264-6dd197cb922c'
 });
 
-const randomString = () => Math.random().toString(36).substr(2, 8);
+const randomString = (): string => Math.random().toString(36).substr(2, 8);
 
-const simpleCustomer = () => new Customer({
+const simpleCustomer = () => ({
   base: {
     firstName: randomString(),
     contacts: {
@@ -39,7 +38,7 @@ const randomJob = () => ({
   jobTitle: randomJobTitle()
 });
 
-const complexCustomer = () => new Customer({
+const complexCustomer = () => ({
   externalId: randomString(),
   extra: randomString(),
   base: {
@@ -154,7 +153,7 @@ describe('ContactHub', () => {
       const customers = await ch.getCustomers({ fields: ['base.firstName'] });
 
       expect(customers.length).toBe(10);
-      expect(Object.keys(customers[0].base)).toEqual(['firstName']);
+      expect(customers[0].base && Object.keys(customers[0].base)).toEqual(['firstName']);
     });
 
     it('takes a custom query', async () => {
@@ -175,7 +174,7 @@ describe('ContactHub', () => {
       };
       const customers = await ch.getCustomers({ query });
 
-      expect(customers[0].base.firstName).toBe('mario');
+      expect(customers[0].base && customers[0].base.firstName).toBe('mario');
     });
 
     it('takes a sort field and direction', async () => {
@@ -184,7 +183,7 @@ describe('ContactHub', () => {
         direction: 'desc'
       });
 
-      expect(customers[0].base.contacts
+      expect(customers[0].base && customers[0].base.contacts
              && customers[0].base.contacts.email).toMatch(/^zz/);
     });
   });
@@ -192,13 +191,16 @@ describe('ContactHub', () => {
   it('creates, updates and deletes a customer', async () => {
     const c1 = await ch.addCustomer(simpleCustomer());
 
-    c1.base.firstName = randomString();
+    const newName = randomString();
+    if (c1.base) {
+      c1.base.firstName = newName;
+    }
 
-    const c2 = await ch.updateCustomer(c1);
+    const c2 = await ch.updateCustomer(c1.id, c1);
 
     const del = await ch.deleteCustomer(c2.id);
 
-    expect(del).toEqual({ deleted: true });
+    expect(del).toEqual(true);
   });
 
   it('writes and reads back a simple customer', async () => {
@@ -222,20 +224,20 @@ describe('ContactHub', () => {
     const c1 = await ch.addCustomer(customer);
 
     const updatedEmail = `${randomString()}@example.com`;
-    const patch = new Customer({
+    const patch = {
       base: { contacts: { email: updatedEmail } }
-    });
+    };
     const c2 = await ch.patchCustomer(
       c1.id, patch
     );
 
-    const email = c2.base.contacts && c2.base.contacts.email;
+    const email = c2.base && c2.base.contacts && c2.base.contacts.email;
 
     // email property was modified
     expect(email).toEqual(updatedEmail);
 
     // firstName property was not modified
-    expect(c2.base.firstName).toEqual(customer.base.firstName);
+    expect(c2.base && c2.base.firstName).toEqual(customer.base.firstName);
   });
 
 

@@ -1,15 +1,34 @@
 // @flow
 
-import type { Auth, GetCustomersOptions } from './types';
+import type {
+  Auth, BaseProperties, Customer, CustomerData, APICustomer, GetCustomersOptions, Job
+} from './types';
 import API from './API';
+import { compact } from './utils';
 
-import Customer from './Customer';
+const cleanCustomer = (data: APICustomer): Customer => {
+  const customer = {};
+
+  customer.id = data.id;
+  customer.registeredAt = new Date(data.registeredAt);
+  customer.updatedAt = new Date(data.updatedAt);
+
+  if (data.externalId) { customer.externalId = data.externalId; }
+  if (data.extended) { customer.extended = data.extended; }
+  if (data.extra) { customer.extra = data.extra; }
+  if (data.tags) { customer.tags = data.tags; }
+
+  /* Strip nulls and empty arrays recursively from `base` */
+  if (data.base) { customer.base = (compact(data.base): BaseProperties); }
+
+  return customer;
+};
 
 export default class ContactHub {
   auth: Auth
   api: API
 
-  constructor(params: Object) {
+  constructor(params: Auth) {
     if (!(params && params.token && params.workspaceId && params.nodeId)) {
       throw new Error('Missing required ContactHub configuration.');
     }
@@ -21,19 +40,25 @@ export default class ContactHub {
     this.api = new API(this.auth);
   }
 
-  addCustomer(customer: Object): Promise<Customer> {
+  addCustomer(customer: CustomerData): Promise<Customer> {
+    const data = {
+      nodeId: this.auth.nodeId,
+      externalId: customer.externalId,
+      base: customer.base,
+      extended: customer.extended,
+      extra: customer.extra,
+      tags: customer.tags
+    };
+
     return this.api.post({
       endpoint: 'customers',
-      data: {
-        nodeId: this.auth.nodeId,
-        base: customer.base
-      }
-    }).then(data => new Customer(data));
+      data
+    }).then(cleanCustomer);
   }
 
   getCustomer(customerId: string): Promise<Customer> {
     return this.api.get({ endpoint: `customers/${customerId}` })
-      .then(data => new Customer(data));
+      .then(cleanCustomer);
   }
 
   getCustomers(options: ?GetCustomersOptions): Promise<Array<Customer>> {
@@ -48,32 +73,57 @@ export default class ContactHub {
     };
 
     return this.api.get({ endpoint, params })
-      .then(({ elements }) => elements)
-      .then(data => data.map(d => new Customer(d)));
+      .then(data => data.elements.map(cleanCustomer));
   }
 
-  updateCustomer(customer: Customer): Promise<Customer> {
-    const data = { ...customer, nodeId: this.auth.nodeId };
-    return this.api.put({ endpoint: `customers/${customer.id}`, data })
-      .then(data => new Customer(data));
+  updateCustomer(customerId: string, customer: CustomerData): Promise<Customer> {
+    const data = {
+      nodeId: this.auth.nodeId,
+      id: customerId,
+      externalId: customer.externalId,
+      base: customer.base,
+      extended: customer.extended,
+      extra: customer.extra,
+      tags: customer.tags
+    };
+
+    return this.api.put({ endpoint: `customers/${customerId}`, data })
+      .then(cleanCustomer);
   }
 
-  patchCustomer(customerId: string, customer: Customer): Promise<Customer> {
-    const data = { ...customer, id: customerId };
+  patchCustomer(customerId: string, customer: CustomerData): Promise<Customer> {
+    const data = {
+      id: customerId,
+      externalId: customer.externalId,
+      base: customer.base,
+      extended: customer.extended,
+      extra: customer.extra,
+      tags: customer.tags
+    };
+
     return this.api.patch({ endpoint: `customers/${customerId}`, data })
-      .then(data => new Customer(data));
+      .then(cleanCustomer);
   }
 
-  deleteCustomer(customerId: string) {
-    return this.api.del({ endpoint: `customers/${customerId}` }).then(() => ({ deleted: true }));
+  deleteCustomer(customerId: string): Promise<boolean> {
+    const endpoint = `customers/${customerId}`;
+    const params = { nodeId: this.auth.nodeId };
+
+    return this.api.delete({ endpoint, params }).then(() => true);
   }
 
-  addJob(customerId: string, job: Object): Promise<Object> {
-    return this.api.post({ endpoint: `customers/${customerId}/jobs`, data: job });
+  addJob(customerId: string, job: Job): Promise<Job> {
+    return this.api.post({
+      endpoint: `customers/${customerId}/jobs`,
+      data: job
+    });
   }
 
-  updateJob(customerId: string, job: Object): Promise<Object> {
-    return this.api.put({ endpoint: `customers/${customerId}/jobs/${job.id}`, data: job });
+  updateJob(customerId: string, job: Job): Promise<Job> {
+    return this.api.put({
+      endpoint: `customers/${customerId}/jobs/${job.id}`,
+      data: job
+    });
   }
 
 }
