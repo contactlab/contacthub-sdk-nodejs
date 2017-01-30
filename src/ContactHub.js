@@ -1,7 +1,8 @@
 // @flow
 
 import type {
-  Auth, BaseProperties, Customer, CustomerData, APICustomer, GetCustomersOptions, Job
+  Auth, Job, Event, EventData,
+  Customer, CustomerData, BaseProperties, APICustomer, GetCustomersOptions
 } from './types';
 import API from './API';
 import { compact } from './utils';
@@ -124,6 +125,46 @@ export default class ContactHub {
       endpoint: `customers/${customerId}/jobs/${job.id}`,
       data: job
     });
+  }
+
+  addEvent(event: EventData): Promise<boolean> {
+    if (!(event.customerId || event.externalId || event.sessionId)) {
+      throw new Error(
+        'Cannot create an event without customerId, externalId or sessionId'
+      );
+    }
+
+    const bringBackProperties = event.customerId ? undefined : {
+      type: event.externalId ? 'EXTERNAL_ID' : 'SESSION_ID',
+      value: event.externalId ? event.externalId : event.sessionId,
+      nodeId: this.auth.nodeId
+    };
+
+    const data = {
+      bringBackProperties,
+      customerId: event.customerId,
+      type: event.type,
+      context: event.context,
+      properties: event.properties,
+      contextInfo: event.contextInfo,
+      date: event.date && event.date.toISOString() || new Date().toISOString()
+    };
+
+    return this.api.post({
+      endpoint: 'events', data
+    }).then(() => true);
+  }
+
+  getEvent(eventId: string): Promise<Event> {
+    return this.api.get({ endpoint: `events/${eventId}` });
+  }
+
+  getEvents(customerId: string): Promise<Array<Event>> {
+    return this.api.get({
+      endpoint: 'events',
+      params: { customerId }
+    })
+    .then(data => data.elements);
   }
 
 }

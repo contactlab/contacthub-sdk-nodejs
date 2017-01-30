@@ -165,3 +165,19 @@ export type APICustomer = {
   extended: Object | null,
   tags: Tags | null
 };
+
+export type EventData = {
+  customerId?: string,
+  externalId?: string,
+  sessionId?: string,
+  type: string,
+  context: string,
+  properties: Object,
+  contextInfo?: Object,
+  date?: Date
+};
+
+export type Event = EventData & {
+  id: string,
+  registeredAt: Date
+};
