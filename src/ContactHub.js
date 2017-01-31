@@ -5,6 +5,7 @@ import type {
 } from './types';
 import API from './API';
 import { compact } from './utils';
+import uuid from 'uuid';
 
 const cleanCustomer = (data: APICustomer): Customer => {
   const customer = {};
@@ -38,6 +39,17 @@ export default class ContactHub {
       nodeId: params.nodeId
     };
     this.api = new API(this.auth);
+  }
+
+  createSessionId(): string {
+    return uuid.v4();
+  }
+
+  addCustomerSession(customerId: string, sessionId: string): Promise<boolean> {
+    const endpoint = `customers/${customerId}/sessions`;
+    const data = { value: sessionId };
+
+    return this.api.post({ endpoint, data }).then(() => true);
   }
 
   addCustomer(customer: CustomerData): Promise<Customer> {

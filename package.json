@@ -52,7 +52,8 @@
   },
   "dependencies": {
     "axios": "^0.15.0",
-    "postinstall-build": "^2.1.3"
+    "postinstall-build": "^2.1.3",
+    "uuid": "^3.0.1"
   },
   "jest": {
     "testEnvironment": "node"
