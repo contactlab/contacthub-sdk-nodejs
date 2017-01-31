@@ -19,25 +19,6 @@ const simpleCustomer = () => ({
   }
 });
 
-// Source: http://justsomething.co/hilarious-job-titles/
-const realJobs = [
-  'Chocolate Beer Specialist', 'Shredded Cheese Authority',
-  'Pornography Historian', 'Smarties Expert', 'Mall Santa',
-  'Rasputin Impersonator', 'Cat Behavior Consultant', 'MILF Commander',
-  'Head of Potatoes', 'Ex-moonshiner', 'Pork Rind Expert', 'Bread Scientist',
-  'Bear biologist and Paper folder', '6-layer dip maker',
-  'Chief of Unicorn Division', 'Bride Kidnapping Expert'
-];
-
-const randomJobTitle = () => {
-  return realJobs[Math.floor(Math.random() * realJobs.length)];
-};
-
-const randomJob = () => ({
-  id: randomString(),
-  jobTitle: randomJobTitle()
-});
-
 const complexCustomer = () => ({
   externalId: randomString(),
   extra: randomString(),
@@ -242,18 +223,4 @@ describe('ContactHub', () => {
     expect(c2.base && c2.base.firstName).toEqual(customer.base.firstName);
   });
 
-
-  it('adds and updates a job', async () => {
-    const c1 = await ch.addCustomer(simpleCustomer());
-
-    const job = await ch.addJob(c1.id, randomJob());
-
-    const updatedJob = Object.assign({}, job, {
-      jobTitle: randomJobTitle()
-    });
-
-    const j2 = await ch.updateJob(c1.id, updatedJob);
-
-    expect(j2.jobTitle).toEqual(updatedJob.jobTitle);
-  });
 });
