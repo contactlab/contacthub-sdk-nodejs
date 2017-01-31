@@ -132,6 +132,8 @@ const complexCustomer = () => ({
   }
 });
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
+
 describe('ContactHub', () => {
 
   describe('getCustomers', async () => {
