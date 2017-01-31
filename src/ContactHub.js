@@ -1,7 +1,7 @@
 // @flow
 
 import type {
-  Auth, Job, Event, EventData,
+  Auth, Education, Job, Like, Event, EventData,
   Customer, CustomerData, BaseProperties, APICustomer, GetCustomersOptions
 } from './types';
 import API from './API';
@@ -125,6 +125,26 @@ export default class ContactHub {
     return this.api.delete({ endpoint, params }).then(() => true);
   }
 
+  addEducation(customerId: string, education: Education): Promise<Education> {
+    return this.api.post({
+      endpoint: `customers/${customerId}/educations`,
+      data: education
+    });
+  }
+
+  updateEducation(customerId: string, education: Education): Promise<Education> {
+    return this.api.put({
+      endpoint: `customers/${customerId}/educations/${education.id}`,
+      data: education
+    });
+  }
+
+  deleteEducation(customerId: string, educationId: string): Promise<boolean> {
+    return this.api.delete({
+      endpoint: `customers/${customerId}/educations/${educationId}`
+    }).then(() => true);
+  }
+
   addJob(customerId: string, job: Job): Promise<Job> {
     return this.api.post({
       endpoint: `customers/${customerId}/jobs`,
@@ -137,6 +157,32 @@ export default class ContactHub {
       endpoint: `customers/${customerId}/jobs/${job.id}`,
       data: job
     });
+  }
+
+  deleteJob(customerId: string, jobId: string): Promise<boolean> {
+    return this.api.delete({
+      endpoint: `customers/${customerId}/jobs/${jobId}`
+    }).then(() => true);
+  }
+
+  addLike(customerId: string, like: Like): Promise<Like> {
+    return this.api.post({
+      endpoint: `customers/${customerId}/likes`,
+      data: like
+    });
+  }
+
+  updateLike(customerId: string, like: Like): Promise<Like> {
+    return this.api.put({
+      endpoint: `customers/${customerId}/likes/${like.id}`,
+      data: like
+    });
+  }
+
+  deleteLike(customerId: string, likeId: string): Promise<boolean> {
+    return this.api.delete({
+      endpoint: `customers/${customerId}/likes/${likeId}`
+    }).then(() => true);
   }
 
   addEvent(event: EventData): Promise<boolean> {
@@ -178,5 +224,4 @@ export default class ContactHub {
     })
     .then(data => data.elements);
   }
-
 }

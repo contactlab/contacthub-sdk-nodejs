@@ -3,7 +3,6 @@
 import ContactHub from '../src/ContactHub';
 const nock = require('nock');
 
-
 const auth = {
   token: 'token',
   workspaceId: 'wid',
@@ -51,6 +50,20 @@ describe('ContactHub', () => {
 
       const res = await ch.updateJob(cid, job);
       expect(res).toEqual(job);
+    });
+  });
+
+  describe('deleteJob', () => {
+    it('deletes a job', async () => {
+      const cid = 'cid';
+      const jid = 'a-job';
+
+      nock(apiUrl)
+        .delete(`/workspaces/${auth.workspaceId}/customers/${cid}/jobs/${jid}`)
+        .reply(200);
+
+      const res = await ch.deleteJob(cid, jid);
+      expect(res).toEqual(true);
     });
   });
 });
