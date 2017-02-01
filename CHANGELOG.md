@@ -1,6 +1,24 @@
 #  Change Log
 
-## [Unreleased](https://github.com/contactlab/contacthub-sdk-nodejs/tree/HEAD)
+
+
+## [v0.2.0](https://github.com/contactlab/contacthub-sdk-nodejs/tree/v0.2.0) (2017-02-01)
+[Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v0.1.0...v0.2.0)
+
+#### New features:
+
+- Education, Job and Like APIs [#36](https://github.com/contactlab/contacthub-sdk-nodejs/issues/36)
+- Tag API [#35](https://github.com/contactlab/contacthub-sdk-nodejs/issues/35)
+- Session API [#34](https://github.com/contactlab/contacthub-sdk-nodejs/issues/34)
+- Event API [#32](https://github.com/contactlab/contacthub-sdk-nodejs/issues/32)
+- Improve documentation in Readme [#28](https://github.com/contactlab/contacthub-sdk-nodejs/issues/28)
+- Create example project [#22](https://github.com/contactlab/contacthub-sdk-nodejs/issues/22)
+
+#### Fixes (bugs & defects):
+
+- Improve Flow types for Customers [#30](https://github.com/contactlab/contacthub-sdk-nodejs/issues/30)
+
+## [v0.1.0](https://github.com/contactlab/contacthub-sdk-nodejs/tree/v0.1.0) (2017-01-24)
 
 
 #### Fixes (bugs & defects):
