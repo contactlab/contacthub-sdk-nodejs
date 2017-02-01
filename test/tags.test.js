@@ -29,6 +29,7 @@ const customerWithNoTags = {
 
 describe('ContactHub', () => {
   beforeEach(() => {
+    nock.cleanAll();
     nock(apiUrl)
       .get(new RegExp(`/workspaces/${auth.workspaceId}/customers/(cid1|cid2)$`))
       .reply(200, uri => {
@@ -43,6 +44,11 @@ describe('ContactHub', () => {
     it('adds a tag if not already present', async () => {
       const res = await ch.addTag(customer.id, 'black');
       expect(res.tags && res.tags.manual).toEqual(['shoes', 'men', 'black']);
+    });
+
+    it('preserves other Customer properties', async () => {
+      const res = await ch.addTag(customer.id, 'black');
+      expect(res.base && res.base.firstName).toEqual('foo');
     });
 
     it('does not make an unnecessary call if tag is already there', async () => {
@@ -63,6 +69,11 @@ describe('ContactHub', () => {
       expect(res.tags && res.tags.manual).toEqual(['shoes']);
     });
 
+    it('preserves other Customer properties', async () => {
+      const res = await ch.removeTag(customer.id, 'men');
+      expect(res.base && res.base.firstName).toEqual('foo');
+    });
+
     it('does not make an unnecessary call if tag is not there', async () => {
       const res = await ch.removeTag(customer.id, 'red');
       expect(res.tags && res.tags.manual).toEqual(['shoes', 'men']);
@@ -70,8 +81,8 @@ describe('ContactHub', () => {
     });
 
     it('does not make an unnecessary call if customer has no tags', async () => {
-      const res = await ch.removeTag(customer.id, 'red');
-      expect(res.tags && res.tags.manual).toEqual(['shoes', 'men']);
+      const res = await ch.removeTag(customerWithNoTags.id, 'red');
+      expect(res.tags).toBeUndefined();
       expect(nock.isDone()).toBe(false);
     });
   });

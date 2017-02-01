@@ -228,35 +228,48 @@ export default class ContactHub {
   async addTag(customerId: string, tag: string): Promise<Customer> {
     const customer = await this.getCustomer(customerId);
 
+    // if the customer has no previous tags
     if (!customer.tags) {
       customer.tags = { auto: [], manual: [tag] };
 
       return this.updateCustomer(customerId, customer);
     }
 
-    const index = customer.tags.manual.indexOf(tag);
-    if (customer.tags && index === -1) {
-      const newTags = [...customer.tags.manual, tag];
-      customer.tags.manual = newTags;
+    const oldTags = customer.tags;
 
-      return this.updateCustomer(customerId, customer);
+    // if the tag is already present
+    if (oldTags.manual.indexOf(tag) !== -1) {
+      return Promise.resolve(customer);
     }
 
-    return Promise.resolve(customer);
+    const newCustomer = { ...customer, tags: {
+      auto: oldTags.auto,
+      manual: [...oldTags.manual, tag]
+    } };
+
+    return this.updateCustomer(customerId, newCustomer);
   }
 
   async removeTag(customerId: string, tag: string): Promise<Customer> {
     const customer = await this.getCustomer(customerId);
 
-    if (customer.tags) {
-      const newTags = customer.tags && customer.tags.manual.filter(t => t !== tag);
-      if (customer.tags) {
-        customer.tags.manual = newTags;
-
-        return this.updateCustomer(customerId, customer);
-      }
+    // if the customer has no previous tags
+    if (!customer.tags) {
+      return Promise.resolve(customer);
     }
 
-    return Promise.resolve(customer);
+    const oldTags = customer.tags;
+
+    // if the tag to remove is not present
+    if (oldTags.manual.indexOf(tag) === -1) {
+      return Promise.resolve(customer);
+    }
+
+    const newCustomer = { ...customer, tags: {
+      auto: oldTags.auto,
+      manual: oldTags.manual.filter(t => t !== tag)
+    } };
+
+    return this.updateCustomer(customerId, newCustomer);
   }
 }
