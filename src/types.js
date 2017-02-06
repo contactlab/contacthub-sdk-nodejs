@@ -19,6 +19,8 @@ export type GetCustomersOptions = {|
   direction?: 'asc' | 'desc'
 |};
 
+// SDK Customer
+
 export type Tags = {
   auto: Array<string>,
   manual: Array<string>
@@ -153,19 +155,6 @@ export type Customer = CustomerData & {
   updatedAt: Date
 };
 
-export type APICustomer = {
-  id: string,
-  nodeId: string,
-  externalId: string | null,
-  extra: string | null,
-  registeredAt: string,
-  updatedAt: string,
-  enabled: boolean,
-  base: BaseProperties | null,
-  extended: Object | null,
-  tags: Tags | null
-};
-
 export type EventData = {
   customerId?: string,
   externalId?: string,
@@ -180,4 +169,118 @@ export type EventData = {
 export type Event = EventData & {
   id: string,
   registeredAt: Date
+};
+
+// API Customer
+
+export type APIMobileDevice = {
+  identifier: ?string,
+  name: ?string,
+  type: 'IOS' | 'GCM' | 'WP'
+};
+
+export type APIContacts = {
+  email: ?string,
+  fax: ?string,
+  mobilePhone: ?string,
+  phone: ?string,
+  otherContacts: Array<OtherContact>,
+  mobileDevices: Array<APIMobileDevice>
+};
+
+export type APIAddress = {
+  street: ?string,
+  city: ?string,
+  country: ?string,
+  province: ?string,
+  zip: ?string,
+  geo: ?Geo
+};
+
+export type APICredential = {
+  username: string,
+  password: string
+};
+
+export type APIEducation = {
+  id: string,
+  schoolType: 'PRIMARY_SCHOOL' | 'SECONDARY_SCHOOL' | 'HIGH_SCHOOL' | 'COLLEGE' | 'OTHER',
+  schoolName: ?string,
+  schoolConcentration: ?string,
+  startYear: ?number,
+  endYear: ?number,
+  isCurrent: ?boolean
+};
+
+export type APILike = {
+  id: string,
+  category: ?string,
+  name: ?string
+};
+
+export type APISocial = {
+  facebook: ?string,
+  google: ?string,
+  instagram: ?string,
+  linkedin: ?string,
+  qzone: ?string,
+  twitter: ?string
+};
+
+export type APIJob = {
+  id: string,
+  companyIndustry: ?string,
+  companyName: ?string,
+  jobTitle: ?string,
+  startDate: ?string,
+  endDate: ?string,
+  isCurrent: ?boolean
+};
+
+export type APISubscription = {
+  id: string,
+  name: ?string,
+  type: ?string,
+  kind: 'DIGITAL_MESSAGE' | 'SERVICE' | 'OTHER',
+  subscribed: ?boolean,
+  startDate: ?string,
+  endDate: ?string,
+  subscriberId: ?string,
+  registeredAt: ?string,
+  updatedAt: ?string,
+  preferences: Array<Preference>
+};
+
+export type APIBaseProperties = {
+  pictureUrl: ?string,
+  title: ?string,
+  prefix: ?string,
+  firstName: ?string,
+  lastName: ?string,
+  middleName: ?string,
+  gender: ?string,
+  dob: ?string,
+  locale: ?string,
+  timezone: ?string,
+  contacts: ?APIContacts,
+  address: ?APIAddress,
+  credential: ?APICredential,
+  educations: Array<APIEducation>,
+  likes: Array<APILike>,
+  socialProfile: APISocial,
+  jobs: Array<APIJob>,
+  subscriptions: Array<APISubscription>
+};
+
+export type APICustomer = {
+  id: string,
+  nodeId: string,
+  externalId: ?string,
+  extra: ?string,
+  registeredAt: string,
+  updatedAt: string,
+  enabled: boolean,
+  base: ?APIBaseProperties,
+  extended: ?Object,
+  tags: ?Tags
 };
