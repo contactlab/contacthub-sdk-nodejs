@@ -176,7 +176,7 @@ export type Event = EventData & {
 export type APIMobileDevice = {
   identifier: ?string,
   name: ?string,
-  type: 'IOS' | 'GCM' | 'WP'
+  type: null | 'IOS' | 'GCM' | 'WP'
 };
 
 export type APIContacts = {
@@ -204,7 +204,7 @@ export type APICredential = {
 
 export type APIEducation = {
   id: string,
-  schoolType: 'PRIMARY_SCHOOL' | 'SECONDARY_SCHOOL' | 'HIGH_SCHOOL' | 'COLLEGE' | 'OTHER',
+  schoolType: null | 'PRIMARY_SCHOOL' | 'SECONDARY_SCHOOL' | 'HIGH_SCHOOL' | 'COLLEGE' | 'OTHER',
   schoolName: ?string,
   schoolConcentration: ?string,
   startYear: ?number,
@@ -241,7 +241,7 @@ export type APISubscription = {
   id: string,
   name: ?string,
   type: ?string,
-  kind: 'DIGITAL_MESSAGE' | 'SERVICE' | 'OTHER',
+  kind: null | 'DIGITAL_MESSAGE' | 'SERVICE' | 'OTHER',
   subscribed: ?boolean,
   startDate: ?string,
   endDate: ?string,
