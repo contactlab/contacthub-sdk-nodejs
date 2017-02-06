@@ -13,6 +13,17 @@ All async operations return a `Promise`.
 can be leveraged if you use Flow in a project which depends on this library.
 
 
+## Installation
+
+This library will be soon available on [npmjs.com](https://www.npmjs.com/). For
+now, you can clone this Git repository and install it from your local copy:
+
+```sh
+git clone git@github.com:/contactlab/contacthub-sdk-nodejs /tmp/contacthub-sdk-nodejs
+npm install --save file:/tmp/contacthub-sdk-nodejs
+```
+
+
 ## Quick start
 
 ```js
