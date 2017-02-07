@@ -471,6 +471,18 @@ Run unit tests with `npm test`, or `npm run test-watch` to enable watch mode.
 
 Run e2e tests with `npm run e2e`, or `npm run e2e-watch` to enable watch mode.
 
+**Note:** to run e2e test you need to authenticate to the API. Put a valid
+workspaceId, nodeId and token in environment variables:
+
+```sh
+export CONTACTHUB_TEST_TOKEN="..."
+export CONTACTHUB_TEST_WORKSPACE="..."
+export CONTACTHUB_TEST_NODE="..."
+```
+
+**Do not use a production workspace, as the tests will write test data (fake
+Customers and Events) to the workspace they are using.**
+
 ### Flow types
 
 This library uses [Flow](flowtype.org) as a static type checker. Run `npm run
