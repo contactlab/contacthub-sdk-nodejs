@@ -160,8 +160,8 @@ export type EventData = {
   customerId?: string,
   externalId?: string,
   sessionId?: string,
-  type: string,
-  context: string,
+  type: string, // TODO: shouldn't be an enum?
+  context: 'CONTACT_CENTER' | 'DIGITAL_CAMPAIGN' | 'ECOMMERCE' | 'IOT' | 'MOBILE' | 'OTHER' | 'RETAIL' | 'SOCIAL' | 'WEB', // eslint-disable-line max-len
   properties: Object,
   contextInfo?: Object,
   date?: Date
