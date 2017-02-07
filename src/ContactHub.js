@@ -8,6 +8,33 @@ import API from './API';
 import { compact } from './utils';
 import uuid from 'uuid';
 
+// format JS Date object in string 'YYYY-MM-DD'
+const formatToDate = (dateTime: ?Date) => dateTime && dateTime.toISOString().slice(0, 10);
+
+const buildCustomer = (data: Customer): APICustomer => {
+  const customer = {};
+  if (data.id) { customer.id = data.id; }
+  if (data.externalId) { customer.externalId = data.externalId; }
+  if (data.extended) { customer.extended = data.extended; }
+  if (data.extra) { customer.extra = data.extra; }
+  if (data.tags) { customer.tags = data.tags; }
+
+  if (data.base) {
+    customer.base = { ...data.base };
+    customer.base.dob = formatToDate(customer.base.dob);
+    if (customer.base.jobs) {
+      const jobs = customer.base.jobs.map(j => ({
+        ...j,
+        endDate: formatToDate(j.endDate),
+        startDate: formatToDate(j.startDate)
+      }));
+      customer.base.jobs = jobs;
+    }
+  }
+
+  return customer;
+};
+
 const cleanCustomer = (data: APICustomer): Customer => {
   const customer = {};
 
@@ -53,7 +80,8 @@ export default class ContactHub {
     return this.api.post({ endpoint, data }).then(() => true);
   }
 
-  addCustomer(customer: CustomerData): Promise<Customer> {
+  addCustomer(customerData: CustomerData): Promise<Customer> {
+    const customer = buildCustomer(customerData);
     const data = {
       nodeId: this.auth.nodeId,
       externalId: customer.externalId,
@@ -89,7 +117,8 @@ export default class ContactHub {
       .then(data => data.elements.map(cleanCustomer));
   }
 
-  updateCustomer(customerId: string, customer: CustomerData): Promise<Customer> {
+  updateCustomer(customerId: string, customerData: CustomerData): Promise<Customer> {
+    const customer = buildCustomer(customerData);
     const data = {
       nodeId: this.auth.nodeId,
       id: customerId,
@@ -104,7 +133,8 @@ export default class ContactHub {
       .then(cleanCustomer);
   }
 
-  patchCustomer(customerId: string, customer: CustomerData): Promise<Customer> {
+  patchCustomer(customerId: string, customerData: CustomerData): Promise<Customer> {
+    const customer = buildCustomer(customerData);
     const data = {
       id: customerId,
       externalId: customer.externalId,
