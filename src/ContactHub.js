@@ -47,8 +47,33 @@ const cleanCustomer = (data: APICustomer): Customer => {
   if (data.extra) { customer.extra = data.extra; }
   if (data.tags) { customer.tags = data.tags; }
 
-  /* Strip nulls and empty arrays recursively from `base` */
-  if (data.base) { customer.base = (compact(data.base): BaseProperties); }
+  if (data.base) {
+
+    const jobs = data.base.jobs.map(j => ({
+      ...j,
+      startDate: j.startDate && new Date(j.startDate)
+    }));
+
+    const likes = data.base.likes.map(l => ({
+      ...l,
+      createdTime: l.createdTime && new Date(l.createdTime)
+    }));
+
+    const subscriptions = data.base.subscriptions.map(s => ({
+      ...s,
+      registeredAt: s.registeredAt && new Date(s.registeredAt),
+      startDate: s.startDate && new Date(s.startDate),
+      endDate: s.endDate && new Date(s.endDate),
+      updatedAt: s.updatedAt && new Date(s.updatedAt)
+    }));
+
+    /* Strip nulls and empty arrays recursively from `base` */
+    const base = { ...data.base, jobs, likes, subscriptions };
+    customer.base = (compact(base): BaseProperties);
+    if (customer.base.dob) {
+      customer.base.dob = new Date(data.base.dob);
+    }
+  }
 
   return customer;
 };
