@@ -4,8 +4,9 @@ import { chTest, randomString } from './helper';
 
 const ch = chTest();
 
+// FIXME: creating new events takes a few seconds, so we rely on a known
+// customerId already having some associated events
 const cid = '689ef20e-e37a-4b8e-8d3f-2494ec901bc5';
-const eventId = 'e7f540f3-db32-4b1d-a572-0df15c95ae64';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
 
@@ -37,8 +38,10 @@ describe('ContactHub', () => {
 
   describe('getEvent', () => {
     it('retrieves an Event by id', async () => {
-      const event = await ch.getEvent(eventId);
-      expect(event.id).toBe(eventId);
+      const events = await ch.getEvents(cid);
+
+      const event = await ch.getEvent(events[0].id);
+      expect(event.id).toBe(events[0].id);
     });
   });
 
