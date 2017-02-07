@@ -81,8 +81,8 @@ export type Job = {
   companyIndustry?: string,
   companyName?: string,
   jobTitle?: string,
-  startDate?: string,
-  endDate?: string,
+  startDate?: Date,
+  endDate?: Date,
   isCurrent?: boolean
 };
 
@@ -112,11 +112,11 @@ export type Subscription = {
   type?: string,
   kind?: 'DIGITAL_MESSAGE' | 'SERVICE' | 'OTHER',
   subscribed?: boolean,
-  startDate?: string,
-  endDate?: string,
+  startDate?: Date,
+  endDate?: Date,
   subscriberId?: string,
-  registeredAt?: string,
-  updatedAt?: string,
+  registeredAt?: Date,
+  updatedAt?: Date,
   preferences?: Array<Preference>
 };
 
