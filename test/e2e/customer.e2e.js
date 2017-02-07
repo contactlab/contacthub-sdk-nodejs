@@ -25,7 +25,7 @@ const complexCustomer = () => ({
     lastName: 'Rossi',
     middleName: 'Giacomo',
     gender: 'male',
-    dob: '1990-12-12',
+    dob: new Date('1990-12-12'),
     locale: 'it_IT',
     timezone: 'Europe/Rome',
     contacts: {
@@ -72,7 +72,7 @@ const complexCustomer = () => ({
       id: 'like1',
       category: 'cat1',
       name: 'foobar',
-      createdTime: '2017-01-10T00:00:00.000+0000'
+      createdTime: new Date('2017-01-10')
     }],
     socialProfile: {
       facebook: 'https://www.facebook.com/ContactLab',
@@ -83,7 +83,7 @@ const complexCustomer = () => ({
       companyIndustry: 'Marketing',
       companyName: 'ContactLab',
       jobTitle: 'Software Engineer',
-      startDate: '2016-09-01',
+      startDate: new Date('2016-09-01T00:00:00.000+0000'),
       isCurrent: true
     }],
     subscriptions: [{
@@ -92,11 +92,11 @@ const complexCustomer = () => ({
       type: 'Newsletter',
       kind: 'DIGITAL_MESSAGE',
       subscribed: true,
-      startDate: '2016-01-01T00:00:00.000+0000',
-      endDate: '2018-01-01T00:00:00.000+0000',
+      startDate: new Date('2016-01-01T00:00:00.000+0000'),
+      endDate: new Date('2018-01-01T00:00:00.000+0000'),
       subscriberId: 'ASD123',
-      registeredAt: '2016-05-10T00:00:00.000+0000',
-      updatedAt: '2016-05-10T00:00:00.000+0000',
+      registeredAt: new Date('2016-05-10T00:00:00.000+0000'),
+      updatedAt: new Date('2016-05-10T00:00:00.000+0000'),
       preferences: [
         { key: 'key1', value: 'value1' },
         { key: 'key2', value: 'value2' }
