@@ -5,11 +5,9 @@ import type {
   Customer, CustomerData, BaseProperties, APICustomer, GetCustomersOptions
 } from './types';
 import API from './API';
-import { compact } from './utils';
+import { compact, formatToDate } from './utils';
 import uuid from 'uuid';
 
-// format JS Date object in string 'YYYY-MM-DD'
-const formatToDate = (dateTime: ?Date) => dateTime && dateTime.toISOString().slice(0, 10);
 
 const buildCustomer = (data: Customer): APICustomer => {
   const customer = {};

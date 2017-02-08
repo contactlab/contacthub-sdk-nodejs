@@ -33,3 +33,8 @@ export const compact = (value: any): any => {
 
   return value;
 };
+
+// format JS Date object in string 'YYYY-MM-DD'
+export const formatToDate = (dateTime: ?Date): ?string => {
+  return dateTime && dateTime.toISOString().slice(0, 10);
+};
