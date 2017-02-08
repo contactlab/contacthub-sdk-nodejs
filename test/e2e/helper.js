@@ -3,21 +3,16 @@ import ContactHub from '../../src/ContactHub';
 
 const chTest = (): ContactHub => {
 
-  const tok = process.env.CONTACTHUB_TEST_TOKEN;
-  const wid = process.env.CONTACTHUB_TEST_WORKSPACE;
-  const nid = process.env.CONTACTHUB_TEST_NODE;
+  const token = process.env.CONTACTHUB_TEST_TOKEN;
+  const workspaceId = process.env.CONTACTHUB_TEST_WORKSPACE_ID;
+  const nodeId = process.env.CONTACTHUB_TEST_NODE_ID;
 
-  if (!(tok && wid && nid)) {
+  if (!(token && workspaceId && nodeId)) {
     throw new Error('End-to-end tests require the following env variables to be set: '
-                    + 'CONTACTHUB_TEST_TOKEN, CONTACTHUB_TEST_WORKSPACE, CONTACTHUB_TEST_NODE');
+      + 'CONTACTHUB_TEST_TOKEN, CONTACTHUB_TEST_WORKSPACE_ID, CONTACTHUB_TEST_NODE_ID');
   }
 
-  return new ContactHub({
-    token: tok,
-    workspaceId: wid,
-    nodeId: nid
-  });
-
+  return new ContactHub({ token, workspaceId, nodeId });
 };
 
 const randomString = (): string => Math.random().toString(36).substr(2, 8);

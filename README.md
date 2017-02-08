@@ -476,8 +476,8 @@ workspaceId, nodeId and token in environment variables:
 
 ```sh
 export CONTACTHUB_TEST_TOKEN="..."
-export CONTACTHUB_TEST_WORKSPACE="..."
-export CONTACTHUB_TEST_NODE="..."
+export CONTACTHUB_TEST_WORKSPACE_ID="..."
+export CONTACTHUB_TEST_NODE_ID="..."
 ```
 
 **Do not use a production workspace, as the tests will write test data (fake
