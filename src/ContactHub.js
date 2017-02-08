@@ -2,32 +2,34 @@
 
 import type {
   Auth, Education, Job, Like, Event, EventData,
-  Customer, CustomerData, BaseProperties, APICustomer, GetCustomersOptions
+  Customer, CustomerData, BaseProperties,
+  APICustomer, APICustomerData, APIBaseProperties,
+  GetCustomersOptions
 } from './types';
 import API from './API';
 import { compact, formatToDate } from './utils';
 import uuid from 'uuid';
 
 
-const buildCustomer = (data: Customer): APICustomer => {
+const buildCustomer = (data: CustomerData): APICustomerData => {
   const customer = {};
-  if (data.id) { customer.id = data.id; }
   if (data.externalId) { customer.externalId = data.externalId; }
   if (data.extended) { customer.extended = data.extended; }
   if (data.extra) { customer.extra = data.extra; }
   if (data.tags) { customer.tags = data.tags; }
 
   if (data.base) {
-    customer.base = { ...data.base };
-    customer.base.dob = formatToDate(customer.base.dob);
-    if (customer.base.jobs) {
-      const jobs = customer.base.jobs.map(j => ({
+    const base = {
+      ...data.base,
+      dob: formatToDate(data.base.dob),
+      jobs: data.base && data.base.jobs && data.base.jobs.map(j => ({
         ...j,
         endDate: formatToDate(j.endDate),
         startDate: formatToDate(j.startDate)
-      }));
-      customer.base.jobs = jobs;
-    }
+      }))
+    };
+
+    customer.base = (compact(base): APIBaseProperties);
   }
 
   return customer;
@@ -47,30 +49,32 @@ const cleanCustomer = (data: APICustomer): Customer => {
 
   if (data.base) {
 
-    const jobs = data.base.jobs.map(j => ({
+    if (data.base.dob) {
+      customer.base.dob = new Date(data.base.dob);
+    }
+
+    const jobs = data.base.jobs && data.base.jobs.map(j => ({
       ...j,
       startDate: j.startDate && new Date(j.startDate)
     }));
 
-    const likes = data.base.likes.map(l => ({
+    const likes = data.base && data.base.likes && data.base.likes.map(l => ({
       ...l,
       createdTime: l.createdTime && new Date(l.createdTime)
     }));
 
-    const subscriptions = data.base.subscriptions.map(s => ({
-      ...s,
-      registeredAt: s.registeredAt && new Date(s.registeredAt),
-      startDate: s.startDate && new Date(s.startDate),
-      endDate: s.endDate && new Date(s.endDate),
-      updatedAt: s.updatedAt && new Date(s.updatedAt)
-    }));
+    const subscriptions = data.base && data.base.subscriptions &&
+      data.base.subscriptions.map(s => ({
+        ...s,
+        registeredAt: s.registeredAt && new Date(s.registeredAt),
+        startDate: s.startDate && new Date(s.startDate),
+        endDate: s.endDate && new Date(s.endDate),
+        updatedAt: s.updatedAt && new Date(s.updatedAt)
+      }));
 
     /* Strip nulls and empty arrays recursively from `base` */
     const base = { ...data.base, jobs, likes, subscriptions };
     customer.base = (compact(base): BaseProperties);
-    if (customer.base.dob) {
-      customer.base.dob = new Date(data.base.dob);
-    }
   }
 
   return customer;

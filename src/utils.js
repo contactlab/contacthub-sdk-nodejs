@@ -14,7 +14,7 @@ export const compact = (value: any): any => {
     return compacted.length === 0 ? undefined : compacted;
   }
 
-  if (typeof value === 'object' && value instanceof Date === false) {
+  if (typeof value === 'object' && !(value instanceof Date)) {
     const compacted = Object.keys(value).reduce((acc, key) => {
       const nested = compact(value[key]);
 

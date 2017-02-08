@@ -83,7 +83,7 @@ const complexCustomer = () => ({
       companyIndustry: 'Marketing',
       companyName: 'ContactLab',
       jobTitle: 'Software Engineer',
-      startDate: new Date('2016-09-01T00:00:00.000+0000'),
+      startDate: new Date('2016-09-01'),
       isCurrent: true
     }],
     subscriptions: [{
