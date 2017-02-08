@@ -1,17 +1,12 @@
 // @flow
 
-import ContactHub from '../../src/ContactHub';
+import { chTest, randomString } from './helper';
 
-const ch = new ContactHub({
-  token: '97841617075b4b5f8ea88c30a8d2aec7647b7181df2c483fa78138c8d58aed4d',
-  workspaceId: '40b6195f-e4f7-4f95-b10e-75268d850988',
-  nodeId: '854f0791-c120-4e4a-9264-6dd197cb922c'
-});
+const ch = chTest();
 
+// FIXME: creating new events takes a few seconds, so we rely on a known
+// customerId already having some associated events
 const cid = '689ef20e-e37a-4b8e-8d3f-2494ec901bc5';
-const eventId = 'e7f540f3-db32-4b1d-a572-0df15c95ae64';
-
-const randomString = (): string => Math.random().toString(36).substr(2, 8);
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
 
@@ -43,8 +38,10 @@ describe('ContactHub', () => {
 
   describe('getEvent', () => {
     it('retrieves an Event by id', async () => {
-      const event = await ch.getEvent(eventId);
-      expect(event.id).toBe(eventId);
+      const events = await ch.getEvents(cid);
+
+      const event = await ch.getEvent(events[0].id);
+      expect(event.id).toBe(events[0].id);
     });
   });
 

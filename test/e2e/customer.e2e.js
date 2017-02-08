@@ -1,18 +1,13 @@
 // @flow
 
-import ContactHub from '../../src/ContactHub';
+import { chTest, randomString } from './helper';
 
-const ch = new ContactHub({
-  token: '97841617075b4b5f8ea88c30a8d2aec7647b7181df2c483fa78138c8d58aed4d',
-  workspaceId: '40b6195f-e4f7-4f95-b10e-75268d850988',
-  nodeId: '854f0791-c120-4e4a-9264-6dd197cb922c'
-});
-
-const randomString = (): string => Math.random().toString(36).substr(2, 8);
+const ch = chTest();
 
 const simpleCustomer = () => ({
   base: {
     firstName: randomString(),
+    lastName: randomString(),
     contacts: {
       email: `${randomString()}@example.com`
     }
@@ -126,10 +121,20 @@ describe('ContactHub', () => {
     });
 
     it('filters by externalId', async () => {
-      const customers = await ch.getCustomers({ externalId: 'ext123' });
+      const extId = randomString();
+
+      await ch.addCustomer({
+        ...simpleCustomer(),
+        externalId: extId
+      });
+
+      // Wait 5 seconds for the Customer to be available in searches
+      await new Promise(resolve => setTimeout(resolve, 5000));
+
+      const customers = await ch.getCustomers({ externalId: extId });
 
       expect(customers.length).toBe(1);
-      expect(customers[0].externalId).toBe('ext123');
+      expect(customers[0].externalId).toBe(extId);
     });
 
     it('takes a whitelist of fields', async () => {
@@ -157,7 +162,7 @@ describe('ContactHub', () => {
       };
       const customers = await ch.getCustomers({ query });
 
-      expect(customers[0].base && customers[0].base.firstName).toBe('mario');
+      expect(customers[0].base && customers[0].base.firstName).toBe('Mario');
     });
 
     it('takes a sort field and direction', async () => {
@@ -166,8 +171,11 @@ describe('ContactHub', () => {
         direction: 'desc'
       });
 
-      expect(customers[0].base && customers[0].base.contacts
-             && customers[0].base.contacts.email).toMatch(/^zz/);
+      const [ first, second ] = [customers[0], customers[1]].map(c => {
+        return c.base && c.base.contacts && c.base.contacts.email;
+      });
+
+      expect(first && second && first > second).toBe(true);
     });
   });
 
