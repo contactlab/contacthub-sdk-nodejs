@@ -1,6 +1,16 @@
 #  Change Log
 
+## [Unreleased](https://github.com/contactlab/contacthub-sdk-nodejs/tree/HEAD)
+[Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v0.2.0...HEAD)
 
+#### Fixes (bugs & defects):
+
+- Remove API tokens from Git [#46](https://github.com/contactlab/contacthub-sdk-nodejs/issues/46)
+- Add installation instructions to README [#43](https://github.com/contactlab/contacthub-sdk-nodejs/issues/43)
+
+#### New features:
+
+- Create different flow type for api customer and sdk customer [#40](https://github.com/contactlab/contacthub-sdk-nodejs/issues/40)
 
 ## [v0.2.0](https://github.com/contactlab/contacthub-sdk-nodejs/tree/v0.2.0) (2017-02-01)
 [Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v0.1.0...v0.2.0)
