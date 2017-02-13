@@ -1,3 +1,5 @@
+![Version 0.2.1 beta](https://img.shields.io/badge/version-0.2.1%20beta-0072bc.svg)
+
 # contacthub-sdk-nodejs
 
 Node.js SDK for the ContactHub API.
