@@ -8,7 +8,6 @@
 
 Node.js SDK for the Contacthub API.
 
-
 ## Requirements and design
 
 This library requires Node.js v4 or later.
