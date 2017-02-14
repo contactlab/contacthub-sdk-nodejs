@@ -1,17 +1,16 @@
-# contacthub-sdk-nodejs
+# Contacthub nodejs SDK
 
-Node.js SDK for the ContactHub API.
+Node.js SDK for the Contacthub API.
 
 
 ## Requirements and design
 
 This library requires Node.js v4 or later.
 
-All async operations return a `Promise`.
+All asynchronous operations return a `Promise`.
 
-[Flow](http://flowtype.org) type annotations are used throughout the library and
-can be leveraged if you use Flow in a project which depends on this library.
-
+[Flow](http://flowtype.org) type annotations are used throughout the library, and
+can be leveraged if you use Flow in a project that depends on this library.
 
 ## Installation
 
@@ -22,7 +21,6 @@ now, you can clone this Git repository and install it from your local copy:
 git clone git@github.com:/contactlab/contacthub-sdk-nodejs /tmp/contacthub-sdk-nodejs
 npm install --save file:/tmp/contacthub-sdk-nodejs
 ```
-
 
 ## Quick start
 
@@ -42,15 +40,13 @@ ch.getCustomer('CUSTOMER_ID').then(customer => {
 });
 ```
 
-
 ## Initializing and authenticating
 
-All the functionalities provided by the SDK are exposed as methods of the
+All the functions provided by the SDK are exposed as methods of the
 `ContactHub` object prototype.
 
-To create a new instance you need three authentication parameters: `token`,
-`workspaceId` and `nodeId`. You can find them in your [ContactHub
-dashboard](https://hub.contactlab.it/#/settings/sources).
+To create a new instance, you need three authentication parameters: `token`,
+`workspaceId` and `nodeId`. You can find them using the [Contacthub UI](https://hub.contactlab.it/#/settings/sources).
 
 ```js
 const ch = new ContactHub({
@@ -60,18 +56,17 @@ const ch = new ContactHub({
 });
 ```
 
-The `ch` object will use the provided authentication parameters for all its
+The `ch` object uses the appropriate authentication parameters for all of the
 methods listed below.
 
 If you need to work with more than one workspace or node, or if you want to use
-different tokens, you can instantiate multiple ContactHub objects.
-
+different tokens, you can instantiate multiple Contacthub objects.
 
 ## Session API
 
 ### createSessionId
 
-Generates a new random sessionId to use in ContactHub events.
+Generates a new random sessionId to use in Contacthub events.
 
 ```js
 const sessionId = ch.createSessionId();
@@ -89,7 +84,6 @@ successfully reconciled.
 ch.addCustomerSession(customerId, sessionId)
 ```
 
-
 ## Event API
 
 ### addEvent
@@ -97,8 +91,8 @@ ch.addCustomerSession(customerId, sessionId)
 Adds a new Event.
 
 Returns a `Promise` that resolves to `true` if the API has successfully queued
-the event for insertion. The API will then process the queue asynchronously, it
-can take a few seconds for an event to be actually stored.
+the event for insertion. The API will then process the queue asynchronously, and it
+can take a few seconds for an event to actually be stored.
 
 ```js
 addEvent(event)
@@ -106,21 +100,40 @@ addEvent(event)
 
 The `event` parameter is an object that can contain the following properties:
 
-* `customerId`: the id of the `Customer` associated to this event
-* `externalId`: the externalId of the `Customer` associated to this event
-* `sessionId`: the id of the session associated to this event
-* `context`: one of `WEB`,`MOBILE`,`ECOMMERCE`,`RETAIL`,`SOCIAL`,`DIGITAL_CAMPAIGN`,`CONTACT_CENTER`,`IOT`,`OTHER`
-* `type`: a valid event type (listed in the [ContactHub settings](https://hub.contactlab.it/#/settings/events))
-* `properties`: an object conforming to the JSON schema required by the event type
+* `customerId`
+
+  The ID of the `Customer` associated with the event.
+
+* `externalId`
+
+  The externalId of the `Customer` associated with the event.
+
+* `sessionId`
+
+  The ID of the session associated with the event.
+
+* `context`
+
+  One of `WEB`,`MOBILE`,`ECOMMERCE`,`RETAIL`,`SOCIAL`,`DIGITAL_CAMPAIGN`,`CONTACT_CENTER`,`IOT`,`OTHER`.
+
+* `type`
+
+  A valid event type (shown in [Contacthub settings](https://hub.contactlab.it/#/settings/events)).
+
+* `properties`
+
+  An object conforming to the JSON schema for the event type.
 
 `context`, `type` and `properties` are always required.
 
-You must specify one between `customerId`, `externalId` and `sessionId`. If you
-don't have any `Customer` information (e.g. the user is not logged in) you should
-use a sessionId so that you can later reconcile all the events in the same
-session with a `Customer` when he/she logins.
+You must specify one `customerId`, `externalId` or `sessionId`. If you
+don't have any `Customer` information (for example, the customer is not logged in) you should
+use a sessionId. This enables you to later reconcile all the events in the same
+session with a `Customer`, when they log in.
 
-Example of a valid `event` object:
+**Example:**
+
+The following is an example of a valid `event` object:
 
 ```js
 const event = {
@@ -136,7 +149,7 @@ const event = {
 
 ### getEvent
 
-Retrieves an event by its id.
+Retrieves an event by its ID.
 
 Returns a `Promise` that resolves to an `Event` object.
 
@@ -160,7 +173,7 @@ ch.getEvents(customerId);
 
 Creates a new `Customer`.
 
-Returns a `Promise` that resolves to a `Customer` object including the `id` it
+Returns a `Promise` that resolves to a `Customer` object, including the `id` that 
 was assigned by the API.
 
 ```js
@@ -169,15 +182,32 @@ ch.addCustomer(customerData)
 
 The `customerData` parameter is an object that can contain the following properties:
 
-* `externalId`: a string identifying the customer in the user's own system
-* `base`: an object conforming to the JSON schema for [Base Properties](https://hub.contactlab.it/#/settings/properties)
-* `extended`: an object conforming the JSON schema for [Extended Properties](https://hub.contactlab.it/#/settings/properties)
-* `extra`: an optional string containing extra data about the customer
-* `tags`: an optional object containing a list of tags associated with the
-  customer. It must follow this format: `{ auto: Array<string>, manual: Array<String> }`
+* `externalId`
 
-The object must contain at least one between `externalId`, `base` and
-`extended`.
+  A string identifying the customer in your own systems.
+
+* `base`
+
+  An object conforming to the JSON schema for [Base Properties](https://hub.contactlab.it/#/settings/properties).
+
+* `extended`
+
+  An object conforming the JSON schema for [Extended Properties](https://hub.contactlab.it/#/settings/properties).
+
+* `extra`
+
+  An optional string containing extra data about the customer.
+
+* `tags`
+
+  An optional object containing a list of tags associated with the
+  customer. It must follow this format: 
+
+  `{ auto: Array<string>, manual: Array<String> }`
+
+The object must contain at least one of the following:
+
+* `externalId`, `base` or `extended`
 
 ### getCustomer
 
@@ -199,21 +229,35 @@ Returns a `Promise` that resolves to an `Array` of `Customer` objects.
 ch.getCustomers(options)
 ```
 
-`options` is an optional object that can contain one or more of the following
+`options` is an optional object, which can contain one or more of the following
 properties:
 
-* `externalId`: only return customers with this `externalId`
-* `query`: only return customers matching this [Custom Query](#custom-queries)
-* `fields`: an `Array` whitelisting the fields to retrieve for each customer
-* `sort`: the field to order the results by
-* `direction`: either `asc` or `desc`. ignored if `sort` is not specified
+* `externalId`
+
+  Only returns customers with this `externalId`.
+
+* `query`
+
+  Only returns customers that match the [Custom Query](#custom-queries).
+
+* `fields`
+
+  An `Array` that whitelists the fields to retrieve for each customer.
+
+* `sort`
+
+  The field where results are ordered.
+
+* `direction`
+
+  Either `asc` (ascending) or `desc` (descending). Ignored if `sort` is not specified.
 
 ### updateCustomer
 
-Updates a customer, removing all its existing properties and replacing them with
-the ones passed to this method.
+Updates a customer, removing all their existing properties and replacing them with
+the ones passed by this method.
 
-Returns a `Promise` that resolves to a `Customer` object containing the updated
+Returns a `Promise` that resolves to a `Customer` object, which contains the updated
 version of the `Customer`.
 
 ```js
@@ -222,10 +266,10 @@ ch.updateCustomer(customerId, customerData)
 
 ### patchCustomer
 
-Patches a customer, keeping all its existing properties and replacing only the
+Patches a customer, keeping most of their existing properties, while replacing the
 ones specified in `customerData`.
 
-Returns a `Promise` that resolves to a `Customer` object containing the updated
+Returns a `Promise` that resolves to a `Customer` object, which contains the updated
 version of the `Customer`.
 
 ```js
@@ -249,38 +293,42 @@ ch.deleteCustomer(customerId)
 Adds a tag to an existing `Customer`. The new tag will be appended to the
 `tags.manual` array of tags, if not already present.
 
-Returns a `Promise` that resolves to a `Customer` object containing the updated
+Returns a `Promise` that resolves to a `Customer` object, which contains  the updated
 version of the `Customer`.
 
 ```js
 ch.addTag(customerId, tag)
 ```
 
-**Warning: this method can suffer from race conditions if there are other
-clients updating the same workspace.** It makes two API calls in short
-succession, retrieving the existing customer, than _patching_ it to replace the
-existing array of manual tags. This is an ugly workaround until the API supports
-atomic updates of the tags.
+**Warning:** 
+
+This method can suffer from race conditions, if there are other
+clients updating the same workspace. 
+
+It makes two API calls in short succession, retrieving the existing customer, 
+then _patching_ it to replace the existing array of manual tags. 
+This is temporary workaround, until the API supports atomic updates of the tags.
 
 ### removeTag
 
-Removes a tag to an existing `Customer`. The new tag will be removed from the
-`tags.manual` Array of tags, if present.
+Removes a tag from an existing `Customer`. The new tag will be removed from the
+`tags.manual` array of tags, if present.
 
-Returns a `Promise` that resolves to a `Customer` object containing the updated
+Returns a `Promise` that resolves to a `Customer` object, which contains the updated
 version of the `Customer`.
 
 ```js
 ch.removeTag(customerId, tag)
 ```
 
-**Warning: this method can suffer from race conditions if there are other
-clients updating the same workspace.** It makes two API calls in short
-succession, retrieving the existing customer, than _patching_ it to replace the
-existing array of manual tags. This is an ugly workaround until the API supports
-atomic updates of the tags.
+**Warning:** 
 
+This method can suffer from race conditions, if there are other
+clients updating the same workspace. 
 
+It makes two API calls in short succession, retrieving the existing customer, 
+then _patching_ it to replace the existing array of manual tags. 
+This is temporary workaround, until the API supports atomic updates of the tags.
 
 ## Education API
 
@@ -288,7 +336,7 @@ atomic updates of the tags.
 
 Adds a new `Education` object to an existing `Customer`.
 
-Returns a `Promise` that resolves to a `Customer` object containing the updated
+Returns a `Promise` that resolves to a `Customer` object, which contains the updated
 version of the `Customer`.
 
 ```js
@@ -297,7 +345,10 @@ ch.addEducation(customerId, education)
 
 `education` is an object with the following properties:
 
-* `id` (required): a unique identifier for this Education
+* `id` (required)
+
+  A unique identifier for this Education.
+
 * `schoolType`
 * `schoolName`
 * `schoolConcentration`
@@ -309,28 +360,27 @@ ch.addEducation(customerId, education)
 
 Updates an existing `Education` object for an existing `Customer`.
 
-Returns a `Promise` that resolves to a `Customer` object containing the updated
+Returns a `Promise` that resolves to a `Customer` object, which contains the updated
 version of the `Customer`.
 
 ```js
 ch.updateEducation(customerId, education)
 ```
 
-The `education` object must contain an `id` matching an existing `Education` for
+The `education` object must contain an `id` that matches an existing `Education` for
 the `Customer`. All the other properties of that `Education` will be replaced by
-the new ones provided to this method.
+the new ones provided by this method.
 
 ### removeEducation
 
 Removes an existing `Education` object from an existing `Customer`.
 
-Returns a `Promise` that resolves to a `Customer` object containing the updated
+Returns a `Promise` that resolves to a `Customer` object, which contains the updated
 version of the `Customer`.
 
 ```js
 ch.removeEducation(customerId, educationId)
 ```
-
 
 ## Job API
 
@@ -338,7 +388,7 @@ ch.removeEducation(customerId, educationId)
 
 Adds a new `Job` object to an existing `Customer`.
 
-Returns a `Promise` that resolves to a `Customer` object containing the updated
+Returns a `Promise` that resolves to a `Customer` object, which contains the updated
 version of the `Customer`.
 
 ```js
@@ -347,7 +397,10 @@ ch.addJob(customerId, job)
 
 `job` is an object with the following properties:
 
-* `id` (required): a unique identifier for this Job
+* `id` (required)
+
+  A unique identifier for this Job.
+
 * `companyIndustry`
 * `companyName`
 * `jobTitle`
@@ -359,22 +412,22 @@ ch.addJob(customerId, job)
 
 Updates an existing `Job` object for an existing `Customer`.
 
-Returns a `Promise` that resolves to a `Customer` object containing the updated
+Returns a `Promise` that resolves to a `Customer` object, which contains the updated
 version of the `Customer`.
 
 ```js
 ch.updateJob(customerId, job)
 ```
 
-The `job` object must contain an `id` matching an existing `Job` for
+The `job` object must contain an `id` that matches an existing `Job` for
 the `Customer`. All the other properties of that `Job` will be replaced by
-the new ones provided to this method.
+the new ones provided by this method.
 
 ### removeJob
 
 Removes an existing `Job` object from an existing `Customer`.
 
-Returns a `Promise` that resolves to a `Customer` object containing the updated
+Returns a `Promise` that resolves to a `Customer` object, which contains the updated
 version of the `Customer`.
 
 ```js
@@ -388,7 +441,7 @@ ch.removeJob(customerId, jobId)
 
 Adds a new `Like` object to an existing `Customer`.
 
-Returns a `Promise` that resolves to a `Customer` object containing the updated
+Returns a `Promise` that resolves to a `Customer` object, which contains the updated
 version of the `Customer`.
 
 ```js
@@ -397,43 +450,48 @@ ch.addLike(customerId, like)
 
 `like` is an object with the following properties:
 
-* `id` (required): a unique identifier for this Like
+* `id` (required)
+
+  A unique identifier for this Like.
+
 * `category`
 * `name`
 * `createdTime`
-
 
 ### updateLike
 
 Updates an existing `Like` object for an existing `Customer`.
 
-Returns a `Promise` that resolves to a `Customer` object containing the updated
+Returns a `Promise` that resolves to a `Customer` object, which contains the updated
 version of the `Customer`.
 
 ```js
 ch.updateLike(customerId, like)
 ```
 
-The `like` object must contain an `id` matching an existing `Like` for
+The `like` object must contain an `id` that matches an existing `Like` for
 the `Customer`. All the other properties of that `Like` will be replaced by
-the new ones provided to this method.
+the new ones provided by this method.
 
 ### removeLike
 
 Removes an existing `Like` object from an existing `Customer`.
 
-Returns a `Promise` that resolves to a `Customer` object containing the updated
+Returns a `Promise` that resolves to a `Customer` object, which contains the updated
 version of the `Customer`.
 
 ```js
 ch.removeLike(customerId, likeId)
 ```
 
-
 ## Custom queries
 
-ContactHub supports a complex query language for advanced searches in the
-`Customer` list. This is an example of a valid query
+Contacthub supports a complex query language for advanced searches in the
+`Customer` list. 
+
+**Example:**
+
+The following is an example of a valid query:
 
 ```js
 ch.getCustomers({
@@ -455,24 +513,24 @@ ch.getCustomers({
 });
 ```
 
-Refer to the ContactHub documentation for further details.
-
+See the Contacthub documentation for further details.
 
 ## Examples
 
-Check the [example](example/) folder for a simple example app.
-
+Check the [example](example/) folder for a simple app example.
 
 ## Contributing to this library
 
 ### Running tests
 
-Run unit tests with `npm test`, or `npm run test-watch` to enable watch mode.
+Run unit tests with `npm test`, or `npm run test-watch`, to enable watch mode.
 
-Run e2e tests with `npm run e2e`, or `npm run e2e-watch` to enable watch mode.
+Run e2e tests with `npm run e2e`, or `npm run e2e-watch`' to enable watch mode.
 
-**Note:** to run e2e test you need to authenticate to the API. Put a valid
-workspaceId, nodeId and token in environment variables:
+**Note:** 
+
+To run an e2e test, you need to be authenticated with the API. Insert a valid
+workspaceId, nodeId and token in the environment variables:
 
 ```sh
 export CONTACTHUB_TEST_TOKEN="..."
@@ -480,8 +538,10 @@ export CONTACTHUB_TEST_WORKSPACE_ID="..."
 export CONTACTHUB_TEST_NODE_ID="..."
 ```
 
-**Do not use a production workspace, as the tests will write test data (fake
-Customers and Events) to the workspace they are using.**
+**Important:**
+
+Do **NOT** use a production workspace, because the tests will write test data (fake
+Customers and Events) to the workspace they are using.
 
 ### Flow types
 
@@ -491,9 +551,9 @@ flow` to check the entire project for errors.
 ### Minimum Node version
 
 This SDK is developed and tested against Node.js v4. To help developing against
-this specific version we provide a Dockerfile for testing purposes.
+this specific version, we provide a Dockerfile for testing purposes.
 
-Here are the commands to run tests with docker.
+Here are the commands to run tests with docker:
 
 ```sh
 $ docker build -t ch-node4 .
