@@ -3,9 +3,9 @@
 const ContactHub = require('contacthub-sdk-nodejs');
 
 const ch = new ContactHub({
-  token: 'CONTACTHUB_API_TOKEN',
-  workspaceId: 'CONTACTHUB_WORKSPACE_ID',
-  nodeId: 'CONTACTHUB_NODE_ID'
+  token: process.env.CONTACTHUB_TEST_TOKEN || '',
+  workspaceId: process.env.CONTACTHUB_TEST_WORKSPACE_ID || '',
+  nodeId: process.env.CONTACTHUB_TEST_NODE_ID || ''
 });
 
 const log = console.log; // eslint-disable-line no-console
