@@ -49,10 +49,6 @@ const cleanCustomer = (data: APICustomer): Customer => {
 
   if (data.base) {
 
-    if (data.base.dob) {
-      customer.base.dob = new Date(data.base.dob);
-    }
-
     const jobs = data.base.jobs && data.base.jobs.map(j => ({
       ...j,
       startDate: j.startDate && new Date(j.startDate)
@@ -75,6 +71,11 @@ const cleanCustomer = (data: APICustomer): Customer => {
     /* Strip nulls and empty arrays recursively from `base` */
     const base = { ...data.base, jobs, likes, subscriptions };
     customer.base = (compact(base): BaseProperties);
+
+    if (data.base.dob) {
+      customer.base.dob = new Date(data.base.dob);
+    }
+
   }
 
   return customer;
