@@ -14,7 +14,7 @@ export const compact = (value: any): any => {
     return compacted.length === 0 ? undefined : compacted;
   }
 
-  if (typeof value === 'object') {
+  if (typeof value === 'object' && !(value instanceof Date)) {
     const compacted = Object.keys(value).reduce((acc, key) => {
       const nested = compact(value[key]);
 
@@ -32,4 +32,9 @@ export const compact = (value: any): any => {
   }
 
   return value;
+};
+
+// format JS Date object in string 'YYYY-MM-DD'
+export const formatToDate = (dateTime: ?Date): ?string => {
+  return dateTime && dateTime.toISOString().slice(0, 10);
 };

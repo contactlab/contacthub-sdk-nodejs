@@ -25,7 +25,7 @@ const complexCustomer = () => ({
     lastName: 'Rossi',
     middleName: 'Giacomo',
     gender: 'male',
-    dob: '1990-12-12',
+    dob: new Date('1990-12-12'),
     locale: 'it_IT',
     timezone: 'Europe/Rome',
     contacts: {
@@ -72,7 +72,7 @@ const complexCustomer = () => ({
       id: 'like1',
       category: 'cat1',
       name: 'foobar',
-      createdTime: '2017-01-10T00:00:00.000+0000'
+      createdTime: new Date('2017-01-10')
     }],
     socialProfile: {
       facebook: 'https://www.facebook.com/ContactLab',
@@ -83,7 +83,7 @@ const complexCustomer = () => ({
       companyIndustry: 'Marketing',
       companyName: 'ContactLab',
       jobTitle: 'Software Engineer',
-      startDate: '2016-09-01',
+      startDate: new Date('2016-09-01'),
       isCurrent: true
     }],
     subscriptions: [{
@@ -92,11 +92,11 @@ const complexCustomer = () => ({
       type: 'Newsletter',
       kind: 'DIGITAL_MESSAGE',
       subscribed: true,
-      startDate: '2016-01-01T00:00:00.000+0000',
-      endDate: '2018-01-01T00:00:00.000+0000',
+      startDate: new Date('2016-01-01T00:00:00.000+0000'),
+      endDate: new Date('2018-01-01T00:00:00.000+0000'),
       subscriberId: 'ASD123',
-      registeredAt: '2016-05-10T00:00:00.000+0000',
-      updatedAt: '2016-05-10T00:00:00.000+0000',
+      registeredAt: new Date('2016-05-10T00:00:00.000+0000'),
+      updatedAt: new Date('2016-05-10T00:00:00.000+0000'),
       preferences: [
         { key: 'key1', value: 'value1' },
         { key: 'key2', value: 'value2' }
@@ -108,7 +108,7 @@ const complexCustomer = () => ({
   }
 });
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
 describe('ContactHub', () => {
 
@@ -123,18 +123,19 @@ describe('ContactHub', () => {
     it('filters by externalId', async () => {
       const extId = randomString();
 
-      await ch.addCustomer({
+      const customer = await ch.addCustomer({
         ...simpleCustomer(),
         externalId: extId
       });
 
-      // Wait 5 seconds for the Customer to be available in searches
-      await new Promise(resolve => setTimeout(resolve, 5000));
+      // Wait 30 seconds for the Customer to be available in searches
+      await new Promise(resolve => setTimeout(resolve, 30000));
 
       const customers = await ch.getCustomers({ externalId: extId });
 
       expect(customers.length).toBe(1);
       expect(customers[0].externalId).toBe(extId);
+      expect(customers[0].id).toBe(customer.id);
     });
 
     it('takes a whitelist of fields', async () => {
@@ -171,7 +172,7 @@ describe('ContactHub', () => {
         direction: 'desc'
       });
 
-      const [ first, second ] = [customers[0], customers[1]].map(c => {
+      const [first, second] = [customers[0], customers[1]].map(c => {
         return c.base && c.base.contacts && c.base.contacts.email;
       });
 

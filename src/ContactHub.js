@@ -2,11 +2,38 @@
 
 import type {
   Auth, Education, Job, Like, Event, EventData,
-  Customer, CustomerData, BaseProperties, APICustomer, GetCustomersOptions
+  Customer, CustomerData, BaseProperties,
+  APICustomer, APICustomerData, APIBaseProperties,
+  GetCustomersOptions
 } from './types';
 import API from './API';
-import { compact } from './utils';
+import { compact, formatToDate } from './utils';
 import uuid from 'uuid';
+
+
+const buildCustomer = (data: CustomerData): APICustomerData => {
+  const customer = {};
+  if (data.externalId) { customer.externalId = data.externalId; }
+  if (data.extended) { customer.extended = data.extended; }
+  if (data.extra) { customer.extra = data.extra; }
+  if (data.tags) { customer.tags = data.tags; }
+
+  if (data.base) {
+    const base = {
+      ...data.base,
+      dob: formatToDate(data.base.dob),
+      jobs: data.base && data.base.jobs && data.base.jobs.map(j => ({
+        ...j,
+        endDate: formatToDate(j.endDate),
+        startDate: formatToDate(j.startDate)
+      }))
+    };
+
+    customer.base = (compact(base): APIBaseProperties);
+  }
+
+  return customer;
+};
 
 const cleanCustomer = (data: APICustomer): Customer => {
   const customer = {};
@@ -20,8 +47,36 @@ const cleanCustomer = (data: APICustomer): Customer => {
   if (data.extra) { customer.extra = data.extra; }
   if (data.tags) { customer.tags = data.tags; }
 
-  /* Strip nulls and empty arrays recursively from `base` */
-  if (data.base) { customer.base = (compact(data.base): BaseProperties); }
+  if (data.base) {
+
+    const jobs = data.base.jobs && data.base.jobs.map(j => ({
+      ...j,
+      startDate: j.startDate && new Date(j.startDate)
+    }));
+
+    const likes = data.base && data.base.likes && data.base.likes.map(l => ({
+      ...l,
+      createdTime: l.createdTime && new Date(l.createdTime)
+    }));
+
+    const subscriptions = data.base && data.base.subscriptions &&
+      data.base.subscriptions.map(s => ({
+        ...s,
+        registeredAt: s.registeredAt && new Date(s.registeredAt),
+        startDate: s.startDate && new Date(s.startDate),
+        endDate: s.endDate && new Date(s.endDate),
+        updatedAt: s.updatedAt && new Date(s.updatedAt)
+      }));
+
+    /* Strip nulls and empty arrays recursively from `base` */
+    const base = { ...data.base, jobs, likes, subscriptions };
+    customer.base = (compact(base): BaseProperties);
+
+    if (data.base.dob) {
+      customer.base.dob = new Date(data.base.dob);
+    }
+
+  }
 
   return customer;
 };
@@ -53,7 +108,8 @@ export default class ContactHub {
     return this.api.post({ endpoint, data }).then(() => true);
   }
 
-  addCustomer(customer: CustomerData): Promise<Customer> {
+  addCustomer(customerData: CustomerData): Promise<Customer> {
+    const customer = buildCustomer(customerData);
     const data = {
       nodeId: this.auth.nodeId,
       externalId: customer.externalId,
@@ -89,7 +145,8 @@ export default class ContactHub {
       .then(data => data.elements.map(cleanCustomer));
   }
 
-  updateCustomer(customerId: string, customer: CustomerData): Promise<Customer> {
+  updateCustomer(customerId: string, customerData: CustomerData): Promise<Customer> {
+    const customer = buildCustomer(customerData);
     const data = {
       nodeId: this.auth.nodeId,
       id: customerId,
@@ -104,7 +161,8 @@ export default class ContactHub {
       .then(cleanCustomer);
   }
 
-  patchCustomer(customerId: string, customer: CustomerData): Promise<Customer> {
+  patchCustomer(customerId: string, customerData: CustomerData): Promise<Customer> {
+    const customer = buildCustomer(customerData);
     const data = {
       id: customerId,
       externalId: customer.externalId,

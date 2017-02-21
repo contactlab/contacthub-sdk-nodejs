@@ -81,15 +81,16 @@ export type Job = {
   companyIndustry?: string,
   companyName?: string,
   jobTitle?: string,
-  startDate?: string,
-  endDate?: string,
+  startDate?: Date,
+  endDate?: Date,
   isCurrent?: boolean
 };
 
 export type Like = {
   id: string,
   category?: string,
-  name?: string
+  name?: string,
+  createdTime?: Date
 };
 
 export type Social = {
@@ -112,11 +113,11 @@ export type Subscription = {
   type?: string,
   kind?: 'DIGITAL_MESSAGE' | 'SERVICE' | 'OTHER',
   subscribed?: boolean,
-  startDate?: string,
-  endDate?: string,
+  startDate?: Date,
+  endDate?: Date,
   subscriberId?: string,
-  registeredAt?: string,
-  updatedAt?: string,
+  registeredAt?: Date,
+  updatedAt?: Date,
   preferences?: Array<Preference>
 };
 
@@ -128,7 +129,7 @@ export type BaseProperties = {
   lastName?: string,
   middleName?: string,
   gender?: string,
-  dob?: string,
+  dob?: Date,
   locale?: string,
   timezone?: string,
   contacts?: Contacts,
@@ -215,7 +216,8 @@ export type APIEducation = {
 export type APILike = {
   id: string,
   category: ?string,
-  name: ?string
+  name: ?string,
+  createdTime: string
 };
 
 export type APISocial = {
@@ -272,15 +274,18 @@ export type APIBaseProperties = {
   subscriptions: Array<APISubscription>
 };
 
-export type APICustomer = {
-  id: string,
-  nodeId: string,
+export type APICustomerData = {
   externalId: ?string,
   extra: ?string,
-  registeredAt: string,
-  updatedAt: string,
-  enabled: boolean,
   base: ?APIBaseProperties,
   extended: ?Object,
   tags: ?Tags
+};
+
+export type APICustomer = APICustomerData & {
+  id: string,
+  nodeId: string,
+  enabled: boolean,
+  registeredAt: string,
+  updatedAt: string
 };

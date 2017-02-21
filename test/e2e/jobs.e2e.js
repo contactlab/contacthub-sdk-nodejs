@@ -23,8 +23,6 @@ const randomJob = () => ({
   jobTitle: randomJobTitle()
 });
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
-
 describe('ContactHub', () => {
   it('adds, updates and deletes a job', async () => {
     const c1 = await ch.addCustomer({
