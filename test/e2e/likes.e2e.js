@@ -9,8 +9,6 @@ const randomLike = () => ({
   name: 'JavaScript'
 });
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
-
 describe('ContactHub', () => {
   it('adds, updates and deletes a like', async () => {
     const c1 = await ch.addCustomer({

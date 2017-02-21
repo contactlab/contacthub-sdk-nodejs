@@ -9,8 +9,6 @@ const randomEducation = () => ({
   schoolName: 'Politecnico di Torino'
 });
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
-
 describe('ContactHub', () => {
   it('adds, updates and deletes an education', async () => {
     const c1 = await ch.addCustomer({

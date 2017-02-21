@@ -108,7 +108,7 @@ const complexCustomer = () => ({
   }
 });
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
 describe('ContactHub', () => {
 
@@ -123,18 +123,19 @@ describe('ContactHub', () => {
     it('filters by externalId', async () => {
       const extId = randomString();
 
-      await ch.addCustomer({
+      const customer = await ch.addCustomer({
         ...simpleCustomer(),
         externalId: extId
       });
 
-      // Wait 5 seconds for the Customer to be available in searches
-      await new Promise(resolve => setTimeout(resolve, 5000));
+      // Wait 30 seconds for the Customer to be available in searches
+      await new Promise(resolve => setTimeout(resolve, 30000));
 
       const customers = await ch.getCustomers({ externalId: extId });
 
       expect(customers.length).toBe(1);
       expect(customers[0].externalId).toBe(extId);
+      expect(customers[0].id).toBe(customer.id);
     });
 
     it('takes a whitelist of fields', async () => {
@@ -171,7 +172,7 @@ describe('ContactHub', () => {
         direction: 'desc'
       });
 
-      const [ first, second ] = [customers[0], customers[1]].map(c => {
+      const [first, second] = [customers[0], customers[1]].map(c => {
         return c.base && c.base.contacts && c.base.contacts.email;
       });
 

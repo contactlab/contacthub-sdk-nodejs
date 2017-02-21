@@ -8,8 +8,6 @@ const ch = chTest();
 // customerId already having some associated events
 const cid = '689ef20e-e37a-4b8e-8d3f-2494ec901bc5';
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
-
 describe('ContactHub', () => {
 
   describe('addEvent', () => {
