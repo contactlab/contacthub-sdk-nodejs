@@ -139,7 +139,11 @@ describe('ContactHub', () => {
     });
 
     it('takes a whitelist of fields', async () => {
-      const customers = await ch.getCustomers({ fields: ['base.firstName'] });
+      const customers = await ch.getCustomers({
+        fields: ['base.firstName'],
+        sort: 'base.firstName',
+        direction: 'asc'
+      });
 
       expect(customers.length).toBe(10);
       expect(customers[0].base && Object.keys(customers[0].base)).toEqual(['firstName']);
