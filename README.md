@@ -1,5 +1,6 @@
 # Contacthub nodejs SDK
 
+[![Build Status](https://travis-ci.org/contactlab/contacthub-sdk-nodejs.svg?branch=master)](https://travis-ci.org/contactlab/contacthub-sdk-nodejs)
 ![Version 0.2.1 beta](https://img.shields.io/badge/version-0.2.1%20beta-0072bc.svg)
 
 Node.js SDK for the Contacthub API.
@@ -174,7 +175,7 @@ ch.getEvents(customerId);
 
 Creates a new `Customer`.
 
-Returns a `Promise` that resolves to a `Customer` object, including the `id` that 
+Returns a `Promise` that resolves to a `Customer` object, including the `id` that
 was assigned by the API.
 
 ```js
@@ -202,7 +203,7 @@ The `customerData` parameter is an object that can contain the following propert
 * `tags`
 
   An optional object containing a list of tags associated with the
-  customer. It must follow this format: 
+  customer. It must follow this format:
 
   `{ auto: Array<string>, manual: Array<String> }`
 
@@ -301,13 +302,13 @@ version of the `Customer`.
 ch.addTag(customerId, tag)
 ```
 
-**Warning:** 
+**Warning:**
 
 This method can suffer from race conditions, if there are other
-clients updating the same workspace. 
+clients updating the same workspace.
 
-It makes two API calls in short succession, retrieving the existing customer, 
-then _patching_ it to replace the existing array of manual tags. 
+It makes two API calls in short succession, retrieving the existing customer,
+then _patching_ it to replace the existing array of manual tags.
 This is temporary workaround, until the API supports atomic updates of the tags.
 
 ### removeTag
@@ -322,13 +323,13 @@ version of the `Customer`.
 ch.removeTag(customerId, tag)
 ```
 
-**Warning:** 
+**Warning:**
 
 This method can suffer from race conditions, if there are other
-clients updating the same workspace. 
+clients updating the same workspace.
 
-It makes two API calls in short succession, retrieving the existing customer, 
-then _patching_ it to replace the existing array of manual tags. 
+It makes two API calls in short succession, retrieving the existing customer,
+then _patching_ it to replace the existing array of manual tags.
 This is temporary workaround, until the API supports atomic updates of the tags.
 
 ## Education API
@@ -488,7 +489,7 @@ ch.removeLike(customerId, likeId)
 ## Custom queries
 
 Contacthub supports a complex query language for advanced searches in the
-`Customer` list. 
+`Customer` list.
 
 **Example:**
 
@@ -528,7 +529,7 @@ Run unit tests with `npm test`, or `npm run test-watch`, to enable watch mode.
 
 Run e2e tests with `npm run e2e`, or `npm run e2e-watch`' to enable watch mode.
 
-**Note:** 
+**Note:**
 
 To run an e2e test, you need to be authenticated with the API. Insert a valid
 workspaceId, nodeId and token in the environment variables:
