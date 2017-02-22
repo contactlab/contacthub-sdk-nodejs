@@ -91,7 +91,7 @@ describe('ContactHub', () => {
         .get(`/workspaces/${auth.workspaceId}/events`)
         .query({ customerId: 'cid' })
         .reply(200, {
-          elements: [ event1, event2 ]
+          elements: [event1, event2]
         });
 
       const res = await ch.getEvents('cid');

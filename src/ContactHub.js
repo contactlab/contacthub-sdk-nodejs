@@ -72,7 +72,8 @@ const cleanCustomer = (data: APICustomer): Customer => {
     const base = { ...data.base, jobs, likes, subscriptions };
     customer.base = (compact(base): BaseProperties);
 
-    if (data.base.dob) {
+    // check for data.base is useful only for avoid flow warning
+    if (data.base && data.base.dob) {
       customer.base.dob = new Date(data.base.dob);
     }
 

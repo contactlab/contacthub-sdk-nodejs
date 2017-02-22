@@ -5,7 +5,6 @@
   ],
   "presets": [
     ["env", {
-      "debug": true,
       "targets": { "node": 4 },
       "exclude": ["transform-regenerator"]
     }]

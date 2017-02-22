@@ -1,5 +1,7 @@
 [ignore]
-.*/example/index.js
+<PROJECT_ROOT>/example/
+<PROJECT_ROOT>/lib/
+<PROJECT_ROOT>/index.js
 
 [options]
 suppress_comment=\\(.\\|\n\\)*\\$ExpectError
