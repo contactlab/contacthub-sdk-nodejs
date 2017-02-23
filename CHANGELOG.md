@@ -1,7 +1,19 @@
 #  Change Log
 
 ## [Unreleased](https://github.com/contactlab/contacthub-sdk-nodejs/tree/HEAD)
-[Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v0.2.0...HEAD)
+[Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v0.2.1...HEAD)
+
+#### New features:
+
+- Run tests on CI [#51](https://github.com/contactlab/contacthub-sdk-nodejs/issues/51)
+- Convert JS dates [#42](https://github.com/contactlab/contacthub-sdk-nodejs/issues/42)
+
+#### Fixes (bugs & defects):
+
+- regeneratorRuntime is not defined [#49](https://github.com/contactlab/contacthub-sdk-nodejs/issues/49)
+
+## [v0.2.1](https://github.com/contactlab/contacthub-sdk-nodejs/tree/v0.2.1) (2017-02-13)
+[Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v0.2.0...v0.2.1)
 
 #### Fixes (bugs & defects):
 
@@ -10,7 +22,7 @@
 
 #### New features:
 
-- Create different flow type for API customer and SDK customer [#40](https://github.com/contactlab/contacthub-sdk-nodejs/issues/40)
+- Create different flow type for api customer and sdk customer [#40](https://github.com/contactlab/contacthub-sdk-nodejs/issues/40)
 
 ## [v0.2.0](https://github.com/contactlab/contacthub-sdk-nodejs/tree/v0.2.0) (2017-02-01)
 [Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v0.1.0...v0.2.0)
@@ -21,7 +33,7 @@
 - Tag API [#35](https://github.com/contactlab/contacthub-sdk-nodejs/issues/35)
 - Session API [#34](https://github.com/contactlab/contacthub-sdk-nodejs/issues/34)
 - Event API [#32](https://github.com/contactlab/contacthub-sdk-nodejs/issues/32)
-- Improve documentation in README [#28](https://github.com/contactlab/contacthub-sdk-nodejs/issues/28)
+- Improve documentation in Readme [#28](https://github.com/contactlab/contacthub-sdk-nodejs/issues/28)
 - Create example project [#22](https://github.com/contactlab/contacthub-sdk-nodejs/issues/22)
 
 #### Fixes (bugs & defects):
@@ -34,7 +46,7 @@
 #### Fixes (bugs & defects):
 
 - Update Jest to v18 [#25](https://github.com/contactlab/contacthub-sdk-nodejs/issues/25)
-- Normalize missing Customer properties [#21](https://github.com/contactlab/contacthub-sdk-nodejs/issues/21)
+- Normalise missing Customer properties [#21](https://github.com/contactlab/contacthub-sdk-nodejs/issues/21)
 
 #### New features:
 
