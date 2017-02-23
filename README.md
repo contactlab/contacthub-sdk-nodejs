@@ -1,7 +1,8 @@
 # Contacthub nodejs SDK
 
 [![Build Status](https://travis-ci.org/contactlab/contacthub-sdk-nodejs.svg?branch=master)](https://travis-ci.org/contactlab/contacthub-sdk-nodejs)
-![Version 0.2.1 beta](https://img.shields.io/badge/version-0.2.1%20beta-0072bc.svg)
+[![GitHub release](https://img.shields.io/github/release/contactlab/contacthub-sdk-nodejs.svg)](https://github.com/contactlab/contacthub-sdk-nodejs/releases)
+[![npm version](https://img.shields.io/npm/v/contacthub-sdk-nodejs.svg)](https://www.npmjs.com/package/contacthub-sdk-nodejs)
 
 Node.js SDK for the Contacthub API.
 
