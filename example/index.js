@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable max-len */
 
 const ContactHub = require('contacthub-sdk-nodejs');
