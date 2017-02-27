@@ -3,17 +3,21 @@
 import type {
   Auth, Education, Job, Like, Event, EventData,
   Customer, CustomerData, BaseProperties,
-  APICustomer, APICustomerData, APIBaseProperties,
+  APICustomer, APICustomerData, APIBaseProperties, APIJob,
   GetCustomersOptions
 } from './types';
 import API from './API';
 import { compact, formatToDate } from './utils';
 import uuid from 'uuid';
 
-const buildJob = (job) => ({
-  ...job,
+const buildJob = (job: Job): APIJob => ({
+  id: job.id,
+  companyIndustry: job.companyIndustry,
+  companyName: job.companyName,
+  jobTitle: job.jobTitle,
   endDate: formatToDate(job.endDate),
-  startDate: formatToDate(job.startDate)
+  startDate: formatToDate(job.startDate),
+  isCurrent: job.isCurrent
 });
 
 const buildCustomer = (data: CustomerData): APICustomerData => {
