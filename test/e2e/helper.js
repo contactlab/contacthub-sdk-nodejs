@@ -1,11 +1,21 @@
 // @flow
 import ContactHub from '../../src/ContactHub';
 
-const chTest = (): ContactHub => {
+type chTestArgumentsType = {
+  token: string,
+  workspaceId: string,
+  nodeId: string
+};
 
-  const token = process.env.CONTACTHUB_TEST_TOKEN;
-  const workspaceId = process.env.CONTACTHUB_TEST_WORKSPACE_ID;
-  const nodeId = process.env.CONTACTHUB_TEST_NODE_ID;
+const chTest = (options: ?chTestArgumentsType): ContactHub => { // eslint-disable-line max-len
+  const {
+    token: _token,
+    workspaceId: _workspaceId,
+    nodeId: _nodeId
+  } = options || {};
+  const token = _token || process.env.CONTACTHUB_TEST_TOKEN;
+  const workspaceId = _workspaceId || process.env.CONTACTHUB_TEST_WORKSPACE_ID;
+  const nodeId = _nodeId || process.env.CONTACTHUB_TEST_NODE_ID;
 
   if (!(token && workspaceId && nodeId)) {
     throw new Error('End-to-end tests require the following env variables to be set: '
