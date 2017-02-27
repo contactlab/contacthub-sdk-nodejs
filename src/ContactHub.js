@@ -3,13 +3,22 @@
 import type {
   Auth, Education, Job, Like, Event, EventData,
   Customer, CustomerData, BaseProperties,
-  APICustomer, APICustomerData, APIBaseProperties,
+  APICustomer, APICustomerData, APIBaseProperties, APIJob,
   GetCustomersOptions
 } from './types';
 import API from './API';
 import { compact, formatToDate } from './utils';
 import uuid from 'uuid';
 
+const buildJob = (job: Job): APIJob => ({
+  id: job.id,
+  companyIndustry: job.companyIndustry,
+  companyName: job.companyName,
+  jobTitle: job.jobTitle,
+  endDate: formatToDate(job.endDate),
+  startDate: formatToDate(job.startDate),
+  isCurrent: job.isCurrent
+});
 
 const buildCustomer = (data: CustomerData): APICustomerData => {
   const customer = {};
@@ -22,11 +31,7 @@ const buildCustomer = (data: CustomerData): APICustomerData => {
     const base = {
       ...data.base,
       dob: formatToDate(data.base.dob),
-      jobs: data.base && data.base.jobs && data.base.jobs.map(j => ({
-        ...j,
-        endDate: formatToDate(j.endDate),
-        startDate: formatToDate(j.startDate)
-      }))
+      jobs: data.base && data.base.jobs && data.base.jobs.map(buildJob)
     };
 
     customer.base = (compact(base): APIBaseProperties);
@@ -207,14 +212,14 @@ export default class ContactHub {
   addJob(customerId: string, job: Job): Promise<Job> {
     return this.api.post({
       endpoint: `customers/${customerId}/jobs`,
-      data: job
+      data: buildJob(job)
     });
   }
 
   updateJob(customerId: string, job: Job): Promise<Job> {
     return this.api.put({
       endpoint: `customers/${customerId}/jobs/${job.id}`,
-      data: job
+      data: buildJob(job)
     });
   }
 
