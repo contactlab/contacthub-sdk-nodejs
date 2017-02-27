@@ -4,6 +4,8 @@ import { chTest, randomString } from './helper';
 
 const ch = chTest();
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
+
 describe('ContactHub', () => {
 
   describe('addCustomerSession', async () => {

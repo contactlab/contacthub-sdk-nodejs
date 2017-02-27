@@ -1,5 +1,6 @@
 import { chTest } from './helper';
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
 describe('ContactHub', () => {
   describe('errors', async () => {
