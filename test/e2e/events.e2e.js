@@ -51,4 +51,38 @@ describe('ContactHub', () => {
     });
   });
 
+  describe('getEvents', () => {
+    it('retrieves all Events for a Customer using date range filter', async () => {
+      const dateFrom = new Date('2017-02-10');
+      const dateTo = new Date('2017-02-20');
+      const filters = { dateFrom, dateTo };
+
+      const events = await ch.getEvents(cid, filters);
+      expect(events.length > 0).toBe(true);
+
+      const haveRightDate = events.every((v) => {
+        const eventDate = new Date(v.date);
+        return dateTo >= eventDate && eventDate >= dateFrom;
+      });
+      expect(haveRightDate).toBe(true);
+    });
+
+    it('retrieves all Events for a customer with "MOBILE" context', async () => {
+      const eventData = {
+        customerId: cid,
+        context: 'MOBILE',
+        type: 'viewedPage',
+        properties: {}
+      };
+
+      await ch.addEvent(eventData);
+
+      const events = await ch.getEvents(cid, { context: 'MOBILE' });
+      expect(events.length > 0).toBe(true);
+
+      const areMobileEvents = events.every(({ context }) => context === 'MOBILE');
+      expect(areMobileEvents).toBe(true);
+    });
+  });
+
 });

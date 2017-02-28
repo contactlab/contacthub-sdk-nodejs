@@ -4,7 +4,7 @@ import type {
   Auth, Education, Job, Like, Event, EventData,
   Customer, CustomerData, BaseProperties,
   APICustomer, APICustomerData, APIBaseProperties, APIJob,
-  GetCustomersOptions
+  GetCustomersOptions, EventFilters
 } from './types';
 import API from './API';
 import { compact, formatToDate } from './utils';
@@ -281,10 +281,10 @@ export default class ContactHub {
     return this.api.get({ endpoint: `events/${eventId}` });
   }
 
-  getEvents(customerId: string): Promise<Array<Event>> {
+  getEvents(customerId: string, filters?: EventFilters): Promise<Array<Event>> {
     return this.api.get({
       endpoint: 'events',
-      params: { customerId }
+      params: { customerId, ...(filters || {} ) }
     })
     .then(data => data.elements);
   }

@@ -156,12 +156,15 @@ export type Customer = CustomerData & {
   updatedAt: Date
 };
 
+type EventType = 'abandonedCart' | 'addedCompare' | 'addedProduct' | 'addedWishlist' | 'campaignBlacklisted' | 'campaignBounced' | 'campaignLinkClicked' | 'campaignMarkedSpam' | 'campaignOpened' | 'campaignSent' | 'campaignSubscribed' | 'campaignUnsubscribed' | 'changedSetting' | 'clickedLink' | 'closedTicket' | 'completedOrder' | 'eventInvited' | 'eventParticipated' | 'formCompiled' | 'genericActiveEvent' | 'genericPassiveEvent' | 'loggedIn' | 'loggedOut' | 'openedTicket' | 'orderShipped' | 'removedCompare' | 'removedProduct' | 'removedWishlist' | 'repliedTicket' | 'reviewedProduct' | 'searched' | 'serviceSubscribed' | 'serviceUnsubscribed' | 'viewedPage' | 'viewedProduct' | 'viewedProductCategory'; // eslint-disable-line max-len
+type EventContext = 'CONTACT_CENTER' | 'DIGITAL_CAMPAIGN' | 'ECOMMERCE' | 'IOT' | 'MOBILE' | 'OTHER' | 'RETAIL' | 'SOCIAL' | 'WEB'; // eslint-disable-line max-len
+
 export type EventData = {
   customerId?: string,
   externalId?: string,
   sessionId?: string,
-  type: 'abandonedCart' | 'addedCompare' | 'addedProduct' | 'addedWishlist' | 'campaignBlacklisted' | 'campaignBounced' | 'campaignLinkClicked' | 'campaignMarkedSpam' | 'campaignOpened' | 'campaignSent' | 'campaignSubscribed' | 'campaignUnsubscribed' | 'changedSetting' | 'clickedLink' | 'closedTicket' | 'completedOrder' | 'eventInvited' | 'eventParticipated' | 'formCompiled' | 'genericActiveEvent' | 'genericPassiveEvent' | 'loggedIn' | 'loggedOut' | 'openedTicket' | 'orderShipped' | 'removedCompare' | 'removedProduct' | 'removedWishlist' | 'repliedTicket' | 'reviewedProduct' | 'searched' | 'serviceSubscribed' | 'serviceUnsubscribed' | 'viewedPage' | 'viewedProduct' | 'viewedProductCategory', // eslint-disable-line max-len
-  context: 'CONTACT_CENTER' | 'DIGITAL_CAMPAIGN' | 'ECOMMERCE' | 'IOT' | 'MOBILE' | 'OTHER' | 'RETAIL' | 'SOCIAL' | 'WEB', // eslint-disable-line max-len
+  type: EventType,
+  context: EventContext,
   properties: Object,
   contextInfo?: Object,
   date?: Date
@@ -288,4 +291,12 @@ export type APICustomer = APICustomerData & {
   enabled: boolean,
   registeredAt: string,
   updatedAt: string
+};
+
+export type EventFilters = {
+  type?: EventType,
+  context?: EventContext,
+  mode?: 'ACTIVE' | 'PASSIVE',
+  dateFrom?: Date,
+  dateTo?: Date
 };
