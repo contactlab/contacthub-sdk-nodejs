@@ -16,7 +16,8 @@ export type GetCustomersOptions = {|
   query?: Query,
   fields?: Array<string>,
   sort?: string,
-  direction?: 'asc' | 'desc'
+  direction?: 'asc' | 'desc',
+  page?: number
 |};
 
 // SDK Customer
@@ -298,5 +299,16 @@ export type EventFilters = {
   context?: EventContext,
   mode?: 'ACTIVE' | 'PASSIVE',
   dateFrom?: Date,
-  dateTo?: Date
+  dateTo?: Date,
+  page?: number
+};
+
+export type Paginated<T> = {
+  page: {
+    current: number,
+    total: number,
+    prev: () => ?Promise<Paginated<T>>,
+    next: () => ?Promise<Paginated<T>>
+  },
+  data: Array<T>
 };
