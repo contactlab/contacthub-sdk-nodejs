@@ -13,11 +13,11 @@ class ContactHubError extends Error {
 
   constructor({ status, message, raw }) {
     super(raw);
-    Error.captureStackTrace(this, ContactHubError);
     this.name = 'ContactHubError';
     this.status = status;
     this.message = message;
     this.raw = raw;
+    Error.captureStackTrace(this, ContactHubError);
   }
 }
 
