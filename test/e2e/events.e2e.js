@@ -4,6 +4,8 @@ import { chTest, randomString } from './helper';
 
 const ch = chTest();
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
+
 // FIXME: creating new events takes a few seconds, so we rely on a known
 // customerId already having some associated events
 const cid = '689ef20e-e37a-4b8e-8d3f-2494ec901bc5';

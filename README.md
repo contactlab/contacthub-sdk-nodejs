@@ -487,6 +487,32 @@ version of the `Customer`.
 ch.removeLike(customerId, likeId)
 ```
 
+## Error Handling
+
+Errors from API are serialized as it follows to be consistent among them:
+
+```js
+{
+  status: 401,
+  message: "The client is not authorized to access the API",
+  raw: { ... } // The axios error object
+}
+```
+
+You can handle these errors using `.catch()`.
+
+```js
+ch.getCustomer(customer.id)
+  .then(customer => ch.addLike(customer.id, like))
+  .catch((err) => {
+    console.log(err.message);
+    if (err.status === 401) {
+      console.log('Check the validity of your token');
+    }
+  });
+```
+
+
 ## Custom queries
 
 Contacthub supports a complex query language for advanced searches in the
