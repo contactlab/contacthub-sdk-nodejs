@@ -51,4 +51,20 @@ describe('ContactHub', () => {
     });
   });
 
+  describe('getEvents', () => {
+    it('retrieves all Events for a Customer using filters', async () => {
+      const dateFrom = new Date('2017-02-28');
+      const filters = {
+        mode: 'ACTIVE',
+        context: 'WEB',
+        dateFrom
+      };
+      const events = await ch.getEvents(cid, filters);
+      const areWebEvents = events.reduce((acc, v) => acc && v.context === 'WEB', true);
+      expect(areWebEvents).toBe(true);
+      const haveRightDate = events.reduce((acc, v) => acc && new Date(v.date) >= dateFrom, true);
+      expect(haveRightDate).toBe(true);
+    });
+  });
+
 });
