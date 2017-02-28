@@ -7,7 +7,7 @@ type chTestArgumentsType = {
   nodeId: string
 };
 
-const chTest = (options: ?chTestArgumentsType): ContactHub => { // eslint-disable-line max-len
+const chTest = (options: ?chTestArgumentsType): ContactHub => {
   const {
     token: _token,
     workspaceId: _workspaceId,
