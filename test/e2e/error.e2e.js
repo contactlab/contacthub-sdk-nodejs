@@ -1,4 +1,4 @@
-import { chTest } from './helper';
+import { chTest, randomString } from './helper';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
@@ -34,33 +34,11 @@ describe('ContactHub', () => {
 
 
     it('should return a duplicated customer error (409)', async () => {
-      let customer;
-      const customerEmail = 'duplicated-email@fake-customer.com';
+      const customerEmail = `${randomString()}@example.com`;
       const customerData = { base: { contacts: { email: customerEmail } } };
 
       const ch = chTest();
-
-      // try to add a customer for the first time to be sure it's present or fetch it from API
-      try {
-        customer = await ch.addCustomer(customerData);
-      } catch (err) {
-        const query = {
-          name: '',
-          query: {
-            name: 'duplicated-email',
-            type: 'simple',
-            are: {
-              condition: {
-                type: 'atomic',
-                attribute: 'base.contacts.email',
-                operator: 'EQUALS',
-                value: customerEmail
-              }
-            }
-          }
-        };
-        customer = await ch.getCustomers({ query }).then((customers) => customers[0]);
-      }
+      const customer = await ch.addCustomer(customerData);
 
       try {
         await ch.addCustomer(customerData);
