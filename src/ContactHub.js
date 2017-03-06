@@ -4,7 +4,7 @@ import type {
   Auth, Education, Job, Like, Event, EventData,
   Customer, CustomerData, BaseProperties,
   APICustomer, APICustomerData, APIBaseProperties, APIJob,
-  GetCustomersOptions, EventFilters
+  GetCustomersOptions, EventFilters, Paginated
 } from './types';
 import API from './API';
 import { compact, formatToDate } from './utils';
@@ -85,6 +85,36 @@ const cleanCustomer = (data: APICustomer): Customer => {
   }
 
   return customer;
+};
+
+/**
+ * Helper for adding 'page' to args.params object
+ */
+
+const buildArguments = (args: Object, page: number): Object => ({
+  ...args,
+  params: {
+    ...args.params,
+    page: (args.params.page || 0) + page
+  }
+});
+
+/**
+ * Helper to create a recursive structure for paginated resources
+ */
+
+const buildPaginatedResource = (promise: Function, args: Object): Promise<Paginated<any>> => {
+  return promise(args).then(({ page: { number, totalPages }, elements }) => {
+    return {
+      page: {
+        current: number,
+        prev: () => number > 0 && buildPaginatedResource(promise, buildArguments(args, -1)),
+        next: () => number < totalPages && buildPaginatedResource(promise, buildArguments(args, 1)),
+        total: totalPages
+      },
+      data: elements
+    };
+  });
 };
 
 export default class ContactHub {
