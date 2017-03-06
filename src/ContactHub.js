@@ -312,12 +312,11 @@ export default class ContactHub {
     return this.api.get({ endpoint: `events/${eventId}` });
   }
 
-  getEvents(customerId: string, filters?: EventFilters): Promise<Array<Event>> {
-    return this.api.get({
+  getEvents(customerId: string, filters?: EventFilters): Promise<Paginated<Event>> {
+    return buildPaginatedResource(this.api.get.bind(this.api), {
       endpoint: 'events',
       params: { customerId, ...(filters || {} ) }
-    })
-    .then(data => data.elements);
+    });
   }
 
   async addTag(customerId: string, tag: string): Promise<Customer> {
