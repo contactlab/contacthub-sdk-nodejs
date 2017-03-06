@@ -91,13 +91,14 @@ describe('ContactHub', () => {
         .get(`/workspaces/${auth.workspaceId}/events`)
         .query({ customerId: 'cid' })
         .reply(200, {
+          page: { number: 0, totalPages: 10 },
           elements: [event1, event2]
         });
 
-      const res = await ch.getEvents('cid');
-      expect(res.length).toBe(2);
-      expect(res[0].id).toBe('event1');
-      expect(res[1].id).toBe('event2');
+      const { data: events } = await ch.getEvents('cid');
+      expect(events.length).toBe(2);
+      expect(events[0].id).toBe('event1');
+      expect(events[1].id).toBe('event2');
     });
   });
 });
