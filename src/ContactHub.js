@@ -166,7 +166,7 @@ export default class ContactHub {
       .then(cleanCustomer);
   }
 
-  getCustomers(options: ?GetCustomersOptions): Promise<Array<Customer>> {
+  getCustomers(options: ?GetCustomersOptions): Promise<Paginated<Customer>> {
     const endpoint = 'customers';
     const params = {
       nodeId: this.auth.nodeId,
@@ -174,11 +174,12 @@ export default class ContactHub {
       fields: options && options.fields && options.fields.join(','),
       query: options && options.query,
       sort: options && options.sort
-            && options.sort + (options.direction ? `,${options.direction}` : '')
+            && options.sort + (options.direction ? `,${options.direction}` : ''),
+      page: options && options.page
     };
 
-    return this.api.get({ endpoint, params })
-      .then(data => data.elements.map(cleanCustomer));
+    return buildPaginatedResource(this.api.get.bind(this.api), { endpoint, params })
+      .then(({ data, ...others }) => ({ ...others, data: data.map(cleanCustomer) }));
   }
 
   updateCustomer(customerId: string, customerData: CustomerData): Promise<Customer> {
