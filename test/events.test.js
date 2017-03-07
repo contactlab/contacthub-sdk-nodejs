@@ -95,7 +95,7 @@ describe('ContactHub', () => {
           elements: [event1, event2]
         });
 
-      const { data: events } = await ch.getEvents('cid');
+      const { elements: events } = await ch.getEvents('cid');
       expect(events.length).toBe(2);
       expect(events[0].id).toBe('event1');
       expect(events[1].id).toBe('event2');

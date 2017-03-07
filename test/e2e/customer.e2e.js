@@ -119,8 +119,8 @@ describe('ContactHub', () => {
 
       const paginatedCustomers = await ch.getCustomers({ page: initialPage });
       expect(paginatedCustomers.page.current).toBe(initialPage);
-      expect(paginatedCustomers.data.length).toBe(10);
-      paginatedCustomers.data.forEach(c => expect(c.id).toBeDefined());
+      expect(paginatedCustomers.elements.length).toBe(10);
+      paginatedCustomers.elements.forEach(c => expect(c.id).toBeDefined());
 
       const firstCustomersPage = await paginatedCustomers.page.next();
       expect(firstCustomersPage !== undefined).toBe(true);
@@ -154,7 +154,7 @@ describe('ContactHub', () => {
       // Wait 30 seconds for the Customer to be available in searches
       await new Promise(resolve => setTimeout(resolve, 40000));
 
-      const { data: customers } = await ch.getCustomers({ externalId: extId });
+      const { elements: customers } = await ch.getCustomers({ externalId: extId });
 
       expect(customers.length).toBe(1);
       expect(customers[0].externalId).toBe(extId);
@@ -162,7 +162,7 @@ describe('ContactHub', () => {
     });
 
     it('takes a whitelist of fields', async () => {
-      const { data: customers } = await ch.getCustomers({
+      const { elements: customers } = await ch.getCustomers({
         fields: ['base.firstName'],
         sort: 'base.firstName',
         direction: 'asc'
@@ -188,13 +188,13 @@ describe('ContactHub', () => {
           }
         }
       };
-      const { data: customers } = await ch.getCustomers({ query });
+      const { elements: customers } = await ch.getCustomers({ query });
 
       expect(customers[0].base && customers[0].base.firstName).toBe('Mario');
     });
 
     it('takes a sort field and direction', async () => {
-      const { data: customers } = await ch.getCustomers({
+      const { elements: customers } = await ch.getCustomers({
         sort: 'base.contacts.email',
         direction: 'desc'
       });

@@ -66,7 +66,7 @@ describe('ContactHub', () => {
           elements: [{ id: 'no-filters' }]
         });
 
-      const { data: elements } = await ch.getCustomers();
+      const { elements } = await ch.getCustomers();
       expect(elements[0].id).toBe('no-filters');
     });
 
@@ -79,7 +79,7 @@ describe('ContactHub', () => {
           elements: [{ id: 'by-extid' }]
         });
 
-      const { data: elements } = await ch.getCustomers({ externalId: 'ext123' });
+      const { elements } = await ch.getCustomers({ externalId: 'ext123' });
       expect(elements[0].id).toBe('by-extid');
     });
 
@@ -92,7 +92,7 @@ describe('ContactHub', () => {
           elements: [{ id: 'with-fields' }]
         });
 
-      const { data: elements } = await ch.getCustomers({
+      const { elements } = await ch.getCustomers({
         fields: ['base.firstName', 'base.lastName']
       });
       expect(elements[0].id).toBe('with-fields');
@@ -107,7 +107,7 @@ describe('ContactHub', () => {
           elements: [{ id: 'by-query' }]
         });
 
-      const { data: elements } = await ch.getCustomers({ query: exampleQuery });
+      const { elements } = await ch.getCustomers({ query: exampleQuery });
       expect(elements[0].id).toBe('by-query');
     });
 
@@ -120,7 +120,7 @@ describe('ContactHub', () => {
           elements: [{ id: 'sorted' }]
         });
 
-      const { data: elements } = await ch.getCustomers({ sort: 'base.firstName' });
+      const { elements } = await ch.getCustomers({ sort: 'base.firstName' });
       expect(elements[0].id).toBe('sorted');
     });
 
@@ -133,7 +133,7 @@ describe('ContactHub', () => {
           elements: [{ id: 'sorted-desc' }]
         });
 
-      const { data: elements } = await ch.getCustomers({
+      const { elements } = await ch.getCustomers({
         sort: 'base.firstName',
         direction: 'desc'
       });
@@ -155,7 +155,7 @@ describe('ContactHub', () => {
           elements: [{ id: 'all-params' }]
         });
 
-      const { data: elements } = await ch.getCustomers({
+      const { elements } = await ch.getCustomers({
         externalId: 'ext123',
         fields: ['base.firstName'],
         query: exampleQuery,

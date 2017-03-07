@@ -310,5 +310,5 @@ export type Paginated<T> = {
     prev: () => ?Promise<Paginated<T>>,
     next: () => ?Promise<Paginated<T>>
   },
-  data: Array<T>
+  elements: Array<T>
 };

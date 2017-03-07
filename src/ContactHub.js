@@ -91,11 +91,11 @@ const cleanCustomer = (data: APICustomer): Customer => {
  * Helper for adding 'page' to args.params object
  */
 
-const buildArguments = (args: Object, page: number): Object => ({
+const buildArguments = (args: Object, newPage: number): Object => ({
   ...args,
   params: {
     ...args.params,
-    page: (args.params.page || 0) + page
+    page: newPage
   }
 });
 
@@ -104,17 +104,17 @@ const buildArguments = (args: Object, page: number): Object => ({
  */
 
 const buildPaginatedResource = (promise: Function, args: Object): Promise<Paginated<any>> => {
-  return promise(args).then(({ page: { number, totalPages }, elements }) => {
-    return {
+  return promise(args)
+    .then(({ page: { number, totalPages }, elements }) => ({
       page: {
         current: number,
-        prev: () => number > 0 && buildPaginatedResource(promise, buildArguments(args, -1)),
-        next: () => number < totalPages && buildPaginatedResource(promise, buildArguments(args, 1)),
+        prev: () => number > 0 && buildPaginatedResource(promise, buildArguments(args, number - 1)),
+        next: () => number < totalPages && buildPaginatedResource(promise, buildArguments(args, number + 1)),
         total: totalPages
       },
-      data: elements
-    };
-  });
+      elements
+    })
+  );
 };
 
 export default class ContactHub {
@@ -179,7 +179,7 @@ export default class ContactHub {
     };
 
     return buildPaginatedResource(this.api.get.bind(this.api), { endpoint, params })
-      .then(({ data, ...others }) => ({ ...others, data: data.map(cleanCustomer) }));
+      .then(({ elements, page }) => ({ page, elements: elements.map(cleanCustomer) }));
   }
 
   updateCustomer(customerId: string, customerData: CustomerData): Promise<Customer> {
