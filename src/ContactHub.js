@@ -4,9 +4,11 @@ import type {
   Auth, Education, Job, Like, Event, EventData,
   Customer, CustomerData, BaseProperties,
   APICustomer, APICustomerData, APIBaseProperties, APIJob,
-  GetCustomersOptions, EventFilters, Paginated
+  GetCustomersOptions, EventFilters, Paginated,
+  Query, AtomicConditionOperator
 } from './types';
 import API from './API';
+import QueryBuilder, { AtomicCondition, SimpleQueryBuilder } from './QueryBuilder';
 import { compact, formatToDate } from './utils';
 import uuid from 'uuid';
 
@@ -366,4 +368,15 @@ export default class ContactHub {
 
     return this.updateCustomer(customerId, newCustomer);
   }
+
+  createQuery(attribute: string, operator: AtomicConditionOperator, value?: any): Query { // eslint-disable-line max-len
+    return new QueryBuilder('default-query-builder')
+      .simpleQuery(
+        new SimpleQueryBuilder()
+          .condition(new AtomicCondition(attribute, operator, value))
+      )
+      .build();
+  }
 }
+
+export { QueryBuilder };
