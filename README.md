@@ -579,7 +579,7 @@ const  query = new QueryBuilder()
   .build();
 ```
 
-The `createQuery` method from `ContactHub` class is for create simple query with an `AtomicCondition`.
+The `createQuery` method from `ContactHub` class is for creating simple query with an `AtomicCondition`.
 
 ```js
 const query = ch.createQuery('base.firstName', 'IS_NOT_NULL');
