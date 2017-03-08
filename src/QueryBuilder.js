@@ -1,6 +1,6 @@
 import type {
   AtomicCondition as AtomicConditionType,
-  CompositeCondition as CompositeConditionType, CompositeConditionConjuction,
+  CompositeCondition as CompositeConditionType, CompositeConditionConjunction,
   SimpleQuery,
   CombinedQuery
 } from './types';
@@ -19,7 +19,7 @@ export class AtomicCondition {
 
 export class CompositeConditionBuilder {
 
-  conjunction(conjunction: CompositeConditionConjuction) {
+  conjunction(conjunction: CompositeConditionConjunction) {
     this.conjunction = conjunction;
   }
 

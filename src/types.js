@@ -28,10 +28,10 @@ export type AtomicCondition = {
   value: any
 };
 
-export type CompositeConditionConjuction = 'and' | 'or';
+export type CompositeConditionConjunction = 'and' | 'or';
 export type CompositeCondition = {
   type: string, // pattern ^composite$
-  conjuction: CompositeConditionConjuction,
+  conjunction: CompositeConditionConjunction,
   conditions: Array<AtomicCondition | CompositeCondition>
 };
 
@@ -49,11 +49,11 @@ export type SimpleQuery = {
   }
 };
 
-type CombinedQueryConjuction = 'INTERSECT' | 'UNION' | 'EXCEPT';
+type CombinedQueryConjunction = 'INTERSECT' | 'UNION' | 'EXCEPT';
 
 export type CombinedQuery = {
   type: string, // pattern ^combined$
-  conjuction: CombinedQueryConjuction,
+  conjunction: CombinedQueryConjunction,
   queries: Array<SimpleQuery | CombinedQuery>
 };
 
