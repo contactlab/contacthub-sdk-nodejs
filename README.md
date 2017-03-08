@@ -542,6 +542,49 @@ ch.getCustomers({
 });
 ```
 
+### Query Builder
+
+The `QueryBuilder` utility class provides apis to create simple and combined queries.
+
+```js
+import QueryBuilder, {
+  SimpleQuery,
+  CombinedQuery,
+  AtomicCondition,
+  CompositeCondition
+} from 'contacthub-sdk-nodejs/QueryBuilder';
+
+const nameQuery = new SimpleQuery()
+  .condition(
+    new CompositeCondition()
+      .conjunction('or')
+      .addCondition(new AtomicCondition('base.firstName', 'IS_NOT_NULL'))
+      .addCondition(new AtomicCondition('base.lastName', 'EQUALS', 'Rossi'))
+      .build()
+  )
+  .build();
+
+const emailWithExample = new SimpleQuery()
+  .condition(new AtomicCondition('base.contacts.email', 'IN', '@example.com'))
+  .build();
+
+const  query = new QueryBuilder()
+  .combinedQuery(
+    new combinedQuery()
+      .conjunction('INTERSECT')
+      .addQuery(nameQuery)
+      .addQuery(emailWithExample)
+      .build()
+  )
+  .build();
+```
+
+The `createQuery` method from `ContactHub` class is for create simple query with an `AtomicCondition`.
+
+```js
+const query = ch.createQuery('base.firstName', 'IS_NOT_NULL');
+```
+
 See the Contacthub documentation for further details.
 
 ## Examples
