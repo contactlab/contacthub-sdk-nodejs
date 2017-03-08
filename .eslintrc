@@ -2,6 +2,7 @@
   "extends": "buildo",
   "plugins": ["flowtype"],
   "rules": {
+    "max-len": [2, 120],
     "flowtype/delimiter-dangle": [2, "never"],
     "flowtype/generic-spacing": [2, "never"],
     "flowtype/require-valid-file-annotation": 2,
