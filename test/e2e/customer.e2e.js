@@ -227,7 +227,8 @@ describe('ContactHub', () => {
         expect(c.base).toBeTruthy();
         expect(c.base && c.base.firstName !== null).toBe(true);
         expect(c.base && c.base.lastName !== null).toBe(true);
-        expect(c.base && c.base.contacts && (c.base.contacts.email || c.base.contacts.phone)).toBeTruthy(); // eslint-disable-line max-len
+        expect(c.base && c.base.contacts && (c.base.contacts.email || c.base.contacts.phone))
+          .toBeTruthy();
       });
     });
 

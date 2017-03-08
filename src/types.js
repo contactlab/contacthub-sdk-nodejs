@@ -8,7 +8,18 @@ export type Auth = {
 
 // Query
 
-export type AtomicConditionOperator = 'EQUALS' | 'NOT_EQUALS' | 'BETWEEN' | 'GTE' | 'GT' | 'LTE' | 'LT' | 'IS_NULL' | 'IS_NOT_NULL' | 'IN' | 'NOT_IN'; // eslint-disable-line max-len
+export type AtomicConditionOperator =
+  'EQUALS' |
+  'NOT_EQUALS' |
+  'BETWEEN' |
+  'GTE' |
+  'GT' |
+  'LTE' |
+  'LT' |
+  'IS_NULL' |
+  'IS_NOT_NULL' |
+  'IN' |
+  'NOT_IN';
 
 export type AtomicCondition = {
   type: string, // pattern ^atomic$

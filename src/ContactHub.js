@@ -369,7 +369,7 @@ export default class ContactHub {
     return this.updateCustomer(customerId, newCustomer);
   }
 
-  createQuery(attribute: string, operator: AtomicConditionOperator, value?: any): Query { // eslint-disable-line max-len
+  createQuery(attribute: string, operator: AtomicConditionOperator, value?: any): Query {
     return new QueryBuilder('default-query-builder')
       .simpleQuery(
         new SimpleQueryBuilder()
