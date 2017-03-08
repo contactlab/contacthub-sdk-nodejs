@@ -113,11 +113,34 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 describe('ContactHub', () => {
 
   describe('getCustomers', async () => {
-    it('gets a list of customers', async () => {
-      const customers = await ch.getCustomers();
+    it('gets a list of customers using pagination', async () => {
 
-      expect(customers.length).toEqual(10);
-      customers.forEach(c => expect(c.id).toBeDefined());
+      const initialPage = 0;
+
+      const paginatedCustomers = await ch.getCustomers({ page: initialPage });
+      expect(paginatedCustomers.page.current).toBe(initialPage);
+      expect(paginatedCustomers.elements.length).toBe(10);
+      paginatedCustomers.elements.forEach(c => expect(c.id).toBeDefined());
+
+      const firstCustomersPage = await paginatedCustomers.page.next();
+      expect(firstCustomersPage !== undefined).toBe(true);
+      if (firstCustomersPage) {
+        expect(firstCustomersPage.page.current).toBe(initialPage + 1);
+
+        const secondCustomersPage = await firstCustomersPage.page.next();
+        expect(secondCustomersPage !== undefined).toBe(true);
+        if (secondCustomersPage) {
+          expect(secondCustomersPage.page.current).toBe(initialPage + 2);
+
+          const firstCustomersPageAgain = await secondCustomersPage.page.prev();
+          expect(firstCustomersPageAgain !== undefined).toBe(true);
+          if (firstCustomersPageAgain) {
+            expect(firstCustomersPageAgain.page.current).toBe(initialPage + 1);
+          }
+        }
+      }
+
+
     });
 
     it('filters by externalId', async () => {
@@ -131,7 +154,7 @@ describe('ContactHub', () => {
       // Wait 30 seconds for the Customer to be available in searches
       await new Promise(resolve => setTimeout(resolve, 40000));
 
-      const customers = await ch.getCustomers({ externalId: extId });
+      const { elements: customers } = await ch.getCustomers({ externalId: extId });
 
       expect(customers.length).toBe(1);
       expect(customers[0].externalId).toBe(extId);
@@ -139,7 +162,7 @@ describe('ContactHub', () => {
     });
 
     it('takes a whitelist of fields', async () => {
-      const customers = await ch.getCustomers({
+      const { elements: customers } = await ch.getCustomers({
         fields: ['base.firstName'],
         sort: 'base.firstName',
         direction: 'asc'
@@ -165,13 +188,13 @@ describe('ContactHub', () => {
           }
         }
       };
-      const customers = await ch.getCustomers({ query });
+      const { elements: customers } = await ch.getCustomers({ query });
 
       expect(customers[0].base && customers[0].base.firstName).toBe('Mario');
     });
 
     it('takes a sort field and direction', async () => {
-      const customers = await ch.getCustomers({
+      const { elements: customers } = await ch.getCustomers({
         sort: 'base.contacts.email',
         direction: 'desc'
       });

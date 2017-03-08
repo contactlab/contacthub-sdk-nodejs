@@ -16,7 +16,8 @@ export type GetCustomersOptions = {|
   query?: Query,
   fields?: Array<string>,
   sort?: string,
-  direction?: 'asc' | 'desc'
+  direction?: 'asc' | 'desc',
+  page?: number
 |};
 
 // SDK Customer
@@ -156,8 +157,54 @@ export type Customer = CustomerData & {
   updatedAt: Date
 };
 
-type EventType = 'abandonedCart' | 'addedCompare' | 'addedProduct' | 'addedWishlist' | 'campaignBlacklisted' | 'campaignBounced' | 'campaignLinkClicked' | 'campaignMarkedSpam' | 'campaignOpened' | 'campaignSent' | 'campaignSubscribed' | 'campaignUnsubscribed' | 'changedSetting' | 'clickedLink' | 'closedTicket' | 'completedOrder' | 'eventInvited' | 'eventParticipated' | 'formCompiled' | 'genericActiveEvent' | 'genericPassiveEvent' | 'loggedIn' | 'loggedOut' | 'openedTicket' | 'orderShipped' | 'removedCompare' | 'removedProduct' | 'removedWishlist' | 'repliedTicket' | 'reviewedProduct' | 'searched' | 'serviceSubscribed' | 'serviceUnsubscribed' | 'viewedPage' | 'viewedProduct' | 'viewedProductCategory'; // eslint-disable-line max-len
-type EventContext = 'CONTACT_CENTER' | 'DIGITAL_CAMPAIGN' | 'ECOMMERCE' | 'IOT' | 'MOBILE' | 'OTHER' | 'RETAIL' | 'SOCIAL' | 'WEB'; // eslint-disable-line max-len
+type EventType =
+  'abandonedCart' |
+  'addedCompare' |
+  'addedProduct' |
+  'addedWishlist' |
+  'campaignBlacklisted' |
+  'campaignBounced' |
+  'campaignLinkClicked' |
+  'campaignMarkedSpam' |
+  'campaignOpened' |
+  'campaignSent' |
+  'campaignSubscribed' |
+  'campaignUnsubscribed' |
+  'changedSetting' |
+  'clickedLink' |
+  'closedTicket' |
+  'completedOrder' |
+  'eventInvited' |
+  'eventParticipated' |
+  'formCompiled' |
+  'genericActiveEvent' |
+  'genericPassiveEvent' |
+  'loggedIn' |
+  'loggedOut' |
+  'openedTicket' |
+  'orderShipped' |
+  'removedCompare' |
+  'removedProduct' |
+  'removedWishlist' |
+  'repliedTicket' |
+  'reviewedProduct' |
+  'searched' |
+  'serviceSubscribed' |
+  'serviceUnsubscribed' |
+  'viewedPage' |
+  'viewedProduct' |
+  'viewedProductCategory';
+
+type EventContext =
+  'CONTACT_CENTER' |
+  'DIGITAL_CAMPAIGN' |
+  'ECOMMERCE' |
+  'IOT' |
+  'MOBILE' |
+  'OTHER' |
+  'RETAIL' |
+  'SOCIAL' |
+  'WEB';
 
 export type EventData = {
   customerId?: string,
@@ -298,5 +345,16 @@ export type EventFilters = {
   context?: EventContext,
   mode?: 'ACTIVE' | 'PASSIVE',
   dateFrom?: Date,
-  dateTo?: Date
+  dateTo?: Date,
+  page?: number
+};
+
+export type Paginated<T> = {
+  page: {
+    current: number,
+    total: number,
+    prev: () => ?Promise<Paginated<T>>,
+    next: () => ?Promise<Paginated<T>>
+  },
+  elements: Array<T>
 };

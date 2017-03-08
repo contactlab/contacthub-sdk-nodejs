@@ -4,7 +4,7 @@ import type {
   Auth, Education, Job, Like, Event, EventData,
   Customer, CustomerData, BaseProperties,
   APICustomer, APICustomerData, APIBaseProperties, APIJob,
-  GetCustomersOptions, EventFilters
+  GetCustomersOptions, EventFilters, Paginated
 } from './types';
 import API from './API';
 import { compact, formatToDate } from './utils';
@@ -87,6 +87,36 @@ const cleanCustomer = (data: APICustomer): Customer => {
   return customer;
 };
 
+/**
+ * Helper for adding 'page' to args.params object
+ */
+
+const buildArguments = (args: Object, newPage: number): Object => ({
+  ...args,
+  params: {
+    ...args.params,
+    page: newPage
+  }
+});
+
+/**
+ * Helper to create a recursive structure for paginated resources
+ */
+
+const buildPaginatedResource = (promise: Function, args: Object): Promise<Paginated<any>> => {
+  return promise(args)
+    .then(({ page: { number, totalPages }, elements }) => ({
+      page: {
+        current: number,
+        prev: () => number > 0 && buildPaginatedResource(promise, buildArguments(args, number - 1)),
+        next: () => number < totalPages && buildPaginatedResource(promise, buildArguments(args, number + 1)),
+        total: totalPages
+      },
+      elements
+    })
+  );
+};
+
 export default class ContactHub {
   auth: Auth
   api: API
@@ -136,7 +166,7 @@ export default class ContactHub {
       .then(cleanCustomer);
   }
 
-  getCustomers(options: ?GetCustomersOptions): Promise<Array<Customer>> {
+  getCustomers(options: ?GetCustomersOptions): Promise<Paginated<Customer>> {
     const endpoint = 'customers';
     const params = {
       nodeId: this.auth.nodeId,
@@ -144,11 +174,12 @@ export default class ContactHub {
       fields: options && options.fields && options.fields.join(','),
       query: options && options.query,
       sort: options && options.sort
-            && options.sort + (options.direction ? `,${options.direction}` : '')
+            && options.sort + (options.direction ? `,${options.direction}` : ''),
+      page: options && options.page
     };
 
-    return this.api.get({ endpoint, params })
-      .then(data => data.elements.map(cleanCustomer));
+    return buildPaginatedResource(this.api.get.bind(this.api), { endpoint, params })
+      .then(({ elements, page }) => ({ page, elements: elements.map(cleanCustomer) }));
   }
 
   updateCustomer(customerId: string, customerData: CustomerData): Promise<Customer> {
@@ -281,12 +312,11 @@ export default class ContactHub {
     return this.api.get({ endpoint: `events/${eventId}` });
   }
 
-  getEvents(customerId: string, filters?: EventFilters): Promise<Array<Event>> {
-    return this.api.get({
+  getEvents(customerId: string, filters?: EventFilters): Promise<Paginated<Event>> {
+    return buildPaginatedResource(this.api.get.bind(this.api), {
       endpoint: 'events',
       params: { customerId, ...(filters || {} ) }
-    })
-    .then(data => data.elements);
+    });
   }
 
   async addTag(customerId: string, tag: string): Promise<Customer> {

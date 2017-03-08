@@ -62,11 +62,12 @@ describe('ContactHub', () => {
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId })
         .reply(200, {
+          page: { number: 0, totalPages: 10 },
           elements: [{ id: 'no-filters' }]
         });
 
-      const res = await ch.getCustomers();
-      expect(res[0].id).toBe('no-filters');
+      const { elements } = await ch.getCustomers();
+      expect(elements[0].id).toBe('no-filters');
     });
 
     it('takes an externalId as a filter', async () => {
@@ -74,11 +75,12 @@ describe('ContactHub', () => {
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId, externalId: 'ext123' })
         .reply(200, {
+          page: { number: 0, totalPages: 10 },
           elements: [{ id: 'by-extid' }]
         });
 
-      const res = await ch.getCustomers({ externalId: 'ext123' });
-      expect(res[0].id).toBe('by-extid');
+      const { elements } = await ch.getCustomers({ externalId: 'ext123' });
+      expect(elements[0].id).toBe('by-extid');
     });
 
     it('takes a list of fields to retrieve', async () => {
@@ -86,13 +88,14 @@ describe('ContactHub', () => {
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId, fields: 'base.firstName,base.lastName' })
         .reply(200, {
+          page: { number: 0, totalPages: 10 },
           elements: [{ id: 'with-fields' }]
         });
 
-      const res = await ch.getCustomers({
+      const { elements } = await ch.getCustomers({
         fields: ['base.firstName', 'base.lastName']
       });
-      expect(res[0].id).toBe('with-fields');
+      expect(elements[0].id).toBe('with-fields');
     });
 
     it('takes a query object as a filter', async () => {
@@ -100,11 +103,12 @@ describe('ContactHub', () => {
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId, query: JSON.stringify(exampleQuery) })
         .reply(200, {
+          page: { number: 0, totalPages: 10 },
           elements: [{ id: 'by-query' }]
         });
 
-      const res = await ch.getCustomers({ query: exampleQuery });
-      expect(res[0].id).toBe('by-query');
+      const { elements } = await ch.getCustomers({ query: exampleQuery });
+      expect(elements[0].id).toBe('by-query');
     });
 
     it('takes a field to sort by', async () => {
@@ -112,11 +116,12 @@ describe('ContactHub', () => {
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId, sort: 'base.firstName' })
         .reply(200, {
+          page: { number: 0, totalPages: 10 },
           elements: [{ id: 'sorted' }]
         });
 
-      const res = await ch.getCustomers({ sort: 'base.firstName' });
-      expect(res[0].id).toBe('sorted');
+      const { elements } = await ch.getCustomers({ sort: 'base.firstName' });
+      expect(elements[0].id).toBe('sorted');
     });
 
     it('takes a sort field and a sort direction', async () => {
@@ -124,14 +129,15 @@ describe('ContactHub', () => {
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId, sort: 'base.firstName,desc' })
         .reply(200, {
+          page: { number: 0, totalPages: 10 },
           elements: [{ id: 'sorted-desc' }]
         });
 
-      const res = await ch.getCustomers({
+      const { elements } = await ch.getCustomers({
         sort: 'base.firstName',
         direction: 'desc'
       });
-      expect(res[0].id).toBe('sorted-desc');
+      expect(elements[0].id).toBe('sorted-desc');
     });
 
     it('takes all params together', async () => {
@@ -145,17 +151,18 @@ describe('ContactHub', () => {
           sort: 'base.firstName,asc'
         })
         .reply(200, {
+          page: { number: 0, totalPages: 10 },
           elements: [{ id: 'all-params' }]
         });
 
-      const res = await ch.getCustomers({
+      const { elements } = await ch.getCustomers({
         externalId: 'ext123',
         fields: ['base.firstName'],
         query: exampleQuery,
         sort: 'base.firstName',
         direction: 'asc'
       });
-      expect(res[0].id).toBe('all-params');
+      expect(elements[0].id).toBe('all-params');
     });
   });
 
