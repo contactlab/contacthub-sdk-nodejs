@@ -6,9 +6,60 @@ export type Auth = {
   nodeId: string
 };
 
+// Query
+
+export type AtomicConditionOperator =
+  'EQUALS' |
+  'NOT_EQUALS' |
+  'BETWEEN' |
+  'GTE' |
+  'GT' |
+  'LTE' |
+  'LT' |
+  'IS_NULL' |
+  'IS_NOT_NULL' |
+  'IN' |
+  'NOT_IN';
+
+export type AtomicCondition = {
+  type: string, // pattern ^atomic$
+  attribute: string,
+  operator: AtomicConditionOperator,
+  value: any
+};
+
+export type CompositeConditionConjunction = 'and' | 'or';
+export type CompositeCondition = {
+  type: string, // pattern ^composite$
+  conjunction: CompositeConditionConjunction,
+  conditions: Array<AtomicCondition | CompositeCondition>
+};
+
+export type SimpleQuery = {
+  type: string, // pattern ^simple$
+  are: {
+    condition: AtomicCondition | CompositeCondition
+  },
+  did?: {
+    event: {
+      name: string
+    },
+    condition: AtomicCondition | CompositeCondition,
+    timeframe: AtomicCondition | CompositeCondition
+  }
+};
+
+type CombinedQueryConjunction = 'INTERSECT' | 'UNION' | 'EXCEPT';
+
+export type CombinedQuery = {
+  type: string, // pattern ^combined$
+  conjunction: CombinedQueryConjunction,
+  queries: Array<SimpleQuery | CombinedQuery>
+};
+
 export type Query = {
   name: string,
-  query: Object
+  query: SimpleQuery | CombinedQuery
 };
 
 export type GetCustomersOptions = {|

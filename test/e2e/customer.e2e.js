@@ -1,6 +1,11 @@
 // @flow
 
 import { chTest, randomString } from './helper';
+import QueryBuilder, {
+  SimpleQueryBuilder,
+  CombinedQueryBuilder,
+  AtomicCondition
+} from '../../src/QueryBuilder';
 
 const ch = chTest();
 
@@ -173,24 +178,58 @@ describe('ContactHub', () => {
     });
 
     it('takes a custom query', async () => {
-      const query = {
-        name: '',
-        query: {
-          name: 'mario',
-          type: 'simple',
-          are: {
-            condition: {
-              type: 'atomic',
-              attribute: 'base.firstName',
-              operator: 'EQUALS',
-              value: 'Mario'
-            }
-          }
-        }
-      };
+      const query = ch.createQuery('base.firstName', 'EQUALS', 'Mario');
       const { elements: customers } = await ch.getCustomers({ query });
 
       expect(customers[0].base && customers[0].base.firstName).toBe('Mario');
+    });
+
+    it('takes a custom combined query', async () => {
+
+      // not null base.firstName
+      const notNullFirstName = new SimpleQueryBuilder()
+        .condition(new AtomicCondition('base.firstName', 'IS_NOT_NULL'))
+        .build();
+
+      // not null base.lastName
+      const notNullLastName = new SimpleQueryBuilder()
+        .condition(new AtomicCondition('base.lastName', 'IS_NOT_NULL'))
+        .build();
+
+      // not null email or phone
+      const notNullEmailOrPhone = new CombinedQueryBuilder()
+        .conjunction('UNION')
+        .addQuery(
+          new SimpleQueryBuilder()
+          .condition(new AtomicCondition('base.contacts.email', 'IN', '@example.com'))
+          .build()
+        )
+        .addQuery(
+          new SimpleQueryBuilder()
+            .condition(new AtomicCondition('base.contacts.phone', 'IS_NOT_NULL'))
+            .build()
+        )
+        .build();
+
+      const combinedQuery = new CombinedQueryBuilder()
+        .conjunction('UNION')
+        .addQuery(notNullFirstName)
+        .addQuery(notNullLastName)
+        .addQuery(notNullEmailOrPhone);
+
+      const query = new QueryBuilder()
+        .combinedQuery(combinedQuery)
+        .build();
+
+      const { elements: customers } = await ch.getCustomers({ query });
+
+      customers.forEach(c => {
+        expect(c.base).toBeTruthy();
+        expect(c.base && c.base.firstName !== null).toBe(true);
+        expect(c.base && c.base.lastName !== null).toBe(true);
+        expect(c.base && c.base.contacts && (c.base.contacts.email || c.base.contacts.phone))
+          .toBeTruthy();
+      });
     });
 
     it('takes a sort field and direction', async () => {
