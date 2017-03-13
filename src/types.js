@@ -84,10 +84,15 @@ export type OtherContact = {
   value?: string
 };
 
+type MobileDeviceType = 'IOS' | 'ANDROID' | 'WINDOWS_PHONE' | 'FIREOS';
+type MobileDeviceNotificationCenter = 'APN' | 'GCM' | 'WNS' | 'ADM' | 'SNS';
+
 export type MobileDevice = {
+  appId: string,
   identifier?: string,
   name?: string,
-  type?: 'IOS' | 'GCM' | 'WP'
+  type?: MobileDeviceType,
+  notificationService: MobileDeviceNotificationCenter
 };
 
 export type Contacts = {
@@ -276,9 +281,11 @@ export type Event = EventData & {
 // API Customer
 
 export type APIMobileDevice = {
+  appId: string,
   identifier: ?string,
   name: ?string,
-  type: null | 'IOS' | 'GCM' | 'WP'
+  type: null | MobileDeviceType,
+  notificationCenter: null | MobileDeviceNotificationCenter
 };
 
 export type APIContacts = {
