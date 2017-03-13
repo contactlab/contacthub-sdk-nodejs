@@ -290,7 +290,7 @@ export type APIMobileDevice = {
   identifier: ?string,
   name: ?string,
   type: ?MobileDeviceType,
-  notificationCenter: null | MobileDeviceNotificationCenter
+  notificationCenter: ?MobileDeviceNotificationCenter
 };
 
 export type APIContacts = {
