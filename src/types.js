@@ -230,7 +230,12 @@ type EventType =
   'clickedLink' |
   'closedTicket' |
   'completedOrder' |
+  'eventConfirmed' |
+  'eventDeclined' |
+  'eventEligible' |
   'eventInvited' |
+  'eventNotShow' |
+  'eventNotInvited' |
   'eventParticipated' |
   'formCompiled' |
   'genericActiveEvent' |
