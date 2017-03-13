@@ -289,7 +289,7 @@ export type APIMobileDevice = {
   appId: string,
   identifier: ?string,
   name: ?string,
-  type: null | MobileDeviceType,
+  type: ?MobileDeviceType,
   notificationCenter: null | MobileDeviceNotificationCenter
 };
 
