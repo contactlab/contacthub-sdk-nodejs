@@ -164,7 +164,7 @@ ch.getEvent(eventId);
 
 Retrieves all the events for a customer.
 
-Returns a `Promise` that resolves to an `Array` of `Event` objects.
+Returns a `Promise` that resolves to a [`PaginatedResult<Event>`](#paginated-result) object.
 
 ```js
 ch.getEvents(customerId);
@@ -226,7 +226,7 @@ ch.getCustomer(customerId)
 
 Retrieves a paginated list of customers.
 
-Returns a `Promise` that resolves to an `Array` of `Customer` objects.
+Returns a `Promise` that resolves to a [`PaginatedResult<Customer>`](#paginated-result) object.
 
 ```js
 ch.getCustomers(options)
@@ -485,6 +485,22 @@ version of the `Customer`.
 
 ```js
 ch.removeLike(customerId, likeId)
+```
+
+## Paginated Result
+A `PaginatedResult` object is returned whenever the API returns a paginated list of elements.
+The `page.prev` and `page.next` are utility methods to fetch the adjacent pages.
+
+```js
+{
+  page: {
+    current: number,
+    prev: Promise<PaginatedResult<T>>,
+    next: Promise<PaginatedResult<T>>,
+    total: number
+  },
+  elements: Array<T>
+}
 ```
 
 ## Error Handling
