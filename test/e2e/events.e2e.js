@@ -8,7 +8,7 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
 // FIXME: creating new events takes a few seconds, so we rely on a known
 // customerId already having some associated events
-const cid = '689ef20e-e37a-4b8e-8d3f-2494ec901bc5';
+const cid = 'b765329a-84b2-4380-bfa5-fa4ec33d3b82';
 
 describe('ContactHub', () => {
 
@@ -54,8 +54,8 @@ describe('ContactHub', () => {
     });
 
     it('retrieves all Events for a Customer using date range filter', async () => {
-      const dateFrom = new Date('2017-02-10');
-      const dateTo = new Date('2017-02-20');
+      const dateFrom = new Date('2017-03-10');
+      const dateTo = new Date('2017-03-20');
       const filters = { dateFrom, dateTo };
 
       const { elements: events } = await ch.getEvents(cid, filters);

@@ -44,9 +44,11 @@ const complexCustomer = () => ({
         value: '3337654321'
       }],
       mobileDevices: [{
+        appId: randomString(),
         type: 'IOS',
         name: 'iPhone',
-        identifier: '1234ABC'
+        identifier: '1234ABC',
+        notificationService: 'APN'
       }]
     },
     address: {
