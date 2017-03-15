@@ -1,7 +1,7 @@
 #  Change Log
 
-## [Unreleased](https://github.com/contactlab/contacthub-sdk-nodejs/tree/HEAD)
-[Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v0.3.1...HEAD)
+## [v1.0.0](https://github.com/contactlab/contacthub-sdk-nodejs/tree/v1.0.0)
+[Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v0.3.1...v1.0.0)
 
 #### Fixes (bugs & defects):
 
