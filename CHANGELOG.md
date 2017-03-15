@@ -1,6 +1,24 @@
 #  Change Log
 
+## [Unreleased](https://github.com/contactlab/contacthub-sdk-nodejs/tree/HEAD)
+[Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v0.3.1...HEAD)
 
+#### Fixes (bugs & defects):
+
+- Update "installation" section of Readme [#67](https://github.com/contactlab/contacthub-sdk-nodejs/issues/67)
+- Add documentation for paginated results [#64](https://github.com/contactlab/contacthub-sdk-nodejs/issues/64)
+
+#### New features:
+
+- API updates [#61](https://github.com/contactlab/contacthub-sdk-nodejs/issues/61)
+- Error Handling [#58](https://github.com/contactlab/contacthub-sdk-nodejs/issues/58)
+- Query Builder [#57](https://github.com/contactlab/contacthub-sdk-nodejs/issues/57)
+- Pagination Support [#56](https://github.com/contactlab/contacthub-sdk-nodejs/issues/56)
+- getEvents filters [#55](https://github.com/contactlab/contacthub-sdk-nodejs/issues/55)
+- Add more methods to example [#45](https://github.com/contactlab/contacthub-sdk-nodejs/issues/45)
+
+## [v0.3.1](https://github.com/contactlab/contacthub-sdk-nodejs/tree/v0.3.1) (2017-02-23)
+[Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v0.3.0...v0.3.1)
 
 ## [v0.3.0](https://github.com/contactlab/contacthub-sdk-nodejs/tree/v0.3.0) (2017-02-23)
 [Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v0.2.1...v0.3.0)
