@@ -4,8 +4,10 @@
   "description": "ContactHub SDK for Node.js",
   "main": "index.js",
   "files": [
-    "lib"
+    "lib",
+    "index.d.ts"
   ],
+  "typings": "./index.d.ts",
   "scripts": {
     "lint": "eslint src && eslint test",
     "flow": "flow",
