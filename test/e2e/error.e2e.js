@@ -28,7 +28,7 @@ describe('ContactHub', () => {
         await chTest({ nodeId: 'fake-node-id' }).getCustomers();
       } catch (err) {
         expect(err.status).toBe(404);
-        expect(err.message).toBe('node not foundfake-node-id');
+        expect(err.message).toBe('node not found fake-node-id');
       }
     });
 
