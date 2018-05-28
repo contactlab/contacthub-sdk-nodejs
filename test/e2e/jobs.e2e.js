@@ -26,7 +26,7 @@ const randomJob = () => ({
 });
 
 describe('ContactHub', () => {
-  it('adds, updates and deletes a job', async () => {
+  it('adds, updates and deletes a job', async() => {
     const c1 = await ch.addCustomer({
       base: { contacts: { email: `${randomString()}@example.com` } }
     });

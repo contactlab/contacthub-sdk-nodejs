@@ -17,7 +17,7 @@ describe('ContactHub', () => {
   describe('addEvent', () => {
     const now = new Date();
 
-    it('creates a new Event', async () => {
+    it('creates a new Event', async() => {
       const event = {
         customerId: 'cid',
         type: 'viewedPage',
@@ -40,7 +40,7 @@ describe('ContactHub', () => {
       expect(res).toBe(true);
     });
 
-    it('creates a new anonymous Event', async () => {
+    it('creates a new anonymous Event', async() => {
       const event = {
         sessionId: 'sid',
         type: 'viewedPage',
@@ -69,12 +69,11 @@ describe('ContactHub', () => {
   });
 
   describe('getEvent', () => {
-    it('retrieves an event by eventId', async () => {
+    it('retrieves an event by eventId', async() => {
       const event = { id: 'event123' };
 
       nock(apiUrl)
         .get(`/workspaces/${auth.workspaceId}/events/${event.id}`)
-        .query({ nodeId: auth.nodeId })
         .reply(200, event);
 
       const res = await ch.getEvent(event.id);
@@ -83,7 +82,7 @@ describe('ContactHub', () => {
   });
 
   describe('getEvents', () => {
-    it('retrieves all events for a Customer', async () => {
+    it('retrieves all events for a Customer', async() => {
       const event1 = { id: 'event1' };
       const event2 = { id: 'event2' };
 

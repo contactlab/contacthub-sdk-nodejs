@@ -41,46 +41,46 @@ describe('ContactHub', () => {
   });
 
   describe('addTag', () => {
-    it('adds a tag if not already present', async () => {
+    it('adds a tag if not already present', async() => {
       const res = await ch.addTag(customer.id, 'black');
       expect(res.tags && res.tags.manual).toEqual(['shoes', 'men', 'black']);
     });
 
-    it('preserves other Customer properties', async () => {
+    it('preserves other Customer properties', async() => {
       const res = await ch.addTag(customer.id, 'black');
       expect(res.base && res.base.firstName).toEqual('foo');
     });
 
-    it('does not make an unnecessary call if tag is already there', async () => {
+    it('does not make an unnecessary call if tag is already there', async() => {
       const res = await ch.addTag(customer.id, 'shoes');
       expect(res.tags && res.tags.manual).toEqual(['shoes', 'men']);
       expect(nock.isDone()).toBe(false);
     });
 
-    it('adds the tag if the customer has no previous tags', async () => {
+    it('adds the tag if the customer has no previous tags', async() => {
       const res = await ch.addTag(customerWithNoTags.id, 'black');
       expect(res.tags && res.tags.manual).toEqual(['black']);
     });
   });
 
   describe('removeTag', () => {
-    it('removes a tag if not already present', async () => {
+    it('removes a tag if not already present', async() => {
       const res = await ch.removeTag(customer.id, 'men');
       expect(res.tags && res.tags.manual).toEqual(['shoes']);
     });
 
-    it('preserves other Customer properties', async () => {
+    it('preserves other Customer properties', async() => {
       const res = await ch.removeTag(customer.id, 'men');
       expect(res.base && res.base.firstName).toEqual('foo');
     });
 
-    it('does not make an unnecessary call if tag is not there', async () => {
+    it('does not make an unnecessary call if tag is not there', async() => {
       const res = await ch.removeTag(customer.id, 'red');
       expect(res.tags && res.tags.manual).toEqual(['shoes', 'men']);
       expect(nock.isDone()).toBe(false);
     });
 
-    it('does not make an unnecessary call if customer has no tags', async () => {
+    it('does not make an unnecessary call if customer has no tags', async() => {
       const res = await ch.removeTag(customerWithNoTags.id, 'red');
       expect(res.tags).toBeUndefined();
       expect(nock.isDone()).toBe(false);

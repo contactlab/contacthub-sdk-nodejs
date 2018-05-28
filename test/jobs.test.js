@@ -19,7 +19,7 @@ describe('ContactHub', () => {
   afterAll(() => nock.restore());
 
   describe('addJob', () => {
-    it('adds a job', async () => {
+    it('adds a job', async() => {
       const cid = 'cid';
       const jid = 'a-job';
       const job = {
@@ -36,7 +36,7 @@ describe('ContactHub', () => {
   });
 
   describe('updateJob', () => {
-    it('updates a job', async () => {
+    it('updates a job', async() => {
       const cid = 'cid';
       const jid = 'a-job';
       const job = {
@@ -54,7 +54,7 @@ describe('ContactHub', () => {
   });
 
   describe('deleteJob', () => {
-    it('deletes a job', async () => {
+    it('deletes a job', async() => {
       const cid = 'cid';
       const jid = 'a-job';
 

@@ -13,7 +13,7 @@ const cid = 'b765329a-84b2-4380-bfa5-fa4ec33d3b82';
 describe('ContactHub', () => {
 
   describe('addEvent', () => {
-    it('creates a new event', async () => {
+    it('creates a new event', async() => {
       const res = await ch.addEvent({
         customerId: cid,
         context: 'WEB',
@@ -24,7 +24,7 @@ describe('ContactHub', () => {
       expect(res).toBe(true);
     });
 
-    it('creates an anonymous event', async () => {
+    it('creates an anonymous event', async() => {
       const res = await ch.addEvent({
         sessionId: randomString(),
         context: 'WEB',
@@ -37,7 +37,7 @@ describe('ContactHub', () => {
   });
 
   describe('getEvent', () => {
-    it('retrieves an Event by id', async () => {
+    it('retrieves an Event by id', async() => {
       const { elements: events } = await ch.getEvents(cid);
 
       const event = await ch.getEvent(events[0].id);
@@ -47,13 +47,13 @@ describe('ContactHub', () => {
 
   describe('getEvents', () => {
 
-    it('retrieves all Events for a Customer', async () => {
+    it('retrieves all Events for a Customer', async() => {
       const { elements: events } = await ch.getEvents(cid);
       expect(events.length).toBe(10);
       expect(events[0].customerId).toBe(cid);
     });
 
-    it('retrieves all Events for a Customer using date range filter', async () => {
+    it('retrieves all Events for a Customer using date range filter', async() => {
       const dateFrom = new Date('2017-03-10');
       const dateTo = new Date('2017-03-20');
       const filters = { dateFrom, dateTo };
@@ -62,13 +62,13 @@ describe('ContactHub', () => {
       expect(events.length > 0).toBe(true);
 
       const haveRightDate = events.every((v) => {
-        const eventDate = new Date(v.date);
+        const eventDate = (v.date && new Date(v.date)) || new Date('1970-01-01');
         return dateTo >= eventDate && eventDate >= dateFrom;
       });
       expect(haveRightDate).toBe(true);
     });
 
-    it('retrieves all Events for a customer with "MOBILE" context', async () => {
+    it('retrieves all Events for a customer with "MOBILE" context', async() => {
       const eventData = {
         customerId: cid,
         context: 'MOBILE',
@@ -85,8 +85,7 @@ describe('ContactHub', () => {
       expect(areMobileEvents).toBe(true);
     });
 
-
-    it('retrieves all Events for a customer using pagination', async () => {
+    it('retrieves all Events for a customer using pagination', async() => {
       const initialPage = 0;
 
       const paginatedEvents = await ch.getEvents(cid, { page: initialPage });

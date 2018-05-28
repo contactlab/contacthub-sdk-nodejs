@@ -19,7 +19,7 @@ describe('ContactHub', () => {
   afterAll(() => nock.restore());
 
   describe('addLike', () => {
-    it('adds a like', async () => {
+    it('adds a like', async() => {
       const cid = 'cid';
       const jid = 'a-like';
       const like = {
@@ -36,7 +36,7 @@ describe('ContactHub', () => {
   });
 
   describe('updateLike', () => {
-    it('updates a like', async () => {
+    it('updates a like', async() => {
       const cid = 'cid';
       const jid = 'a-like';
       const like = {
@@ -54,7 +54,7 @@ describe('ContactHub', () => {
   });
 
   describe('deleteLike', () => {
-    it('deletes a like', async () => {
+    it('deletes a like', async() => {
       const cid = 'cid';
       const jid = 'a-like';
 

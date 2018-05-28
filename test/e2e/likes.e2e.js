@@ -12,7 +12,7 @@ const randomLike = () => ({
 });
 
 describe('ContactHub', () => {
-  it('adds, updates and deletes a like', async () => {
+  it('adds, updates and deletes a like', async() => {
     const c1 = await ch.addCustomer({
       base: { contacts: { email: `${randomString()}@example.com` } }
     });

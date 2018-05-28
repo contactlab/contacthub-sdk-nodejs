@@ -125,8 +125,7 @@ const buildPaginatedResource = (promise: Function, args: Object): Promise<Pagina
         total: totalPages
       },
       elements
-    })
-  );
+    }));
 };
 
 export default class ContactHub {

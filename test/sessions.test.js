@@ -24,7 +24,7 @@ describe('ContactHub', () => {
   });
 
   describe('addCustomerSession', () => {
-    it('reconciles a sessionId with a customerId', async () => {
+    it('reconciles a sessionId with a customerId', async() => {
       const sid = ch.createSessionId();
 
       nock(apiUrl)

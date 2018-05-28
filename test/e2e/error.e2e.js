@@ -3,8 +3,8 @@ import { chTest, randomString } from './helper';
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
 describe('ContactHub', () => {
-  describe('errors', async () => {
-    it('should return an unauthorized error (401)', async () => {
+  describe('errors', async() => {
+    it('should return an unauthorized error (401)', async() => {
       const fakeCh = chTest({ token: 'fake-token' });
       try {
         await fakeCh.getCustomers();
@@ -14,7 +14,7 @@ describe('ContactHub', () => {
       }
     });
 
-    it('should return a workspace not found error (403)', async () => {
+    it('should return a workspace not found error (403)', async() => {
       try {
         await chTest({ workspaceId: 'fake-workspace-id' }).getCustomers();
       } catch (err) {
@@ -23,7 +23,7 @@ describe('ContactHub', () => {
       }
     });
 
-    it('should return a node not found error (404)', async () => {
+    it('should return a node not found error (404)', async() => {
       try {
         await chTest({ nodeId: 'fake-node-id' }).getCustomers();
       } catch (err) {
@@ -33,7 +33,7 @@ describe('ContactHub', () => {
     });
 
 
-    it('should return a duplicated customer error (409)', async () => {
+    it('should return a duplicated customer error (409)', async() => {
       const customerEmail = `${randomString()}@example.com`;
       const customerData = { base: { contacts: { email: customerEmail } } };
 

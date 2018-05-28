@@ -8,8 +8,8 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
 describe('ContactHub', () => {
 
-  describe('addTag', async () => {
-    it('adds a new tag', async () => {
+  describe('addTag', async() => {
+    it('adds a new tag', async() => {
       const customer = await ch.addCustomer({
         base: { contacts: { email: `${randomString()}@example.com` } },
         tags: {
@@ -23,8 +23,8 @@ describe('ContactHub', () => {
     });
   });
 
-  describe('removeTag', async () => {
-    it('removes a tag', async () => {
+  describe('removeTag', async() => {
+    it('removes a tag', async() => {
       const customer = await ch.addCustomer({
         base: { contacts: { email: `${randomString()}@example.com` } },
         tags: {

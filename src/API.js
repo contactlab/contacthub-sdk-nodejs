@@ -58,8 +58,8 @@ export default class API {
       url: `/workspaces/${this.workspaceId}/${opts.endpoint}`,
       params: opts.params
     })
-    .then(res => res.data)
-    .catch(handleError);
+      .then(res => res.data)
+      .catch(handleError);
   }
 
   post(opts: Object): Promise<Object> {
@@ -68,8 +68,8 @@ export default class API {
       url: `/workspaces/${this.workspaceId}/${opts.endpoint}`,
       data: opts.data
     })
-    .then(res => res.data)
-    .catch(handleError);
+      .then(res => res.data)
+      .catch(handleError);
   }
 
   put(opts: Object): Promise<Object> {
@@ -78,8 +78,8 @@ export default class API {
       url: `/workspaces/${this.workspaceId}/${opts.endpoint}`,
       data: opts.data
     })
-    .then(res => res.data)
-    .catch(handleError);
+      .then(res => res.data)
+      .catch(handleError);
   }
 
   patch(opts: Object): Promise<Object> {
@@ -88,8 +88,8 @@ export default class API {
       url: `/workspaces/${this.workspaceId}/${opts.endpoint}`,
       data: opts.data
     })
-    .then(res => res.data)
-    .catch(handleError);
+      .then(res => res.data)
+      .catch(handleError);
   }
 
   delete(opts: Object): Promise<Object> {
@@ -98,7 +98,7 @@ export default class API {
       url: `/workspaces/${this.workspaceId}/${opts.endpoint}`,
       params: opts.params
     })
-    .then(res => res.data)
-    .catch(handleError);
+      .then(res => res.data)
+      .catch(handleError);
   }
 }

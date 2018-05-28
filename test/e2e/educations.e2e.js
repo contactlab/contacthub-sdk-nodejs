@@ -12,7 +12,7 @@ const randomEducation = () => ({
 });
 
 describe('ContactHub', () => {
-  it('adds, updates and deletes an education', async () => {
+  it('adds, updates and deletes an education', async() => {
     const c1 = await ch.addCustomer({
       base: { contacts: { email: `${randomString()}@example.com` } }
     });
