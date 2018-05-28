@@ -8,7 +8,7 @@ Node.js SDK for the Contacthub API.
 
 ## Requirements and design
 
-This library requires Node.js v4 or later.
+This library requires Node.js v6 or later.
 
 All asynchronous operations return a `Promise`.
 
@@ -636,12 +636,12 @@ flow` to check the entire project for errors.
 
 ### Minimum Node version
 
-This SDK is developed and tested against Node.js v4. To help developing against
+This SDK is developed and tested against Node.js v6. To help developing against
 this specific version, we provide a Dockerfile for testing purposes.
 
 Here are the commands to run tests with docker:
 
 ```sh
-$ docker build -t ch-node4 .
-$ docker run --rm ch-node4
+$ docker build -t ch-node6 .
+$ docker run --rm ch-node6
 ```

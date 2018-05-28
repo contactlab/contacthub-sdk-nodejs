@@ -1,4 +1,4 @@
-FROM node:4
+FROM node:6
 
 ADD ./package.json /contacthub-sdk-nodejs/package.json
 WORKDIR /contacthub-sdk-nodejs
