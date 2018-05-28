@@ -199,9 +199,18 @@ export type BaseProperties = {
   subscriptions?: Array<Subscription>
 };
 
+export type Consents = {
+  disclaimer?: Object,
+  marketing?: Object,
+  profiling?: Object,
+  softSpam?: Object,
+  thirdPartyTransfer?: Object
+};
+
 export type CustomerData = {
   externalId?: string,
   base?: BaseProperties,
+  consents?: Consents,
   extended?: Object,
   extra?: string,
   tags?: Tags
@@ -392,6 +401,7 @@ export type APICustomerData = {
   extra: ?string,
   base: ?APIBaseProperties,
   extended: ?Object,
+  consents: ?Consents,
   tags: ?Tags
 };
 

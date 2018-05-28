@@ -110,6 +110,21 @@ const complexCustomer = () => ({
       ]
     }]
   },
+  consents: {
+    disclaimer: {
+      date: new Date('2018-05-25T00:00:00.000+0000'),
+      version: 'v1'
+    },
+    marketing: {
+      traditional: {
+        telephonic: {
+          status: true,
+          limitation: false,
+          objection: false
+        }
+      }
+    }
+  },
   extended: {
     membership_card_nr: 'ABC123'
   }

@@ -2,7 +2,7 @@
 
 import type {
   Auth, Education, Job, Like, Event, EventData,
-  Customer, CustomerData, BaseProperties,
+  Customer, CustomerData, BaseProperties, Consents,
   APICustomer, APICustomerData, APIBaseProperties, APIJob,
   GetCustomersOptions, EventFilters, Paginated,
   Query, AtomicConditionOperator
@@ -35,8 +35,18 @@ const buildCustomer = (data: CustomerData): APICustomerData => {
       dob: formatToDate(data.base.dob),
       jobs: data.base && data.base.jobs && data.base.jobs.map(buildJob)
     };
-
     customer.base = (compact(base): APIBaseProperties);
+  }
+
+  if (data.consents && data.consents.disclaimer) {
+    const consents = {
+      ...data.consents,
+      disclaimer: {
+        ...data.consents.disclaimer,
+        date: formatToDate(data.consents.disclaimer.date)
+      }
+    };
+    customer.consents = (compact(consents): Consents);
   }
 
   return customer;
