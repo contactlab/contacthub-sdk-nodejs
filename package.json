@@ -45,7 +45,7 @@
     "babel-polyfill": "^6.16.0",
     "babel-preset-env": "^1.1.7",
     "eslint": "^4.19.1",
-    "eslint-config-buildo": "github:buildo/eslint-config",
+    "eslint-config-buildo": "^0.2.2",
     "eslint-plugin-flowtype": "^2.19.0",
     "flow-bin": "^0.73.0",
     "flow-copy-source": "^1.1.0",
