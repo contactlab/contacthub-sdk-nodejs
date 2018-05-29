@@ -10,7 +10,7 @@ const log = console.log; // eslint-disable-line no-console
 
 ch.getCustomers({ sort: 'base.lastName' }).then(customers => {
   log(`=== Retrieved ${customers.length} customers sorted by last name ===`);
-  customers.forEach(c => {
+  customers.elements.forEach(c => {
     if (c.base && c.base.firstName && c.base.lastName) {
       log(`${c.base.firstName} ${c.base.lastName}`);
     }

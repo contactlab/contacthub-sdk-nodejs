@@ -110,6 +110,21 @@ const complexCustomer = () => ({
       ]
     }]
   },
+  consents: {
+    disclaimer: {
+      date: new Date('2018-05-25T00:00:00.000+0000'),
+      version: 'v1'
+    },
+    marketing: {
+      traditional: {
+        telephonic: {
+          status: true,
+          limitation: false,
+          objection: false
+        }
+      }
+    }
+  },
   extended: {
     membership_card_nr: 'ABC123'
   }
@@ -119,8 +134,8 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
 describe('ContactHub', () => {
 
-  describe('getCustomers', async () => {
-    it('gets a list of customers using pagination', async () => {
+  describe('getCustomers', async() => {
+    it('gets a list of customers using pagination', async() => {
 
       const initialPage = 0;
 
@@ -150,7 +165,7 @@ describe('ContactHub', () => {
 
     });
 
-    it('filters by externalId', async () => {
+    it('filters by externalId', async() => {
       const extId = randomString();
 
       const customer = await ch.addCustomer({
@@ -168,7 +183,7 @@ describe('ContactHub', () => {
       expect(customers[0].id).toBe(customer.id);
     });
 
-    it('takes a whitelist of fields', async () => {
+    it('takes a whitelist of fields', async() => {
       const { elements: customers } = await ch.getCustomers({
         fields: ['base.firstName'],
         sort: 'base.firstName',
@@ -179,14 +194,14 @@ describe('ContactHub', () => {
       expect(customers[0].base && Object.keys(customers[0].base)).toEqual(['firstName']);
     });
 
-    it('takes a custom query', async () => {
+    it('takes a custom query', async() => {
       const query = ch.createQuery('base.firstName', 'EQUALS', 'Mario');
       const { elements: customers } = await ch.getCustomers({ query });
 
       expect(customers[0].base && customers[0].base.firstName).toBe('Mario');
     });
 
-    it('takes a custom combined query', async () => {
+    it('takes a custom combined query', async() => {
 
       // not null base.firstName
       const notNullFirstName = new SimpleQueryBuilder()
@@ -203,8 +218,8 @@ describe('ContactHub', () => {
         .conjunction('UNION')
         .addQuery(
           new SimpleQueryBuilder()
-          .condition(new AtomicCondition('base.contacts.email', 'IN', '@example.com'))
-          .build()
+            .condition(new AtomicCondition('base.contacts.email', 'IN', '@example.com'))
+            .build()
         )
         .addQuery(
           new SimpleQueryBuilder()
@@ -234,7 +249,7 @@ describe('ContactHub', () => {
       });
     });
 
-    it('takes a sort field and direction', async () => {
+    it('takes a sort field and direction', async() => {
       const { elements: customers } = await ch.getCustomers({
         sort: 'base.contacts.email',
         direction: 'desc'
@@ -248,7 +263,7 @@ describe('ContactHub', () => {
     });
   });
 
-  it('creates, updates and deletes a customer', async () => {
+  it('creates, updates and deletes a customer', async() => {
     const c1 = await ch.addCustomer(simpleCustomer());
 
     const newName = randomString();
@@ -263,7 +278,7 @@ describe('ContactHub', () => {
     expect(del).toEqual(true);
   });
 
-  it('writes and reads back a simple customer', async () => {
+  it('writes and reads back a simple customer', async() => {
     const local = simpleCustomer();
     const cid = (await ch.addCustomer(local)).id;
     const remote = await ch.getCustomer(cid);
@@ -271,7 +286,7 @@ describe('ContactHub', () => {
     expect(remote.base).toEqual(local.base);
   });
 
-  it('writes and reads back all base properties', async () => {
+  it('writes and reads back all base properties', async() => {
     const local = complexCustomer();
     const cid = (await ch.addCustomer(local)).id;
     const remote = await ch.getCustomer(cid);
@@ -279,7 +294,7 @@ describe('ContactHub', () => {
     expect(remote.base).toEqual(local.base);
   });
 
-  it('patches a single customer property', async () => {
+  it('patches a single customer property', async() => {
     const customer = simpleCustomer();
     const c1 = await ch.addCustomer(customer);
 

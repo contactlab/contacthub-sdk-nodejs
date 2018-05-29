@@ -20,7 +20,7 @@ describe('ContactHub', () => {
   afterAll(() => nock.restore());
 
   describe('addEducation', () => {
-    it('adds a education', async () => {
+    it('adds a education', async() => {
       const cid = 'cid';
       const jid = 'a-education';
       const education = {
@@ -37,7 +37,7 @@ describe('ContactHub', () => {
   });
 
   describe('updateEducation', () => {
-    it('updates a education', async () => {
+    it('updates a education', async() => {
       const cid = 'cid';
       const jid = 'a-education';
       const education = {
@@ -55,7 +55,7 @@ describe('ContactHub', () => {
   });
 
   describe('deleteEducation', () => {
-    it('deletes a education', async () => {
+    it('deletes a education', async() => {
       const cid = 'cid';
       const jid = 'a-education';
 

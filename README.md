@@ -8,7 +8,7 @@ Node.js SDK for the Contacthub API.
 
 ## Requirements and design
 
-This library requires Node.js v4 or later.
+This library requires Node.js v6 or later.
 
 All asynchronous operations return a `Promise`.
 
@@ -187,24 +187,26 @@ The `customerData` parameter is an object that can contain the following propert
 
 * `base`
 
-  An object conforming to the JSON schema for [Base Properties](https://hub.contactlab.it/#/settings/properties).
+  An object conforming to the JSON schema for [Base Properties](http://developer.contactlab.com/documentation/contacthub/schemas/customer.base.html).
+
+* `consents`
+
+  An object conforming to the JSON schema for [Consents](http://developer.contactlab.com/documentation/contacthub/schemas/customer.consents.html).
 
 * `extended`
 
   An object conforming the JSON schema for [Extended Properties](https://hub.contactlab.it/#/settings/properties).
+  Extended properties can be customised for each Contacthub Workspace.
 
 * `extra`
 
-  An optional string containing extra data about the customer.
+  A string containing extra data about the customer.
 
 * `tags`
 
-  An optional object containing a list of tags associated with the
-  customer. It must follow this format:
+  An object conforming to the JSON schema for [Tags](http://developer.contactlab.com/documentation/contacthub/schemas/customer.tags.html).
 
-  `{ auto: Array<string>, manual: Array<String> }`
-
-The object must contain at least one of the following:
+All properties are optional, but the object must contain at least one of the following:
 
 * `externalId`, `base` or `extended`
 
@@ -634,12 +636,12 @@ flow` to check the entire project for errors.
 
 ### Minimum Node version
 
-This SDK is developed and tested against Node.js v4. To help developing against
+This SDK is developed and tested against Node.js v6. To help developing against
 this specific version, we provide a Dockerfile for testing purposes.
 
 Here are the commands to run tests with docker:
 
 ```sh
-$ docker build -t ch-node4 .
-$ docker run --rm ch-node4
+$ docker build -t ch-node6 .
+$ docker run --rm ch-node6
 ```

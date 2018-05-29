@@ -8,8 +8,8 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
 describe('ContactHub', () => {
 
-  describe('addCustomerSession', async () => {
-    it('reconciles a sessionId with a customerId', async () => {
+  describe('addCustomerSession', async() => {
+    it('reconciles a sessionId with a customerId', async() => {
       const sid = ch.createSessionId();
 
       const c = await ch.addCustomer({

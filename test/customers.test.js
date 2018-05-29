@@ -29,10 +29,9 @@ describe('ContactHub', () => {
       id: 'foo'
     };
 
-    it('finds an existing Customer', async () => {
+    it('finds an existing Customer', async() => {
       nock(apiUrl)
         .get(`/workspaces/${auth.workspaceId}/customers/${customer.id}`)
-        .query({ nodeId: auth.nodeId })
         .reply(200, customer);
 
       const res = await ch.getCustomer(customer.id);
@@ -57,7 +56,7 @@ describe('ContactHub', () => {
       }
     };
 
-    it('works with no parameters', async () => {
+    it('works with no parameters', async() => {
       nock(apiUrl)
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId })
@@ -70,7 +69,7 @@ describe('ContactHub', () => {
       expect(elements[0].id).toBe('no-filters');
     });
 
-    it('takes an externalId as a filter', async () => {
+    it('takes an externalId as a filter', async() => {
       nock(apiUrl)
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId, externalId: 'ext123' })
@@ -83,7 +82,7 @@ describe('ContactHub', () => {
       expect(elements[0].id).toBe('by-extid');
     });
 
-    it('takes a list of fields to retrieve', async () => {
+    it('takes a list of fields to retrieve', async() => {
       nock(apiUrl)
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId, fields: 'base.firstName,base.lastName' })
@@ -98,7 +97,7 @@ describe('ContactHub', () => {
       expect(elements[0].id).toBe('with-fields');
     });
 
-    it('takes a query object as a filter', async () => {
+    it('takes a query object as a filter', async() => {
       nock(apiUrl)
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId, query: JSON.stringify(exampleQuery) })
@@ -111,7 +110,7 @@ describe('ContactHub', () => {
       expect(elements[0].id).toBe('by-query');
     });
 
-    it('takes a field to sort by', async () => {
+    it('takes a field to sort by', async() => {
       nock(apiUrl)
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId, sort: 'base.firstName' })
@@ -124,7 +123,7 @@ describe('ContactHub', () => {
       expect(elements[0].id).toBe('sorted');
     });
 
-    it('takes a sort field and a sort direction', async () => {
+    it('takes a sort field and a sort direction', async() => {
       nock(apiUrl)
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({ nodeId: auth.nodeId, sort: 'base.firstName,desc' })
@@ -140,7 +139,7 @@ describe('ContactHub', () => {
       expect(elements[0].id).toBe('sorted-desc');
     });
 
-    it('takes all params together', async () => {
+    it('takes all params together', async() => {
       nock(apiUrl)
         .get(`/workspaces/${auth.workspaceId}/customers`)
         .query({
@@ -185,7 +184,7 @@ describe('ContactHub', () => {
   });
 
   describe('updateCustomer', () => {
-    it('updates an existing Customer', async () => {
+    it('updates an existing Customer', async() => {
       const customer = {
         id: 'existing-id',
         base: {
@@ -203,7 +202,7 @@ describe('ContactHub', () => {
   });
 
   describe('patchCustomer', () => {
-    it('updates an existing Customer', async () => {
+    it('updates an existing Customer', async() => {
       const customerId = 'existing-id';
       const customer = {
         base: { lastName: 'Rossi' }
@@ -219,7 +218,7 @@ describe('ContactHub', () => {
   });
 
   describe('deleteCustomer', () => {
-    it('deletes an existing Customer', async () => {
+    it('deletes an existing Customer', async() => {
       const customerId = 'existing-cid';
 
       nock(apiUrl)
