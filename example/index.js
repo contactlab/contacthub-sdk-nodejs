@@ -86,10 +86,21 @@ ch.addCustomer(customerData)
 
     // Add an event
     const eventData = {
-      customerId: customer.id,
-      type: 'viewedPage',
+      sessionId: 'ses123',
       context: 'WEB',
-      properties: {}
+      contextInfo: {
+        client: {
+          ip: '1.2.3.4'
+        },
+        user: {
+          id: 'username1'
+        }
+      },
+      type: 'viewedPage',
+      properties: {
+        title: 'Page Title',
+        url: 'http://www.example.com'
+      }
     };
     return ch.addEvent(eventData).then(() => {
       log(`=== Added an event for customer '${customer.id}' ===`);
