@@ -2,6 +2,14 @@
 
 
 
+## [v1.1.0](https://github.com/contactlab/contacthub-sdk-nodejs/tree/v1.1.0) (2018-05-30)
+[Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v1.0.1...v1.1.0)
+
+#### New features:
+
+- Support "contextInfo" object [#72](https://github.com/contactlab/contacthub-sdk-nodejs/issues/72)
+- Support "consents" object [#71](https://github.com/contactlab/contacthub-sdk-nodejs/issues/71)
+
 ## [v1.0.1](https://github.com/contactlab/contacthub-sdk-nodejs/tree/v1.0.1) (2017-05-31)
 [Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v1.0.0...v1.0.1)
 
