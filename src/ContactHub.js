@@ -308,8 +308,8 @@ export default class ContactHub {
       bringBackProperties,
       customerId: event.customerId,
       type: event.type,
-      context: event.context,
       properties: event.properties,
+      context: event.context,
       contextInfo: event.contextInfo,
       date: event.date && event.date.toISOString() || new Date().toISOString()
     };

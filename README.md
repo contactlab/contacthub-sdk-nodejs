@@ -115,20 +115,26 @@ The `event` parameter is an object that can contain the following properties:
 
   One of `WEB`,`MOBILE`,`ECOMMERCE`,`RETAIL`,`SOCIAL`,`DIGITAL_CAMPAIGN`,`CONTACT_CENTER`,`IOT`,`OTHER`.
 
+* `contextInfo`
+
+  An Object conforming to the JSON schema defined for the specified `context`.
+  All schemas are available [at this link](http://developer.contactlab.com/documentation/contacthub/schemas/index).
+
 * `type`
 
-  A valid event type (shown in [Contacthub settings](https://hub.contactlab.it/#/settings/events)).
+  A valid event type. All event types are listed [at this link](https://hub.contactlab.it/#/settings/events).
 
 * `properties`
 
-  An object conforming to the JSON schema for the event type.
+  An object conforming to the JSON schema defined for the specified event `type`.
+  All schemas are available [at this link](http://developer.contactlab.com/documentation/contacthub/schemas/index).
 
-`context`, `type` and `properties` are always required.
+The required keys are `context`, `type` and `properties`, others are optional.
 
-You must specify one `customerId`, `externalId` or `sessionId`. If you
-don't have any `Customer` information (for example, the customer is not logged in) you should
-use a sessionId. This enables you to later reconcile all the events in the same
-session with a `Customer`, when they log in.
+You must specify one of `customerId`, `externalId` or `sessionId`. If you
+don't have any `Customer` information (for example, the customer is not logged
+in) you should use a sessionId. This enables you to later reconcile all the
+events in the same session with a `Customer`, when they log in.
 
 **Example:**
 
@@ -138,6 +144,14 @@ The following is an example of a valid `event` object:
 const event = {
   sessionId: 'ses123',
   context: 'WEB',
+  contextInfo: {
+    client: {
+      ip: '1.2.3.4'
+    },
+    user: {
+      id: 'username1'
+    }
+  },
   type: 'viewedPage',
   properties: {
     title: 'Page Title',

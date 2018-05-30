@@ -24,6 +24,28 @@ describe('ContactHub', () => {
       expect(res).toBe(true);
     });
 
+    it('creates a new event with additional properties and contextInfo', async() => {
+      const res = await ch.addEvent({
+        customerId: cid,
+        context: 'WEB',
+        type: 'viewedPage',
+        properties: {
+          title: 'Page Title',
+          url: 'http://www.example.com'
+        },
+        contextInfo: {
+          client: {
+            ip: '1.2.3.4'
+          },
+          user: {
+            id: 'username1'
+          }
+        }
+      });
+
+      expect(res).toBe(true);
+    });
+
     it('creates an anonymous event', async() => {
       const res = await ch.addEvent({
         sessionId: randomString(),

@@ -22,16 +22,30 @@ describe('ContactHub', () => {
         customerId: 'cid',
         type: 'viewedPage',
         context: 'WEB',
+        contextInfo: {
+          client: {
+            ip: '1.2.3.4'
+          }
+        },
         date: now,
-        properties: {}
+        properties: {
+          title: 'Page Title'
+        }
       };
 
       nock(apiUrl)
         .post(`/workspaces/${auth.workspaceId}/events`, JSON.stringify({
           customerId: 'cid',
           type: 'viewedPage',
+          properties: {
+            title: 'Page Title'
+          },
           context: 'WEB',
-          properties: {},
+          contextInfo: {
+            client: {
+              ip: '1.2.3.4'
+            }
+          },
           date: now.toISOString()
         }))
         .reply(200, true);
@@ -57,8 +71,8 @@ describe('ContactHub', () => {
             nodeId: auth.nodeId
           },
           type: 'viewedPage',
-          context: 'WEB',
           properties: {},
+          context: 'WEB',
           date: now.toISOString()
         }))
         .reply(200, true);

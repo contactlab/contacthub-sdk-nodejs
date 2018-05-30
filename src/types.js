@@ -281,8 +281,8 @@ export type EventData = {
   externalId?: string,
   sessionId?: string,
   type: EventType,
-  context: EventContext,
   properties: Object,
+  context: EventContext,
   contextInfo?: Object,
   date?: Date
 };
