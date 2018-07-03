@@ -26,16 +26,50 @@ describe('ContactHub', () => {
 
   describe('getCustomer', () => {
     const customer = {
-      id: 'foo'
+      id: 'foo',
+      base: {
+        title: null,
+        firstName: 'Mario',
+        lastName: 'Rossi',
+        dob: '1980-03-17'
+      },
+      consents: {
+        disclaimer: {
+          date: '2018-05-25T14:05:00.000+0000'
+        }
+      },
+      extended: {},
+      externalId: 'eid',
+      extra: 'extrastring',
+      tags: {}
     };
 
-    it('finds an existing Customer', async() => {
+    beforeEach(() => {
       nock(apiUrl)
         .get(`/workspaces/${auth.workspaceId}/customers/${customer.id}`)
         .reply(200, customer);
+    });
 
+    it('finds an existing Customer', async() => {
       const res = await ch.getCustomer(customer.id);
       expect(res.id).toEqual('foo');
+    });
+
+    it('cleans null values returned by the API', async() => {
+      const res = await ch.getCustomer(customer.id);
+      expect(res.base).not.toBeUndefined();
+      expect(res.base && res.base.title).toBeUndefined();
+    });
+
+    it('converts base.dob to a JS Date object', async() => {
+      const res = await ch.getCustomer(customer.id);
+      expect(res.base && res.base.dob).toEqual(new Date('1980-03-17'));
+    });
+
+    it('converts consents.disclaimer.date to a JS Date object', async() => {
+      const res = await ch.getCustomer(customer.id);
+      expect(res.consents && res.consents.disclaimer &&
+        res.consents.disclaimer.date).toEqual(new Date('2018-05-25T14:05:00Z'));
     });
   });
 
@@ -167,14 +201,32 @@ describe('ContactHub', () => {
 
   describe('addCustomer', () => {
     it('creates a new Customer', () => {
+      const datetime = new Date();
       const customer = {
         base: {
           firstName: 'Mario'
-        }
+        },
+        consents: {
+          disclaimer: {
+            date: datetime
+          }
+        },
+        externalId: 'eid',
+        extended: {
+          foo: 'bar'
+        },
+        extra: 'extrastring'
       };
 
       nock(apiUrl)
-        .post(`/workspaces/${auth.workspaceId}/customers`)
+        .post(`/workspaces/${auth.workspaceId}/customers`, {
+          nodeId: 'nid',
+          base: { firstName: 'Mario' },
+          consents: { disclaimer: { date: datetime.toISOString() } },
+          externalId: 'eid',
+          extended: { foo: 'bar' },
+          extra: 'extrastring'
+        })
         .reply(200, { id: 'new-cid' });
 
       return ch.addCustomer(customer).then(res => {
