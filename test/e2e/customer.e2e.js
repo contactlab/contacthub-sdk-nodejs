@@ -294,6 +294,14 @@ describe('ContactHub', () => {
     expect(remote.base).toEqual(local.base);
   });
 
+  it('writes and reads back all consents', async() => {
+    const local = complexCustomer();
+    const cid = (await ch.addCustomer(local)).id;
+    const remote = await ch.getCustomer(cid);
+
+    expect(remote.consents).toEqual(local.consents);
+  });
+
   it('patches a single customer property', async() => {
     const customer = simpleCustomer();
     const c1 = await ch.addCustomer(customer);
