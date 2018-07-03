@@ -173,8 +173,8 @@ describe('ContactHub', () => {
         externalId: extId
       });
 
-      // Wait 30 seconds for the Customer to be available in searches
-      await new Promise(resolve => setTimeout(resolve, 40000));
+      // Wait 50 seconds for the Customer to be available in searches
+      await new Promise(resolve => setTimeout(resolve, 50000));
 
       const { elements: customers } = await ch.getCustomers({ externalId: extId });
 
