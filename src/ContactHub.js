@@ -87,7 +87,7 @@ const cleanCustomer = (data: APICustomer): Customer => {
   }
 
   if (data.consents) {
-    customer.consents = (compact(data.consents));
+    customer.consents = compact(data.consents);
     if (data.consents && data.consents.disclaimer && data.consents.disclaimer.date) {
       customer.consents.disclaimer.date = new Date(data.consents.disclaimer.date);
     }
