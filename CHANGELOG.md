@@ -2,6 +2,13 @@
 
 
 
+## [v1.1.2](https://github.com/contactlab/contacthub-sdk-nodejs/tree/v1.1.2) (2018-07-04)
+[Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v1.1.1...v1.1.2)
+
+#### Fixes (bugs & defects):
+
+- Consets object null using nodejs [#75](https://github.com/contactlab/contacthub-sdk-nodejs/issues/75)
+
 ## [v1.1.1](https://github.com/contactlab/contacthub-sdk-nodejs/tree/v1.1.1) (2018-05-30)
 [Full Changelog](https://github.com/contactlab/contacthub-sdk-nodejs/compare/v1.1.0...v1.1.1)
 
