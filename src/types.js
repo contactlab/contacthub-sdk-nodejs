@@ -199,13 +199,13 @@ export type BaseProperties = {
   subscriptions?: Array<Subscription>
 };
 
-export type Consents = {
+export type Consents = {|
   disclaimer?: Object,
   marketing?: Object,
   profiling?: Object,
   softSpam?: Object,
   thirdPartyTransfer?: Object
-};
+|};
 
 export type CustomerData = {
   externalId?: string,

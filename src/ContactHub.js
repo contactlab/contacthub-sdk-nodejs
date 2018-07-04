@@ -2,7 +2,7 @@
 
 import type {
   Auth, Education, Job, Like, Event, EventData,
-  Customer, CustomerData, BaseProperties, Consents,
+  Customer, CustomerData,
   APICustomer, APICustomerData, APIBaseProperties, APIJob,
   GetCustomersOptions, EventFilters, Paginated,
   Query, AtomicConditionOperator
@@ -28,6 +28,7 @@ const buildCustomer = (data: CustomerData): APICustomerData => {
   if (data.extended) { customer.extended = data.extended; }
   if (data.extra) { customer.extra = data.extra; }
   if (data.tags) { customer.tags = data.tags; }
+  if (data.consents) { customer.consents = data.consents; }
 
   if (data.base) {
     const base = {
@@ -36,17 +37,6 @@ const buildCustomer = (data: CustomerData): APICustomerData => {
       jobs: data.base && data.base.jobs && data.base.jobs.map(buildJob)
     };
     customer.base = (compact(base): APIBaseProperties);
-  }
-
-  if (data.consents && data.consents.disclaimer) {
-    const consents = {
-      ...data.consents,
-      disclaimer: {
-        ...data.consents.disclaimer,
-        date: formatToDate(data.consents.disclaimer.date)
-      }
-    };
-    customer.consents = (compact(consents): Consents);
   }
 
   return customer;
@@ -85,15 +75,22 @@ const cleanCustomer = (data: APICustomer): Customer => {
         updatedAt: s.updatedAt && new Date(s.updatedAt)
       }));
 
-    /* Strip nulls and empty arrays recursively from `base` */
+    /* Strip nulls and empty arrays recursively */
     const base = { ...data.base, jobs, likes, subscriptions };
-    customer.base = (compact(base): BaseProperties);
+    customer.base = (compact(base));
 
-    // check for data.base is useful only for avoid flow warning
+    // check for data.base is useful only to avoid a Flow warning
     if (data.base && data.base.dob) {
       customer.base.dob = new Date(data.base.dob);
     }
 
+  }
+
+  if (data.consents) {
+    customer.consents = compact(data.consents);
+    if (data.consents && data.consents.disclaimer && data.consents.disclaimer.date) {
+      customer.consents.disclaimer.date = new Date(data.consents.disclaimer.date);
+    }
   }
 
   return customer;
@@ -161,6 +158,7 @@ export default class ContactHub {
       nodeId: this.auth.nodeId,
       externalId: customer.externalId,
       base: customer.base,
+      consents: customer.consents,
       extended: customer.extended,
       extra: customer.extra,
       tags: customer.tags
@@ -200,6 +198,7 @@ export default class ContactHub {
       id: customerId,
       externalId: customer.externalId,
       base: customer.base,
+      consents: customer.consents,
       extended: customer.extended,
       extra: customer.extra,
       tags: customer.tags
@@ -215,6 +214,7 @@ export default class ContactHub {
       id: customerId,
       externalId: customer.externalId,
       base: customer.base,
+      consents: customer.consents,
       extended: customer.extended,
       extra: customer.extra,
       tags: customer.tags

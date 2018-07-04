@@ -165,7 +165,9 @@ describe('ContactHub', () => {
 
     });
 
-    it('filters by externalId', async() => {
+    // Disabled because the API is taking more than 1 minute to index a new
+    // customer and this test is failing too often
+    xit('filters by externalId', async() => {
       const extId = randomString();
 
       const customer = await ch.addCustomer({
@@ -173,8 +175,8 @@ describe('ContactHub', () => {
         externalId: extId
       });
 
-      // Wait 30 seconds for the Customer to be available in searches
-      await new Promise(resolve => setTimeout(resolve, 40000));
+      // Wait 50 seconds for the Customer to be available in searches
+      await new Promise(resolve => setTimeout(resolve, 50000));
 
       const { elements: customers } = await ch.getCustomers({ externalId: extId });
 
@@ -292,6 +294,14 @@ describe('ContactHub', () => {
     const remote = await ch.getCustomer(cid);
 
     expect(remote.base).toEqual(local.base);
+  });
+
+  it('writes and reads back all consents', async() => {
+    const local = complexCustomer();
+    const cid = (await ch.addCustomer(local)).id;
+    const remote = await ch.getCustomer(cid);
+
+    expect(remote.consents).toEqual(local.consents);
   });
 
   it('patches a single customer property', async() => {
