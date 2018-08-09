@@ -8,7 +8,7 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
 // FIXME: creating new events takes a few seconds, so we rely on a known
 // customerId already having some associated events
-const cid = 'b765329a-84b2-4380-bfa5-fa4ec33d3b82';
+const cid = '95bf5159-6301-4933-b1b1-db3c77ae96e0';
 
 describe('ContactHub', () => {
 
